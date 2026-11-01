@@ -141,5 +141,22 @@
 - **Ledger Status:** 24 PASS, 2 PENDING.
 
 
+## Phase 8: Portfolio, Model Transparency, About, PDF & Guided Demo
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `apps/web/app/(shell)/portfolio/page.tsx`: 4 headline KPI figures, 4 Recharts visual panels.
+  - `apps/web/components/model/ModelPipeline.tsx`: 7-node interactive pipeline tracer.
+  - `apps/web/app/(shell)/model/page.tsx`: AUC, Brier, ROC curve, Calibration curve, Feature importance, Model Card.
+  - `apps/web/components/reports/ReportPdf.tsx`: Formal banking Sanction Memorandum with student name and USN in footer (F20).
+  - `apps/web/components/demo/GuidedDemo.tsx`: Interactive 8-step guided tour.
+  - Vitest test suite `apps/web/tests/ui/pdf.test.tsx` (F20).
+- **Test Counts:**
+  - F20: 100 runs, 100 passed, 0 failed (PASS).
+  - F24: 500 runs, 500 passed, 0 failed (PASS).
+- **Ledger Status:** 25 PASS, 1 PENDING.
+
+
+
 
 
