@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+/* Tokens: DESIGN.md §3, copied from docs/prototype/index.html. Components use these, never raw hex. */
+:root {
+  --canvas: #F6F6F3; --sheet: #FFFFFF; --sheet-2: #FAFAF8;
+  --rule: #E1E0DA; --rule-strong: #C9C8C0; --dot: #DEDDD6;
+  --ink: #17171A; --ink-2: #4D4E55; --ink-3: #6B6C73; --on-ink: #FFFFFF;
+  --haldi: #F2C12E; --haldi-hover: #F7CD45; --haldi-wash: #FFF0BF; --haldi-edge: #8C6B00;
+  --edge: #17171A;
+  --sanction: #0B7A4B; --sanction-wash: #DDF2E6;
+  --refer: #A04A00; --refer-wash: #FCE8D4;
+  --decline: #C42B3B; --decline-wash: #FBE1E3;
+  --grade-a: #0B7A4B; --grade-b: #5D8F12; --grade-c: #B56A00; --grade-d: #D24E1C; --grade-e: #C42B3B;
+  --chart-1: #17171A; --chart-2: #F2C12E; --chart-3: #13807A; --chart-4: #A9AAA2;
+  --scrim: rgba(23, 23, 26, .42);
+  /* motion: mirrors lib/motion.ts for CSS-driven interactions (button press) */
+  --d-press: 90ms; --d-release: 160ms; --d-micro: 120ms; --d-std: 200ms; --d-max: 300ms;
+  --e-out: cubic-bezier(.23, 1, .32, 1); --e-inout: cubic-bezier(.77, 0, .175, 1); --e-drawer: cubic-bezier(.32, .72, 0, 1);
+  color-scheme: light;
+}
+
+/* "Night ledger" */
+[data-theme="dark"] {
+  --canvas: #141416; --sheet: #1C1C1F; --sheet-2: #202024;
+  --rule: #2E2E33; --rule-strong: #45454C; --dot: #26262B;
+  --ink: #F3F2EC; --ink-2: #B9B9B2; --ink-3: #8E8E88; --on-ink: #141416;
+  --haldi-wash: #3B3216; --edge: #000000;
+  --sanction: #43D196; --sanction-wash: #123526;
+  --refer: #F5A35C; --refer-wash: #3A2614;
+  --decline: #FF7F8C; --decline-wash: #3D1A1F;
+  --grade-a: #2FA36E; --grade-b: #7FAE2E; --grade-c: #D08A1E; --grade-d: #E0693A; --grade-e: #E04B5A;
+  --chart-1: #F3F2EC; --chart-4: #5E5E64;
+  --scrim: rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}
+
+/* Wipe Tailwind defaults so only Saakh tokens exist: no default greys, radii, shadows or fonts. */
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --font-*: initial;
+  --radius-panel: 2px;
+  --radius-stamp: 4px;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-sheet: var(--sheet);
+  --color-sheet-2: var(--sheet-2);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-on-ink: var(--on-ink);
+  --color-haldi: var(--haldi);
+  --color-haldi-hover: var(--haldi-hover);
+  --color-haldi-wash: var(--haldi-wash);
+  --color-sanction: var(--sanction);
+  --color-sanction-wash: var(--sanction-wash);
+  --color-refer: var(--refer);
+  --color-refer-wash: var(--refer-wash);
+  --color-decline: var(--decline);
+  --color-decline-wash: var(--decline-wash);
+  --color-grade-a: var(--grade-a);
+  --color-grade-b: var(--grade-b);
+  --color-grade-c: var(--grade-c);
+  --color-grade-d: var(--grade-d);
+  --color-grade-e: var(--grade-e);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --font-display: var(--font-serif), "Source Serif Pro", Georgia, serif;
+  --font-ui: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  /* The only elevation: Assessment Sheet + dialogs (1.5px ink border + 6px solid offset). */
+  --shadow-pop: 6px 6px 0 0 var(--edge);
+}
+
+*, ::before, ::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.3px);
+  background-size: 20px 20px;
+  color: var(--ink);
+  font-family: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--d-std), color var(--d-std);
+}
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+@utility tnum { font-variant-numeric: tabular-nums; }
+@utility hairline { border: 1px solid var(--rule); }
+@utility pop { border: 1.5px solid var(--ink); box-shadow: 6px 6px 0 0 var(--edge); }
+
+/* Type scale: DESIGN.md §4 */
+@utility display-xl { font-family: var(--font-display); font-weight: 600; font-size: clamp(46px, 7vw, 92px); line-height: .98; letter-spacing: -.025em; font-optical-sizing: auto; }
+@utility display-m { font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 48px; letter-spacing: -.02em; }
+@utility display-l { font-family: var(--font-display); font-weight: 600; font-size: 36px; line-height: 42px; letter-spacing: -.02em; }
+@utility figure-xl { font-weight: 600; font-size: 64px; line-height: 64px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+@utility figure-l { font-weight: 600; font-size: 36px; line-height: 40px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+@utility type-title { font-weight: 600; font-size: 28px; line-height: 34px; letter-spacing: -.015em; }
+@utility type-subtitle { font-weight: 600; font-size: 20px; line-height: 28px; letter-spacing: -.01em; }
+@utility type-body { font-weight: 400; font-size: 16px; line-height: 26px; }
+@utility type-ui { font-weight: 500; font-size: 14px; line-height: 20px; }
+@utility type-small { font-weight: 500; font-size: 13px; line-height: 18px; }
+@utility stamp-text { font-weight: 800; text-transform: uppercase; letter-spacing: .12em; }
+
+/* NeoPOP buttons: DESIGN.md §7.5, mirrors the prototype .btn rules. Press = 90ms down, 160ms up. */
+.btn {
+  --e: 4px; --edge-c: var(--edge);
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 18px; border: 1.5px solid var(--ink); border-radius: 0;
+  font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--e) var(--e) 0 0 var(--edge-c); transform: translate(0, 0);
+  transition: transform var(--d-release) var(--e-out), box-shadow var(--d-release) var(--e-out),
+    background-color var(--d-micro), color var(--d-micro);
+}
+.btn:active:not(:disabled) { transform: translate(var(--e), var(--e)); box-shadow: 0 0 0 0 var(--edge-c); transition-duration: var(--d-press); }
+.btn-primary { background: var(--haldi); color: #17171A; --edge-c: var(--ink); }
+.btn-primary:hover:not(:disabled) { background: var(--haldi-hover); }
+[data-theme="dark"] .btn-primary { border-color: var(--haldi); --edge-c: var(--haldi-edge); }
+.btn-secondary { background: var(--sheet); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--haldi-wash); }
+.btn-ghost { border-color: transparent; box-shadow: none; background: transparent; color: var(--ink-2); }
+.btn-ghost:hover:not(:disabled) { background: var(--haldi-wash); color: var(--ink); }
+.btn-ghost:active:not(:disabled) { transform: scale(.97); box-shadow: none; }
+.btn-icon { width: 40px; height: 40px; padding: 0; border-color: transparent; border-radius: 2px; box-shadow: none; background: transparent; }
+.btn-icon:hover:not(:disabled) { background: var(--haldi-wash); }
+.btn-icon:active:not(:disabled) { transform: scale(.94); box-shadow: none; }
+.btn-hold { background: var(--sheet); border-color: var(--decline); color: var(--decline); --edge-c: var(--decline); overflow: hidden; }
+.btn-hold .hold-fill { position: absolute; inset: 0; background: var(--decline); transform-origin: left; transform: scaleX(0); transition: transform 200ms linear; }
+.btn-hold[data-holding="true"] .hold-fill { transform: scaleX(1); transition-duration: 800ms; }
+.btn-hold[data-holding="true"] { color: var(--sheet); }
+.btn-hold > :not(.hold-fill) { position: relative; }
+.btn-hold[data-done="true"] { animation: btn-shake 300ms; }
+.btn-sm { --e: 3px; height: 36px; padding: 0 12px; font-size: 14px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; transform: translate(var(--e), var(--e)); }
+.btn-ghost:disabled, .btn-icon:disabled { transform: none; }
+.btn .btn-label { transition: opacity var(--d-std), transform var(--d-std) var(--e-out); display: inline-flex; align-items: center; gap: 8px; }
+.btn[aria-busy="true"] .btn-label { opacity: 0; transform: translateY(-4px); }
+.btn .btn-state { position: absolute; inset: 0; display: grid; place-items: center; }
+
+@keyframes btn-shake { 0%, 100% { translate: 0 0; } 25% { translate: -3px 0; } 50% { translate: 3px 0; } 75% { translate: -3px 0; } }
+@keyframes spin { to { rotate: 360deg; } }
+.spin { animation: spin 900ms linear infinite; }
+
+/* Reduced motion: opacity fades only (DESIGN.md §0.8). Hold fill keeps a 1ms transition so transitionend still fires. */
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn:active:not(:disabled) { transition: background-color var(--d-micro), color var(--d-micro); }
+  .btn:active:not(:disabled), .btn-ghost:active:not(:disabled), .btn-icon:active:not(:disabled) { transform: none; }
+  .btn-hold .hold-fill, .btn-hold[data-holding="true"] .hold-fill { transition-duration: 1ms; }
+  .btn-hold[data-done="true"] { animation: none; }
+  .btn .btn-label { transition: opacity var(--d-std); transform: none !important; }
+}

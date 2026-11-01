@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.hypothesis/
+**/tests/ledger/junit-*.xml
+**/tests/ledger/.web-fragments/
+saakh-starter.zip
+.playwright-mcp/
