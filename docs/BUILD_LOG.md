@@ -31,3 +31,22 @@
   - F21: 300 runs, 300 passed, 0 failed (PASS).
   - F25: 200 runs, 200 passed, 0 failed (PASS).
 - **Ledger Status:** 6 PASS, 20 PENDING.
+
+
+## Phase 2: Data & Model
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `services/api/ml/features.py`: `engineer_features` (F04), `FEATURE_NAMES`, `MONOTONE_CONSTRAINTS`.
+  - `services/api/ml/data.py`: `generate_dataset` (F06), synthetic data generation for 5,000 records.
+  - `services/api/ml/model.py`: `train_model` (F07), `predict_pd` (F08), `pd_to_grade` (F09), `PlattCalibrator`.
+  - Artifacts: `artifacts/model.joblib`, `artifacts/metrics.json`, `artifacts/model_card.md`.
+  - Dataset files: `data/applicants_5000.csv`, `data/batch_sample.csv`.
+  - Hypothesis test suite `services/api/tests/test_model.py` (F06, F04, F07, F08, F09).
+- **Test Counts:**
+  - F04: 100 runs, 100 passed, 0 failed (PASS).
+  - F06: 100 runs, 100 passed, 0 failed (PASS).
+  - F07: 100 runs, 100 passed, 0 failed (PASS).
+  - F08: 100 runs, 100 passed, 0 failed (PASS).
+  - F09: 101 runs, 101 passed, 0 failed (PASS).
+- **Ledger Status:** 11 PASS, 15 PENDING.
