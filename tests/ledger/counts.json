@@ -1,1 +1,18 @@
-{}
+{
+  "F02": {
+    "executions": 101,
+    "failed": 0
+  },
+  "F03": {
+    "executions": 101,
+    "failed": 0
+  },
+  "F11": {
+    "executions": 101,
+    "failed": 0
+  },
+  "F12": {
+    "executions": 101,
+    "failed": 0
+  }
+}

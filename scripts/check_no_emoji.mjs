@@ -17,8 +17,8 @@ export const SCAN_ROOTS = [
   "docs/REPORT.md",
 ];
 
-// Pictographs, plus emoji that are not Extended_Pictographic: flags (regional indicators) and keycaps.
-const EMOJI = /[\p{Extended_Pictographic}\p{Regional_Indicator}\u{20E3}]/gu;
+// Pictographs, plus emoji that are not Extended_Pictographic: flags (regional indicators), keycaps, and all supplemental pictographs.
+const EMOJI = /[\p{Extended_Pictographic}\p{Regional_Indicator}\u{20E3}\u{1F300}-\u{1F9FF}]/gu;
 // Allowed: rupee sign (not pictographic anyway) and copyright sign (pictographic, but needed in footers).
 export const ALLOWED = new Set(["₹", "©"]);
 
