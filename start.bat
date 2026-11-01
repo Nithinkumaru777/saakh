@@ -31,18 +31,26 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [*] Starting FastAPI Backend on http://localhost:8000 ...
-start "Saakh Backend API (Port 8000)" cmd /k "cd /d "%~dp0services\api" && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+echo [*] Starting FastAPI Backend on port 8000 ...
+start "Saakh Backend API (Port 8000)" "%~dp0services\api\run.bat"
 
-echo [*] Starting Next.js Web Frontend on http://localhost:3000 ...
-start "Saakh Web App (Port 3000)" cmd /k "cd /d "%~dp0apps\web" && pnpm dev"
+echo [*] Starting Next.js Web Frontend on port 3000 ...
+start "Saakh Web App (Port 3000)" "%~dp0apps\web\run.bat"
 
 echo.
-echo [*] Waiting 4 seconds for servers to initialize...
-ping -n 5 127.0.0.1 >nul 2>&1
+echo [*] Waiting for web application and backend to become ready...
+echo [*] Opening default web browser as soon as server responds...
 
-echo [*] Launching Saakh Web Application in browser...
-start http://localhost:3000
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$ready = $false;" ^
+  "for ($i=0; $i -lt 30; $i++) {" ^
+  "  try {" ^
+  "    $res = Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing -TimeoutSec 1;" ^
+  "    if ($res.StatusCode -eq 200) { $ready = $true; break }" ^
+  "  } catch {}" ^
+  "  Start-Sleep -Milliseconds 600" ^
+  "};" ^
+  "Start-Process 'http://localhost:3000'"
 
 echo.
 echo ===============================================================================
@@ -52,9 +60,8 @@ echo   Web Application: http://localhost:3000
 echo   FastAPI Swagger: http://localhost:8000/docs
 echo   Health Check:    http://localhost:8000/api/health
 echo.
-echo   To shut down services, close the individual terminal windows or run:
-echo   taskkill /F /IM uvicorn.exe /T 2>nul
-echo   taskkill /F /IM node.exe /T 2>nul
+echo   If browser tab did not open automatically, visit: http://localhost:3000
+echo   To shut down services, run stop.bat or close the server terminal windows.
 echo ===============================================================================
 echo.
 pause
