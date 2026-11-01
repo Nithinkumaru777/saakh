@@ -47,11 +47,21 @@ AI FOR FINANCE CIA-2/
 
 ## 3. Quick Start & Execution
 
-### Prerequisites
-- Python 3.12 or 3.13 with `uv` package manager
-- Node.js v20+ with `pnpm`
+### One-Click Launch (Recommended for Windows)
+Double-click `start.bat` in the project root (or run `.\start.bat` from terminal).
+It automatically:
+1. Validates `uv` and `pnpm` availability.
+2. Spawns the FastAPI backend on `http://localhost:8000`.
+3. Spawns the Next.js web application on `http://localhost:3000`.
+4. Opens your default web browser directly to `http://localhost:3000`.
 
-### 1. Launch the Backend Risk Engine
+To stop both services at any time, run `stop.bat` or close the terminal windows.
+
+---
+
+### Manual Launch
+
+#### 1. Launch the Backend Risk Engine
 ```powershell
 # From project root
 cd services/api
