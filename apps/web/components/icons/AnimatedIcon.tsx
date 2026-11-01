@@ -21,7 +21,7 @@ type Props = {
   icon: LucideIcon;
   preset: IconPreset;
   /** 16 inline, 20 buttons/nav, 24 section headers, 40 empty states, 56 result icon. */
-  size?: 16 | 20 | 24 | 40 | 56;
+  size?: number;
   /** Accessible name. Omit for decorative icons next to visible text. */
   label?: string;
   /** Animate on own hover. Set false when a parent control drives it through `ref`. */

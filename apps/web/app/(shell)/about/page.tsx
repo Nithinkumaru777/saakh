@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { ShieldCheck, Sparkles, BookOpen, User, Award } from "lucide-react";

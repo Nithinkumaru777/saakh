@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "hold" | "icon";
 
 type Base = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
-  size?: "md" | "sm";
+  size?: "md" | "sm" | "lg";
   icon?: LucideIcon;
   iconPreset?: IconPreset;
   loading?: boolean;
@@ -58,7 +58,7 @@ export function Button(props: ButtonProps) {
       data-variant={variant}
       data-holding={isHold ? String(holding) : undefined}
       data-done={isHold && done ? "true" : undefined}
-      className={cn("btn", `btn-${variant}`, size === "sm" && "btn-sm", className)}
+      className={cn("btn", `btn-${variant}`, size === "sm" && "btn-sm", size === "lg" && "btn-lg text-base py-3 px-6", className)}
       onMouseEnter={(e) => { iconRef.current?.startAnimation(); dom.onMouseEnter?.(e); }}
       onMouseLeave={(e) => { iconRef.current?.stopAnimation(); if (isHold) holdEnd(); dom.onMouseLeave?.(e); }}
       onPointerDown={(e) => { if (e.pointerType === "touch") iconRef.current?.startAnimation(); if (isHold) holdStart(); dom.onPointerDown?.(e); }}
