@@ -89,3 +89,26 @@
   - F23: 100 runs, 100 passed, 0 failed (PASS).
 - **Ledger Status:** 23 PASS, 3 PENDING.
 
+
+## Phase 5: App Shell & Design System in Code
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `apps/web/lib/api.ts`: API client for FastAPI backend.
+  - `apps/web/lib/ruler.ts`: Piecewise linear mapping from PD to ruler percentage.
+  - Shared UI Primitives:
+    - `CurrencyInput.tsx`: Real-time Indian currency formatting, words below.
+    - `Slider.tsx`: 4px track, 14x24 haldi thumb stretching 12% on drag.
+    - `SegmentedControl.tsx`: Sliding ink block (`spring.snappy`), white text inversion.
+    - `RiskRuler.tsx`: 5 grade segments (A–E), spring needle marker.
+    - `GradeChip.tsx`: 3D flipping grade letter block with decision colors.
+    - `CommandPalette.tsx`: Instant modal search (`Cmd+K`/`Ctrl+K`).
+  - App Shell: `NavRail.tsx`, `Header.tsx`, `app/(shell)/layout.tsx`, `app/template.tsx`.
+  - Landing Page: `app/page.tsx`, `SentenceDemo.tsx`, inverted ink band, student details in footer.
+  - Starter shell routes: `/assess`, `/what-if`, `/applicants`, `/batch`, `/portfolio`, `/model`, `/about`.
+  - Vitest test suite `apps/web/tests/ui/primitives.test.tsx` (F24).
+- **Test Counts:**
+  - F24: 500 runs, 500 passed, 0 failed (PASS).
+- **Ledger Status:** 24 PASS, 2 PENDING.
+
+
