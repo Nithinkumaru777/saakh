@@ -1,4 +1,4 @@
-# Saakh (साख) — 5-Minute Live Presentation & Demonstration Script
+# Saakh — 5-Minute Live Presentation & Demonstration Script
 ## Course: AI for Finance — CIA-2 · Topic 4
 ### Student: NITHIN KUMAR U · USN: 2102508611
 
@@ -8,7 +8,7 @@
 
 | Timestamp | Phase | Screen / Feature | Key Talking Points |
 |---|---|---|---|
-| **0:00 – 0:45** | Opening & Problem Context | Landing Page (`/`) | Retail credit friction in India, opaque CIBIL scoring, and the regulatory mandate for calibrated default risk and explainability. Introduce Saakh (साख). |
+| **0:00 – 0:45** | Opening & Problem Context | Landing Page (`/`) | Retail credit friction in India, opaque CIBIL scoring, and the regulatory mandate for calibrated default risk and explainability. Introduce Saakh. |
 | **0:45 – 1:30** | Interactive Mad-Lib Demo | Hero Sentence Demo | Demonstrate real-time 150ms re-scoring by clicking underlined parameters (income, CIBIL, tenure). Highlight the animated Risk Ruler needle and decision chips. |
 | **1:30 – 2:45** | Underwriting Worksheet | Assess Page (`/assess`) | Load persona "Priya Sharma" (Prime Home Loan) vs "Rajesh Patel" (Thin-File Merchant). Execute the 1.5s Signature Run Sequence: scan line, flipping 3D grade chip, and CRED NeoPOP tactile rubber stamp impact. |
 | **2:45 – 3:30** | Explainability & Counterfactuals | SHAP Bars & Paths | Show diverging factor bars (ink lowers risk, haldi raises risk) with narrative sentences. Click "Apply" on a counterfactual lever (e.g. reduce loan amount) to show how an applicant moves to Grade A. |
@@ -24,7 +24,7 @@
 
 *In Indian retail lending, financial institutions process millions of loan applications each month across personal loans, affordable housing, and MSME credit. Today, loan officers face two extremes: rigid knockout rules that turn away creditworthy thin-file applicants, and opaque scalar bureau scores that cannot explain why a loan was rejected or how an applicant can qualify.*
 
-*To solve this, I built **Saakh (साख)** — an enterprise-grade AI credit underwriting platform that combines regulatory policy filters, a calibrated monotone XGBoost risk engine, exact SHAP explainability, and actionable counterfactual advice."*
+*To solve this, I built **Saakh** — an enterprise-grade AI credit underwriting platform that combines regulatory policy filters, a calibrated monotone XGBoost risk engine, exact SHAP explainability, and actionable counterfactual advice."*
 
 ---
 

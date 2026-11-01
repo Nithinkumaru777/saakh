@@ -18,7 +18,7 @@ const DEMO_STEPS: DemoStep[] = [
   {
     step: 1,
     title: "1. Underwriting Engine Landing",
-    description: "Welcome to Saakh (साख). The platform provides calibrated credit risk assessment with Indian banking policy gates and zero emoji discipline.",
+    description: "Welcome to Saakh. The platform provides calibrated credit risk assessment with Indian banking policy gates and zero emoji discipline.",
     targetRoute: "/",
     highlightText: "Explore the live mad-lib sentence at the hero.",
   },

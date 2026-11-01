@@ -1,4 +1,4 @@
-# Saakh (साख) — AI-Based Loan Eligibility & Risk Assessment System
+# Saakh — AI-Based Loan Eligibility & Risk Assessment System
 **Course:** AI for Finance — CIA-2 · **Topic 4: AI-Based Loan Eligibility and Risk Assessment System**  
 **Student:** NITHIN KUMAR U · **USN:** 2102508611  
 **Architect:** Antigravity · **Builder:** Claude Code  

@@ -24,9 +24,6 @@ export default function LandingPage() {
             <span className="font-display font-semibold text-2xl tracking-tight text-[var(--ink)]">
               Saakh
             </span>
-            <span className="text-sm font-serif text-[var(--ink-3)]">
-              साख
-            </span>
           </Link>
           <span className="hidden sm:inline text-xs font-mono text-[var(--ink-3)] px-2 py-0.5 border border-[var(--rule)] rounded-[2px] bg-[var(--sheet-2)]">
             RISK ASSESSMENT ENGINE
@@ -155,7 +152,7 @@ export default function LandingPage() {
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex flex-col gap-0.5 text-center md:text-left">
             <span className="font-semibold text-[var(--ink)]">
-              Saakh (साख) — AI-Based Loan Eligibility & Risk Assessment System
+              Saakh — AI-Based Loan Eligibility & Risk Assessment System
             </span>
             <span className="font-mono text-[11px]">
               Course: AI for Finance — CIA-2 · Topic 4

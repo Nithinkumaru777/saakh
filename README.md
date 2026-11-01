@@ -1,4 +1,4 @@
-# Saakh (साख) — AI-Based Loan Eligibility & Risk Assessment System
+# Saakh — AI-Based Loan Eligibility & Risk Assessment System
 ### AI for Finance — CIA-2 · Topic 4
 **Student:** NITHIN KUMAR U · **USN:** 2102508611  
 **Submission Date:** November 2026
@@ -6,7 +6,7 @@
 ---
 
 ## 1. Overview
-**Saakh (साख)** is an AI-powered credit underwriting and risk assessment platform built for Indian retail banking and NBFCs. It bridges the gap between rigid regulatory policy rules and black-box credit scores by combining:
+**Saakh** is an AI-powered credit underwriting and risk assessment platform built for Indian retail banking and NBFCs. It bridges the gap between rigid regulatory policy rules and black-box credit scores by combining:
 1. **Deterministic Regulatory Gates:** Automated evaluation of RBI knockout rules (age limits, minimum income, CIBIL floors, FOIR ceilings).
 2. **Calibrated Monotone XGBoost Model:** 28 engineered financial features trained with monotone constraints, post-hoc calibrated via Platt Scaling (Test AUC: 0.8074, Brier Score: 0.0899).
 3. **Transparent Explainability:** TreeSHAP marginal percentage-point feature attributions and plain-language narrative sentences.

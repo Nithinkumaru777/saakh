@@ -3,7 +3,7 @@
 > AI for Finance · CIA-2 · Topic 4 — *AI-Based Loan Eligibility and Risk Assessment System*
 > Student: **NITHIN KUMAR U** · USN **2102508611**
 >
-> "Saakh" (साख) means creditworthiness / financial standing. The product decides whether an applicant
+> "Saakh" means creditworthiness / financial standing. The product decides whether an applicant
 > should get a loan, how risky they are, and — most importantly — *explains why* in plain language.
 
 **Read `design-spec.md` first.** It sets the visual direction ("Ink & Haldi") and names the three references every decision must trace back to: **Ramp** (layout and restraint), **Mercury** (type split and colour discipline), **CRED NeoPOP** (buttons and motion personality). This file turns that direction into exact tokens, components and motion. A working visual reference of everything below lives in `docs/prototype/index.html` — open it in a browser and match it.

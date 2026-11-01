@@ -1,4 +1,4 @@
-# Saakh (साख) — AI-Based Loan Eligibility and Risk Assessment System
+# Saakh — AI-Based Loan Eligibility and Risk Assessment System
 ## Academic Project Report — AI for Finance (CIA-2) · Topic 4
 
 **Student Name:** NITHIN KUMAR U  
@@ -6,7 +6,7 @@
 **Course:** AI for Finance — CIA-2  
 **Topic:** Topic 4 — AI-Based Loan Eligibility and Risk Assessment System  
 **Submission Date:** November 2026  
-**Product Name:** Saakh (साख) — Creditworthiness Assessment & Risk Engine  
+**Product Name:** Saakh — Creditworthiness Assessment & Risk Engine  
 
 ---
 
@@ -14,7 +14,7 @@
 
 Traditional retail lending in India faces substantial operational and structural bottlenecks. Underwriting processes frequently oscillate between rigid rule-based knockouts that reject creditworthy "thin-file" borrowers and black-box credit scores that fail to explain underlying risk drivers to loan officers and applicants.
 
-**Saakh (साख)** is an enterprise-grade AI credit underwriting and risk assessment platform designed specifically for Indian retail banking and Non-Banking Financial Companies (NBFCs). The system unifies deterministic regulatory policy gates (RBI underwriting limits, FOIR ceilings, CIBIL thresholds) with an empirical, calibrated XGBoost machine learning model enforcing strict feature monotonicity constraints. 
+**Saakh** is an enterprise-grade AI credit underwriting and risk assessment platform designed specifically for Indian retail banking and Non-Banking Financial Companies (NBFCs). The system unifies deterministic regulatory policy gates (RBI underwriting limits, FOIR ceilings, CIBIL thresholds) with an empirical, calibrated XGBoost machine learning model enforcing strict feature monotonicity constraints. 
 
 Predictions are calibrated into true empirical Probabilities of Default (PD) via post-hoc Platt scaling (Test AUC: 0.8074 vs Baseline Logistic Regression: 0.7810; Brier Score: 0.0899). Every decision is decomposed into exact marginal percentage-point feature attributions using TreeSHAP, accompanied by plain-language narrative rationales and actionable single-lever counterfactual advice ("Paths to a better grade").
 

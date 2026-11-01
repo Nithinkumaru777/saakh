@@ -48,9 +48,6 @@ export function NavRail() {
               <span className="font-display font-semibold text-xl tracking-tight text-[var(--ink)] group-hover:text-[var(--ink-2)] transition-colors">
                 Saakh
               </span>
-              <span className="text-xs font-serif text-[var(--ink-3)] hidden lg:inline">
-                साख
-              </span>
             </div>
             <span className="text-[11px] font-mono text-[var(--ink-3)] hidden lg:inline tracking-wider mt-0.5">
               RISK ENGINE

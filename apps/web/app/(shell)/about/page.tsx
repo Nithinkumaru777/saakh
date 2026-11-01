@@ -16,7 +16,7 @@ export default function AboutPage() {
           <span>CIA-2 ACADEMIC SUBMISSION</span>
         </div>
         <h1 className="font-display font-semibold text-4xl sm:text-5xl text-[var(--ink)]">
-          About Saakh (साख)
+          About Saakh
         </h1>
         <p className="text-base text-[var(--ink-2)] leading-relaxed">
           An AI-Based Loan Eligibility and Risk Assessment System built for retail banking and NBFCs in India.
