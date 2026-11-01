@@ -1,4 +1,8 @@
 {
+  "F01": {
+    "executions": 101,
+    "failed": 0
+  },
   "F02": {
     "executions": 101,
     "failed": 0
@@ -48,6 +52,34 @@
     "failed": 0
   },
   "F14": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F15": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F16": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F17": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F18": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F19": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F22": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F23": {
     "executions": 100,
     "failed": 0
   }

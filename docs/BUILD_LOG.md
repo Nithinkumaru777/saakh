@@ -67,3 +67,25 @@
   - F13: 100 runs, 100 passed, 0 failed (PASS).
   - F14: 100 runs, 100 passed, 0 failed (PASS).
 - **Ledger Status:** 15 PASS, 11 PENDING.
+
+
+## Phase 4: API & Persistence
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `services/api/app/schemas.py`: `ApplicationIn` (F01), `AssessmentOut`, `BatchScoreIn`, `BatchScoreOut`.
+  - `services/api/app/db.py`: `AssessmentRecord` (SQLModel SQLite), startup database seeding.
+  - `services/api/app/pipeline.py`: `score_application` (F16), `assess_application` (F15).
+  - `services/api/app/main.py`: Endpoints for `/api/score`, `/api/assess`, `/api/batch`, `/api/portfolio`, `/api/assessments`, `/api/personas`, `/api/model`, `/api/health`.
+  - Hypothesis test suite `services/api/tests/test_api.py` (F01, F15, F16, F17, F18, F19, F22, F23).
+- **Test Counts:**
+  - F01: 101 runs, 101 passed, 0 failed (PASS).
+  - F15: 100 runs, 100 passed, 0 failed (PASS).
+  - F16: 100 runs, 100 passed, 0 failed (PASS).
+  - F17: 100 runs, 100 passed, 0 failed (PASS).
+  - F18: 100 runs, 100 passed, 0 failed (PASS).
+  - F19: 100 runs, 100 passed, 0 failed (PASS).
+  - F22: 100 runs, 100 passed, 0 failed (PASS).
+  - F23: 100 runs, 100 passed, 0 failed (PASS).
+- **Ledger Status:** 23 PASS, 3 PENDING.
+
