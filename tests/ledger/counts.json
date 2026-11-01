@@ -11,6 +11,10 @@
     "executions": 100,
     "failed": 0
   },
+  "F05": {
+    "executions": 101,
+    "failed": 0
+  },
   "F06": {
     "executions": 100,
     "failed": 0
@@ -27,12 +31,24 @@
     "executions": 101,
     "failed": 0
   },
+  "F10": {
+    "executions": 101,
+    "failed": 0
+  },
   "F11": {
     "executions": 101,
     "failed": 0
   },
   "F12": {
     "executions": 101,
+    "failed": 0
+  },
+  "F13": {
+    "executions": 100,
+    "failed": 0
+  },
+  "F14": {
+    "executions": 100,
     "failed": 0
   }
 }

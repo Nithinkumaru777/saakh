@@ -50,3 +50,20 @@
   - F08: 100 runs, 100 passed, 0 failed (PASS).
   - F09: 101 runs, 101 passed, 0 failed (PASS).
 - **Ledger Status:** 11 PASS, 15 PENDING.
+
+
+## Phase 3: Policy, Decision, Explanation & Advice
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `services/api/ml/policy.py`: `policy_rules` (F05), `decide` (F10).
+  - `services/api/ml/explain.py`: `explain` (F13), SHAP TreeExplainer, plain-language templates.
+  - `services/api/ml/counterfactual.py`: `counterfactuals` (F14), single-lever optimization search.
+  - `services/api/data/personas.json`: 8 calibrated demo personas matching target outcomes.
+  - Hypothesis test suite `services/api/tests/test_policy_explain.py` (F05, F10, F13, F14).
+- **Test Counts:**
+  - F05: 101 runs, 101 passed, 0 failed (PASS).
+  - F10: 101 runs, 101 passed, 0 failed (PASS).
+  - F13: 100 runs, 100 passed, 0 failed (PASS).
+  - F14: 100 runs, 100 passed, 0 failed (PASS).
+- **Ledger Status:** 15 PASS, 11 PENDING.
