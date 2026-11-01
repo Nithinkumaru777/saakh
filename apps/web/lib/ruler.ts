@@ -25,6 +25,7 @@ export const GRADE_SEGMENTS: GradeSegment[] = [
 ];
 
 export function pdToRulerPercentage(pd: number): number {
+  if (Number.isNaN(pd) || pd === undefined || pd === null) return 0;
   const clampedPd = Math.max(0, Math.min(pd, 0.60));
 
   if (clampedPd <= 0.03) {

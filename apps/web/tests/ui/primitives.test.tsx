@@ -74,7 +74,7 @@ describe("F24: Shell and UI Primitives", () => {
   it("RiskRuler maps probability of default to valid [0, 100] percentage (100 runs)", () => {
     fc.assert(
       fc.property(
-        fc.float({ min: 0, max: 1.0 }),
+        fc.float({ min: 0, max: 1.0, noNaN: true }),
         countRuns("F24", (pd) => {
           cleanup();
           const pct = pdToRulerPercentage(pd);

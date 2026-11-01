@@ -112,3 +112,21 @@
 - **Ledger Status:** 24 PASS, 2 PENDING.
 
 
+## Phase 6: Assess Signature Screen & Run Sequence
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `apps/web/components/assess/DecisionStamp.tsx`: Tactile rubber stamp with `spring.stamp`, -3deg tilt.
+  - `apps/web/components/assess/Highlight.tsx`: Haldi highlighter swipe across decision text.
+  - `apps/web/components/assess/FactorBars.tsx`: Diverging SHAP feature contribution bar chart.
+  - `apps/web/components/assess/CounterfactualList.tsx`: Actionable recommendations with "Apply" button.
+  - `apps/web/components/assess/ApplicationWizard.tsx`: 4-step wizard with step indicator and persona loader.
+  - `apps/web/components/assess/AssessmentSheet.tsx`: Pop elevated card (1.5px ink border, 6px solid offset).
+  - `apps/web/app/(shell)/assess/page.tsx`: Result-first layout (Cols 1–7 = AssessmentSheet, Cols 8–12 = ApplicationWizard) with mobile drawer.
+  - Vitest test suite `apps/web/tests/ui/assess.test.tsx`.
+- **Test Counts:**
+  - F24: 500 runs, 500 passed, 0 failed (PASS).
+- **Ledger Status:** 24 PASS, 2 PENDING.
+
+
+
