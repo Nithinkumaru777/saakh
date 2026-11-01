@@ -82,5 +82,9 @@
   "F23": {
     "executions": 100,
     "failed": 0
+  },
+  "F26": {
+    "executions": 100,
+    "failed": 0
   }
 }

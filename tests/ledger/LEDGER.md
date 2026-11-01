@@ -1,8 +1,8 @@
 # Test ledger
 
-Generated 2026-11-01 07:11 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
+Generated 2026-11-01 07:16 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
 
-**25 of 26 function cards PASS.** PENDING means the function has not been built yet.
+**26 of 26 function cards PASS.** PENDING means the function has not been built yet.
 
 | Function | Spec | Executions | Passed | Failed | Status |
 |---|---|---|---|---|---|
@@ -31,11 +31,11 @@ Generated 2026-11-01 07:11 UTC by `python scripts/test_ledger.py`. Rule (SPEC §
 | F23 model page data (GET /api/model) | SPEC §F23 | 100 | 100 | 0 | PASS |
 | F24 shell features (web) | SPEC §F24 | 500 | 500 | 0 | PASS |
 | F25 quality gate: no emoji | SPEC §F25 | 200 | 200 | 0 | PASS |
-| F26 report and docs | SPEC §F26 | 0 | 0 | 0 | PENDING |
+| F26 report and docs | SPEC §F26 | 100 | 100 | 0 | PASS |
 
 ## Suites (JUnit)
 
 | Report | Tests | Failed | Skipped |
 |---|---|---|---|
-| junit-api.xml | 40 | 0 | 0 |
+| junit-api.xml | 41 | 0 | 0 |
 | junit-web.xml | 26 | 0 | 0 |
