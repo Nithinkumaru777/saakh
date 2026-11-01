@@ -1,6 +1,6 @@
 {
-  "F24": {
-    "executions": 500,
+  "F21": {
+    "executions": 300,
     "failed": 0
   },
   "F20": {
@@ -11,8 +11,8 @@
     "executions": 200,
     "failed": 0
   },
-  "F21": {
-    "executions": 300,
+  "F24": {
+    "executions": 500,
     "failed": 0
   }
 }
