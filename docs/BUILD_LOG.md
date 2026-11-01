@@ -129,4 +129,17 @@
 - **Ledger Status:** 24 PASS, 2 PENDING.
 
 
+## Phase 7: What-If, Applicants Table & Batch Processing
+- **Date:** 2026-11-01
+- **Status:** Done (All pass criteria met)
+- **Built:**
+  - `apps/web/app/(shell)/what-if/page.tsx`: 7 sensitivity sliders, live 150ms re-scoring, counterfactuals with apply patch.
+  - `apps/web/app/(shell)/applicants/page.tsx`: Swiss table, name search, outcome filter, pagination, detail modal, delete action.
+  - `apps/web/app/(shell)/batch/page.tsx`: Drag-and-drop CSV upload, template download, stacked grade strip, CSV results export.
+- **Test Counts:**
+  - F24: 500 runs, 500 passed, 0 failed (PASS).
+- **Ledger Status:** 24 PASS, 2 PENDING.
+
+
+
 
