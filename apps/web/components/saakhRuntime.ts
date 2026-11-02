@@ -2151,151 +2151,6 @@ export function initSaakhRuntime(
   }
 
   /* ====================================================================
-     DESIGN SYSTEM PAGE
-  ==================================================================== */
-  function hexLum(h: string) {
-    const c = (h.match(/\w\w/g) || ["00", "00", "00"]).map((x) => parseInt(x, 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)));
-    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-  }
-  function contrast(a: string, b: string) {
-    const [x, y] = [hexLum(a), hexLum(b)].sort((p, q) => q - p);
-    return (x + 0.05) / (y + 0.05);
-  }
-  function drawSwatches() {
-    const sw = document.getElementById("swatches");
-    if (!sw) return;
-    const cs = getComputedStyle(document.documentElement);
-    const sheet = cs.getPropertyValue("--sheet").trim();
-    const list = [
-      ["canvas", "App ground, dot grid"], ["sheet", "Panels, inputs"], ["rule", "Hairlines"], ["rule-strong", "Input borders"],
-      ["ink", "Text, edges"], ["ink-2", "Secondary text"], ["ink-3", "Help text"], ["haldi", "The one accent"],
-      ["haldi-wash", "Highlighter band"], ["sanction", "Sanctioned"], ["refer", "Refer for review"], ["decline", "Declined, errors only"],
-      ["gA", "Grade A"], ["gB", "Grade B"], ["gC", "Grade C"], ["gD", "Grade D"], ["gE", "Grade E"],
-      ["chart-1", "Chart 1"], ["chart-2", "Chart 2"], ["chart-3", "Chart 3"], ["chart-4", "Chart 4"],
-    ];
-    sw.innerHTML = list
-      .map(([k, d]) => {
-        const v = cs.getPropertyValue("--" + k).trim();
-        const c = /^#[0-9a-f]{6}$/i.test(v) && /^#[0-9a-f]{6}$/i.test(sheet) ? contrast(v, sheet) : 0;
-        return `<div class="sw"><div class="c" style="background:var(--${k})"></div><div class="t"><b>--${k}</b>${v.toUpperCase()}<br>${d}${
-          ["ink", "ink-2", "ink-3", "sanction", "refer", "decline"].includes(k) && c ? `<br>${c.toFixed(1)}:1 on sheet` : ""
-        }</div></div>`;
-      })
-      .join("");
-  }
-  function initDS() {
-    drawSwatches();
-    const TS = [
-      ["display-xl", "64/64 Source Serif 4 600", "Know the risk before you lend."],
-      ["display-m", "44/48 Source Serif 4 600", "Assess an application"],
-      ["display-l", "36/42 Source Serif 4 600", "Sanctioned at grade B"],
-      ["figure-l", "36/40 Geist 600 tabular", "₹18,420"],
-      ["title", "28/34 Geist 600", "Credit and debts"],
-      ["subtitle", "20/28 Geist 600", "Assessment sheet"],
-      ["body", "16/26 Geist 400", "Your EMIs would take 48% of your monthly income. Lenders prefer under 40%."],
-      ["ui", "14/20 Geist 500", "Monthly net income"],
-      ["small", "13/18 Geist 500", "Take-home pay after tax"],
-    ];
-    document.getElementById("typeScale")!.innerHTML = TS.map(
-      ([c, m, t]) =>
-        `<div class="typerow"><div class="meta"><b style="color:var(--ink-2)">${c}</b><br>${m}</div><div class="${c === "body" ? "" : c}" style="${
-          c === "display-xl" ? "font-size:clamp(34px,6vw,61px);line-height:1.05" : ""
-        }">${t}</div></div>`
-    ).join("");
-    document.getElementById("dsSave")?.addEventListener("click", (e: any) => {
-      btnRun(e.currentTarget, async () => {
-        if (onDownloadPdf) await onDownloadPdf(PERSONAS[0], score(PERSONAS[0], true), "demo-report", fmtDate(new Date()));
-        await sleep(500);
-      });
-      setTimeout(() => toast("Report downloaded"), 600);
-    });
-    holdInit(document.getElementById("holdBtn"), () => toast("Marked as declined by the loan officer", "bad"));
-    document.querySelectorAll("#dsMoney,#dsErr").forEach(moneyInit);
-    document.getElementById("dsErrBtn")?.addEventListener("click", () => {
-      const f = document.getElementById("dsErrF")!;
-      const v = parseINR((document.getElementById("dsErr") as HTMLInputElement).value);
-      f.classList.remove("err");
-      if (v < 10000 || v > 5000000) {
-        f.querySelector(".errmsg > div")!.innerHTML = iconSvg("x", { s: 16 }) + "<span>Enter a monthly income between ₹10,000 and ₹50,00,000.</span>";
-        void f.offsetWidth;
-        f.classList.add("err");
-      } else toast("Income looks right");
-    });
-    document.getElementById("dsErr")?.addEventListener("input", () => document.getElementById("dsErrF")?.classList.remove("err"));
-    document.querySelectorAll('[data-view="design-system"] .seg').forEach((s) => segInit(s));
-    rangeInit(document.getElementById("dsR")?.closest(".rng"), (v) => v + " months");
-    setTimeout(() => landStamp(document.getElementById("stamp2"), "SANCTIONED", "01 NOV 2026, SAAKH AI"), 400);
-    document.getElementById("chipDemo")!.innerHTML = ["SANCTIONED", "REFER", "DECLINED"].map(chipOutcome).join("") + GRADES.map(chipGrade).join("");
-    document.querySelectorAll("[data-st]").forEach((b: any) =>
-      b.addEventListener("click", () => {
-        const st = document.getElementById("stamp2")!;
-        st.getAnimations().forEach((a) => a.cancel());
-        landStamp(st, b.dataset.st, "01 NOV 2026, SAAKH AI");
-        setTimeout(() => {
-          if (!reduce) document.getElementById("stampDemo")?.animate([{ translate: "0 0" }, { translate: "0 2px" }, { translate: "0 0" }], { duration: 90 });
-        }, EASE.stamp.duration * 0.3);
-      })
-    );
-    const MOT: any[] = [
-      ["marker spring", "stiffness 260, damping 20", "Risk-ruler marker; small visible overshoot", "marker"],
-      ["stamp spring", "stiffness 650, damping 20, mass 1.3", "Decision stamp only", "stamp"],
-      ["snappy spring", "stiffness 420, damping 32", "Nav marker, segmented control, tab underline", "snappy"],
-      ["ease-out 200 ms", "cubic-bezier(.23,1,.32,1)", "Standard: tooltips, tabs, chips", { duration: 200, easing: "cubic-bezier(.23,1,.32,1)" }],
-      ["ease-in-out 300 ms", "cubic-bezier(.77,0,.175,1)", "On-screen movement, highlighter swipe", { duration: 300, easing: "cubic-bezier(.77,0,.175,1)" }],
-      ["drawer 500 ms", "cubic-bezier(.32,.72,0,1)", "Phone bottom drawer", { duration: 500, easing: "cubic-bezier(.32,.72,0,1)" }],
-      ["press 90 / 160 ms", "asymmetric", "NeoPOP edge collapse: fast down, slower up", { duration: 90, easing: "cubic-bezier(.23,1,.32,1)" }],
-    ];
-    document.getElementById("motGrid")!.innerHTML = MOT.map(
-      (m, i) =>
-        `<div class="mot"><h4>${m[0]}</h4><p>${m[1]}<br>${m[2]}</p><div class="lane"><span class="blk" id="blk${i}"></span></div><button class="btn btn-secondary btn-sm ih" data-mot="${i}">${iconSvg("play", { s: 16, a: "pop" })}<span class="lbl">Play</span></button></div>`
-    ).join("");
-    document.querySelectorAll("[data-mot]").forEach((b: any) =>
-      b.addEventListener("click", () => {
-        const i = +b.dataset.mot;
-        const blk: any = document.getElementById("blk" + i);
-        const lane = blk.parentElement;
-        const dx = lane.offsetWidth - 40;
-        const back = blk._out;
-        blk._out = !back;
-        const m = MOT[i][3];
-        anim(blk, [{ transform: `translateX(${back ? dx : 0}px)` }, { transform: `translateX(${back ? 0 : dx}px)` }], m);
-      })
-    );
-    const IC = [
-      ["file-check", "draw"], ["sliders-horizontal", "nudge-x"], ["users", "pop"], ["cloud-upload", "nudge-y"], ["chart-column-increasing", "bars"],
-      ["brain", "pulse"], ["circle-help", "wiggle"], ["gauge", "needle"], ["stamp", "press"], ["circle-check", "draw"], ["badge-alert", "wiggle"],
-      ["ban", "draw"], ["gavel", "wiggle"], ["indian-rupee", "nudge-y"], ["receipt-indian-rupee", "nudge-y"], ["hand-coins", "nudge-y"],
-      ["credit-card", "nudge-x"], ["briefcase-business", "nudge-y"], ["id-card", "pop"], ["house", "pop"], ["car", "nudge-x"], ["graduation-cap", "wiggle"],
-      ["wallet", "pop"], ["trending-up", "draw"], ["trending-down", "draw"], ["sparkles", "pop"], ["history", "spin"], ["download", "nudge-y"],
-      ["upload", "nudge-y"], ["search", "wiggle"], ["sun-moon", "spin"], ["keyboard", "press"], ["copy", "nudge-x"], ["refresh-cw", "spin"],
-      ["play", "pop"], ["check", "draw"], ["x", "draw"], ["workflow", "pop"], ["chart-scatter", "pop"], ["palette", "wiggle"],
-    ];
-    document.getElementById("icGrid")!.innerHTML = IC.map(([n, a]) => `<div class="icell ih">${iconSvg(n, { a })}<span>${n}</span><b>${a}</b></div>`).join("");
-    const MAP = [
-      ["Approved, success, done", "circle-check", "ring and check draw"],
-      ["Needs review, warning", "badge-alert", "shake"],
-      ["Declined, blocked", "ban", "strike draws"],
-      ["Rule or policy", "gavel", "strike"],
-      ["Money, income", "indian-rupee", "lift"],
-      ["EMI, bill", "receipt-indian-rupee", "lift"],
-      ["Debt, repayments", "hand-coins", "coins drop"],
-      ["Risk level", "gauge", "needle sweeps"],
-      ["Insight, AI explanation", "sparkles", "twinkle"],
-      ["Improve, going up", "trending-up", "line draws"],
-      ["Risk going up", "trending-down", "line draws"],
-      ["Home loan", "house", "pop"],
-      ["Car loan", "car", "nudge"],
-      ["Education loan", "graduation-cap", "wiggle"],
-      ["Celebration after sanction", "stamp", "press"],
-      ["Time, history", "history", "rewind"],
-      ["Loading", "loader-circle", "continuous spin"],
-    ];
-    document.getElementById("emojiMap")!.innerHTML = MAP.map(
-      ([m, n, a]) => `<tr class="ih"><td>${m}</td><td>${iconSvg(n, { a: a.includes("draw") ? "draw" : a.includes("spin") ? "spin" : "pop" })}${n}</td><td>${a}</td></tr>`
-    ).join("");
-  }
-
-  /* ====================================================================
      HOME
   ==================================================================== */
   function initHome() {
@@ -2346,7 +2201,6 @@ export function initSaakhRuntime(
     portfolio: "Portfolio",
     model: "Model",
     about: "About",
-    "design-system": "Design system",
   };
   const inited: Record<string, boolean> = {};
   function placePill(inst?: boolean) {
@@ -2387,7 +2241,6 @@ export function initSaakhRuntime(
       applicants: initApplicants,
       batch: initBatch,
       model: initModel,
-      "design-system": initDS,
     };
     if (!inited[r] && once[r]) {
       once[r]();
@@ -2428,7 +2281,6 @@ export function initSaakhRuntime(
     document.querySelectorAll("#themeBtn,[data-theme-toggle]").forEach((b) =>
       b.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme")
     );
-    if (inited["design-system"]) drawSwatches();
   }
   try {
     const t = localStorage.getItem("saakh-theme");
@@ -2452,7 +2304,6 @@ export function initSaakhRuntime(
         portfolio: "chart-column-increasing",
         model: "brain",
         about: "circle-help",
-        "design-system": "palette",
       } as Record<string, string>)[k],
       run: () => (location.hash = k),
     })),

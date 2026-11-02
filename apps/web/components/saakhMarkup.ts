@@ -25,7 +25,6 @@ export const SAAKH_MARKUP = `
       <a class="ih" href="#model" data-route="model"><i data-icon="brain" data-a="pulse"></i><span>Model</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
-      <a class="ih" href="#design-system" data-route="design-system"><i data-icon="palette" data-a="wiggle"></i><span>Design system</span></a>
     </nav>
     <div class="rail-foot">AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
   </aside>
@@ -306,7 +305,6 @@ export const SAAKH_MARKUP = `
       </dl>
       <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
         <button class="btn btn-primary ih" id="aboutTour"><i data-icon="play" data-a="pop"></i><span class="lbl">Start guided demo</span></button>
-        <a class="btn btn-secondary ih" href="#design-system"><i data-icon="palette" data-a="wiggle"></i><span class="lbl">Open the design system</span></a>
       </div>
     </div>
     <div class="panel" style="grid-column:span 5;padding:28px">
@@ -319,54 +317,6 @@ export const SAAKH_MARKUP = `
       </ul>
     </div>
   </div>
-</section>
-
-<!-- ======================= DESIGN SYSTEM ======================= -->
-<section class="view" data-view="design-system" aria-label="Design system">
-  <div class="page-head"><div class="grow"><h1 class="display-m">Design system</h1><p>Every token, component and motion rule from DESIGN.md, live. Hover icons and buttons; press the play buttons to see each motion.</p></div></div>
-  <div class="ds-sec"><h2 class="title">References</h2><p>Every layout, colour and motion decision traces back to one of these three. Full reasoning in design-spec.md.</p>
-    <div class="refs">
-      <div><h3>Ramp</h3><p>Swiss restraint: ink on white, one highlighter accent rationed to a single job per screen, hierarchy from size, hairlines instead of shadows, dense tables.</p><p class="small">Used for: shell, tables, haldi accent, dot-grid canvas.</p></div>
-      <div><h3>Mercury</h3><p>A serif for headlines and a sans for everything else, so a bank reads like a financial review. Red only when something needs attention. State first, controls second.</p><p class="small">Used for: type split, decision headline, Assess layout, red reserved for declines.</p></div>
-      <div><h3>CRED NeoPOP</h3><p>Indian fintech with personality: sharp geometry, high contrast, and extruded pop buttons whose edge collapses when pressed.</p><p class="small">Used for: every button, the elevated sheet, the stamp's punch.</p></div>
-    </div></div>
-  <div class="ds-sec"><h2 class="title">Color</h2><p>Light theme is "Ink and haldi", dark theme is "Night ledger". Haldi does one job per screen. Switch the theme in the top bar to see both. Contrast is measured against the sheet color.</p><div class="sw-grid" id="swatches"></div></div>
-  <div class="ds-sec"><h2 class="title">Type</h2><p>Source Serif 4 for headlines (Mercury), Geist for everything else including every number (Ramp). Uppercase appears only inside the stamp.</p><div id="typeScale"></div></div>
-  <div class="ds-sec"><h2 class="title">Buttons</h2><p>NeoPOP: the 4 px ink edge collapses when pressed (90 ms down, 160 ms back). Loading keeps the width; success draws a check, then the label returns.</p>
-    <div class="demo-row"><span class="cap">Variants</span>
-      <button class="btn btn-primary ih" id="dsSave" style="min-width:150px"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Download report</span><span class="state load"><i data-icon="loader-circle" data-cls="spin"></i></span><span class="state ok"><span style="display:flex;gap:8px;align-items:center"><i data-icon="check" data-raw></i>Downloaded</span></span></button>
-      <button class="btn btn-secondary ih"><i data-icon="copy" data-a="nudge-x"></i><span class="lbl">Copy summary</span></button>
-      <button class="btn btn-ghost ih"><i data-icon="history" data-a="spin"></i><span class="lbl">View history</span></button>
-      <button class="btn btn-primary" disabled><span class="lbl">Disabled</span></button>
-      <button class="iconbtn ih" aria-label="Refresh"><i data-icon="refresh-cw" data-a="spin"></i></button>
-    </div>
-    <div class="demo-row"><span class="cap">Hold to confirm (loan officer override). Hold for 0.8 seconds; let go early and it drains back.</span>
-      <button class="btn hold ih" id="holdBtn"><span class="fill"></span><i data-icon="ban" data-a="draw"></i><span class="lbl">Hold to decline</span></button>
-    </div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Inputs</h2><p>Indian digit grouping as you type, amount in words below, and errors that shake once and say how to fix the value.</p>
-    <div class="demo-row" style="align-items:flex-start">
-      <div class="field" style="width:280px"><label for="dsMoney">Loan amount</label><div class="money"><input class="ctl" id="dsMoney" data-money value="1250000" inputmode="numeric"></div><span class="words" data-words="dsMoney"></span></div>
-      <div class="field" id="dsErrF" style="width:280px"><label for="dsErr">Monthly net income</label><div class="money"><input class="ctl" id="dsErr" data-money value="4000" inputmode="numeric"></div><div class="errmsg"><div></div></div><span class="help">Take-home pay after tax</span></div>
-      <button class="btn btn-secondary" id="dsErrBtn" style="margin-top:26px">Validate</button>
-    </div>
-    <div class="demo-row"><span class="cap">Segmented control, switch and slider</span>
-      <div class="seg" data-seg="demo"><span class="seg-ind"></span><button type="button" data-v="a" aria-pressed="true">Monthly</button><button type="button" data-v="b">Quarterly</button><button type="button" data-v="c">Yearly</button></div>
-      <label class="switch"><input type="checkbox" checked><span class="trk"></span>Email the report</label>
-      <div class="rng" style="width:260px"><label class="sr" for="dsR">Tenure</label><input type="range" id="dsR" min="12" max="120" value="48" data-fmt="mo"><span class="bub"></span></div>
-    </div>
-    <div class="demo-row"><span class="cap">Loading skeleton</span><div style="flex:1;display:grid;gap:8px;max-width:420px"><div class="skel" style="height:18px;width:60%"></div><div class="skel" style="height:12px"></div><div class="skel" style="height:12px;width:80%"></div></div></div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Decision chips and grades</h2><p>Decision color always comes with a word and an icon; the grade letter is always printed.</p>
-    <div class="demo-row" id="chipDemo"></div></div>
-  <div class="ds-sec"><h2 class="title">The decision stamp</h2><p>One of two signature moments, with the highlighter swipe. It lands with a stiff spring, nudges the sheet and leaves an ink ring.</p>
-    <div class="stampdemo" id="stampDemo"><div class="stamp" id="stamp2"><span class="inkring"></span><b>SANCTIONED</b><small>01 NOV 2026, SAAKH AI</small></div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" data-st="SANCTIONED">Stamp sanctioned</button><button class="btn btn-secondary btn-sm" data-st="REFER">Stamp refer</button><button class="btn btn-secondary btn-sm" data-st="DECLINED">Stamp declined</button></div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Motion tokens</h2><p>From Emil Kowalski’s rules: ease-out by default, nothing routine over 300 ms, springs only where physics helps. Reduced motion keeps opacity only.</p><div class="mot-grid" id="motGrid"></div></div>
-  <div class="ds-sec"><h2 class="title">Animated icons</h2><p>Lucide line icons at 1.75 px; in the app each one is the lucide-animated component of the same name. Hover a cell to play it.</p><div class="icgrid" id="icGrid"></div></div>
-  <div class="ds-sec"><h2 class="title">No emoji: what to use instead</h2><p>Wherever an emoji might be tempting, use the animated icon for that meaning.</p>
-    <div class="panel" style="overflow:hidden"><table class="map"><thead><tr><th>Meaning</th><th>Icon</th><th>Animation</th></tr></thead><tbody id="emojiMap"></tbody></table></div></div>
 </section>
 
     </main>
