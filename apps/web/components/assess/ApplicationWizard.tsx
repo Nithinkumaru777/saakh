@@ -53,34 +53,29 @@ export function ApplicationWizard({
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<ApplicationInput>(initialData || DEFAULT_APPLICATION);
   const [personas, setPersonas] = useState<Persona[]>([]);
-  const [loadingPersonas, setLoadingPersonas] = useState(false);
+  const [appliedPersonaId, setAppliedPersonaId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let mounted = true;
-    setLoadingPersonas(true);
     fetchPersonas()
       .then((data) => {
         if (mounted) setPersonas(data);
       })
-      .catch(() => {})
-      .finally(() => {
-        if (mounted) setLoadingPersonas(false);
-      });
+      .catch(() => {});
     return () => {
       mounted = false;
     };
   }, []);
 
   // Sync external persona if passed via URL or props
+  const externalPersona = selectedPersonaId ? personas.find((p) => p.id === selectedPersonaId) : undefined;
+  if (externalPersona && appliedPersonaId !== externalPersona.id) {
+    setAppliedPersonaId(externalPersona.id);
+    setFormData(externalPersona.application);
+  }
   useEffect(() => {
-    if (selectedPersonaId && personas.length > 0) {
-      const match = personas.find((p) => p.id === selectedPersonaId);
-      if (match) {
-        setFormData(match.application);
-        onLiveChange?.(match.application);
-      }
-    }
-  }, [selectedPersonaId, personas, onLiveChange]);
+    if (externalPersona) onLiveChange?.(externalPersona.application);
+  }, [externalPersona, onLiveChange]);
 
   const updateField = <K extends keyof ApplicationInput>(key: K, value: ApplicationInput[K]) => {
     setFormData((prev) => {

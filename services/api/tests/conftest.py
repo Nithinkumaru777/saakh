@@ -23,7 +23,13 @@ import os
 import re
 from pathlib import Path
 
+import tempfile
+
 import pytest
+
+# Tests must never write into the committed demo database (data/saakh.db). This runs before
+# any test module imports app.db, so the engine is created against a temp file.
+os.environ.setdefault("SAAKH_DB_PATH", str(Path(tempfile.mkdtemp(prefix="saakh-test-")) / "saakh.db"))
 
 pytest_plugins = ["pytester"]
 

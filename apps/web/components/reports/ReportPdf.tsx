@@ -116,6 +116,12 @@ const styles = StyleSheet.create({
   },
 });
 
+
+/** Saved assessments carry their own date; a live estimate is issued on the day it is printed. */
+function issuedOn(createdAt?: string | null): string {
+  return (createdAt ? new Date(createdAt) : new Date()).toLocaleDateString();
+}
+
 export interface ReportPdfProps {
   assessment: AssessmentResponse;
 }
@@ -140,7 +146,7 @@ export function ReportPdfDocument({ assessment }: ReportPdfProps) {
           </View>
           <View>
             <Text style={styles.refBadge}>REF: {assessment.id.slice(0, 12)}</Text>
-            <Text style={styles.refBadge}>DATE: {new Date(assessment.created_at || Date.now()).toLocaleDateString()}</Text>
+            <Text style={styles.refBadge}>DATE: {issuedOn(assessment.created_at)}</Text>
           </View>
         </View>
 

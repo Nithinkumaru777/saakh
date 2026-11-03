@@ -12,7 +12,12 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 DB_DIR = Path(__file__).resolve().parents[1] / "data"
 DB_DIR.mkdir(parents=True, exist_ok=True)
-DB_PATH = DB_DIR / "saakh.db"
+import os  # noqa: E402
+
+# SAAKH_DB_PATH lets deployments put the database on a persistent volume and lets the
+# test suite use a throwaway file instead of the committed demo database.
+DB_PATH = Path(os.environ.get("SAAKH_DB_PATH") or DB_DIR / "saakh.db")
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})

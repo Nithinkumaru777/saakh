@@ -38,7 +38,13 @@ export function CommandPalette() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
+        if (isOpen) {
+          setIsOpen(false);
+        } else {
+          setQuery("");
+          setSelectedIndex(0);
+          setIsOpen(true);
+        }
       } else if (e.key === "Escape" && isOpen) {
         e.preventDefault();
         setIsOpen(false);
@@ -50,9 +56,8 @@ export function CommandPalette() {
 
   useEffect(() => {
     if (isOpen) {
-      setQuery("");
-      setSelectedIndex(0);
-      setTimeout(() => inputRef.current?.focus(), 10);
+      const t = setTimeout(() => inputRef.current?.focus(), 10);
+      return () => clearTimeout(t);
     }
   }, [isOpen]);
 

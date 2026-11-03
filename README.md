@@ -77,6 +77,38 @@ pnpm dev
 ```
 Open `http://localhost:3000` in your browser.
 
+### Production Deployment
+
+```powershell
+# API (no --reload; put SAAKH_DB_PATH on a persistent volume)
+cd services/api
+$env:SAAKH_CORS_ORIGINS = "https://saakh.example.com"
+$env:SAAKH_DB_PATH = "D:\saakh-data\saakh.db"
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# Web (NEXT_PUBLIC_API_URL is baked in at build time)
+cd apps/web
+$env:NEXT_PUBLIC_API_URL = "https://api.saakh.example.com"
+pnpm build
+pnpm start
+```
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `SAAKH_CORS_ORIGINS` | `http://localhost:3000` | Comma-separated origins allowed to call the API |
+| `SAAKH_DB_PATH` | `services/api/data/saakh.db` | SQLite file location (tests use a temp file automatically) |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | API base URL used by the browser |
+
+Production behaviour:
+
+- **Model warm-up:** the XGBoost bundle and SHAP explainer load at startup, so the first `/api/score` after a restart is as fast as the rest (~12 ms instead of ~200 ms).
+- **Batch limits (SPEC §F17):** `POST /api/batch` rejects files over 5 MB (`413`), more than 5,000 rows, or a header that does not match the template (`422`, naming the missing/unknown columns).
+- **History:** `GET /api/assessments` counts and paginates in SQL; `%` and `_` in the search box match literally.
+
+### Real-time Updates
+
+`GET /api/events` is a Server-Sent Events stream. Whenever an assessment is saved (`/api/assess`, `/api/batch?save=true`) or deleted, every open browser receives a `change` frame and the **Applicants** table and **Portfolio** charts refresh in place, so several loan officers see each other's decisions without reloading. A status chip in the top bar shows **Live / Reconnecting / Offline**; assessments from another desk raise a toast; after a reconnect the page re-syncs anything it missed. The feed is in-process (one API worker); with several workers, back `app/events.py` with Redis pub/sub.
+
 ---
 
 ## 4. Quality Verification & Testing

@@ -1,6 +1,6 @@
 # Test ledger
 
-Generated 2026-11-01 07:16 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
+Generated 2026-11-03 06:32 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
 
 **26 of 26 function cards PASS.** PENDING means the function has not been built yet.
 
@@ -22,9 +22,9 @@ Generated 2026-11-01 07:16 UTC by `python scripts/test_ledger.py`. Rule (SPEC §
 | F14 counterfactuals | SPEC §F14 | 100 | 100 | 0 | PASS |
 | F15 assess (POST /api/assess) | SPEC §F15 | 100 | 100 | 0 | PASS |
 | F16 score (POST /api/score) | SPEC §F16 | 100 | 100 | 0 | PASS |
-| F17 batch_score (POST /api/batch) | SPEC §F17 | 100 | 100 | 0 | PASS |
+| F17 batch_score (POST /api/batch) | SPEC §F17 | 201 | 201 | 0 | PASS |
 | F18 portfolio_stats (GET /api/portfolio) | SPEC §F18 | 100 | 100 | 0 | PASS |
-| F19 history list / get / delete | SPEC §F19 | 100 | 100 | 0 | PASS |
+| F19 history list / get / delete | SPEC §F19 | 404 | 404 | 0 | PASS |
 | F20 ReportPdf (web) | SPEC §F20 | 100 | 100 | 0 | PASS |
 | F21 web formatting (lib/format.ts) | SPEC §F21 | 300 | 300 | 0 | PASS |
 | F22 personas and sample data (GET /api/personas) | SPEC §F22 | 100 | 100 | 0 | PASS |

@@ -24,8 +24,11 @@ client = TestClient(app)
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_db():
+    # Run the app's real lifespan (init, seed, model warm-up) exactly as uvicorn does.
     init_db()
     seed_database_if_empty()
+    with client:
+        yield
 
 
 # ==============================================================================

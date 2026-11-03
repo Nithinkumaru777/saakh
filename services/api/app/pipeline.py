@@ -151,3 +151,23 @@ def assess_application(
                 sess.commit()
 
     return data
+
+
+_WARMUP_APPLICATION: dict[str, Any] = {
+    "full_name": "Warm Up", "age": 30, "employment_type": "salaried", "years_in_job": 4.0,
+    "city_tier": 1, "dependents": 0, "residence": "rented", "monthly_income": 80000,
+    "other_monthly_income": 0, "cibil_score": 750, "credit_history_years": 5.0,
+    "open_credit_lines": 3, "credit_utilisation_pct": 24.0, "missed_payments_24m": 0,
+    "enquiries_6m": 0, "past_default": False, "existing_emi": 5000, "outstanding_debt": 40000,
+    "loan_type": "personal", "loan_amount": 500000, "tenure_months": 36,
+    "collateral_value": 0, "purpose": "",
+}
+
+
+def warm_up() -> None:
+    """Score one fixed application so the model bundle and SHAP explainer are loaded at startup.
+
+    Without this the first real /api/score after a restart takes ~200 ms (vs ~12 ms steady
+    state), breaking the F16 p95 budget for whoever happens to be first.
+    """
+    score_application(ApplicationIn(**_WARMUP_APPLICATION))

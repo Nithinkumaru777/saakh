@@ -33,6 +33,7 @@ export const SAAKH_MARKUP = `
     <header class="topbar">
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
+      <span class="livefeed" id="liveFeed" data-state="connecting" role="status" title="Live updates: new assessments from other desks appear without a reload"><span class="pulse" aria-hidden="true"></span><span class="txt">Connecting</span></span>
       <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
       <button class="btn btn-secondary btn-sm ih" id="cmdBtn" aria-label="Open command palette"><i data-icon="search" data-a="wiggle" data-s="16"></i><span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>
       <button class="iconbtn ih" id="themeBtn" aria-label="Switch to dark theme"><i data-icon="sun-moon" data-a="spin"></i></button>

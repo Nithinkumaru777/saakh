@@ -85,7 +85,7 @@ export function AssessmentSheet({
           </span>
         </div>
         <div className="text-[11px] font-mono text-[var(--ink-3)]">
-          {new Date(assessment.created_at || Date.now()).toLocaleTimeString()}
+          {assessment.created_at ? new Date(assessment.created_at).toLocaleTimeString() : "Not saved"}
         </div>
       </div>
 

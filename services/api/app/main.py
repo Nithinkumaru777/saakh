@@ -8,16 +8,18 @@ from __future__ import annotations
 import csv
 import io
 import json
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Optional
-from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import PlainTextResponse
-from sqlmodel import Session, col, desc, select
+from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
+from sqlmodel import Session, col, desc, func, select
 
 from app.db import AssessmentRecord, get_session, init_db, seed_database_if_empty
-from app.pipeline import assess_application, build_assessment, score_application
+from app import events
+from app.pipeline import assess_application, build_assessment, score_application, warm_up
 from app.schemas import ApplicationIn, AssessmentOut
 
 API_DIR = Path(__file__).resolve().parents[1]
@@ -30,6 +32,8 @@ async def lifespan(app: FastAPI):
     """Initialize database and seed with demo personas and generated assessments."""
     init_db()
     seed_database_if_empty()
+    # Load model + SHAP explainer now so the first real applicant isn't the one paying ~200 ms.
+    warm_up()
     yield
 
 
@@ -43,7 +47,12 @@ app = FastAPI(
 # CORS setup
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    # Comma-separated list, e.g. "https://saakh.example.com,http://localhost:3000".
+    allow_origins=[
+        o.strip()
+        for o in os.environ.get("SAAKH_CORS_ORIGINS", "http://localhost:3000").split(",")
+        if o.strip()
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -62,6 +71,19 @@ def health() -> dict[str, str]:
         "student": "NITHIN KUMAR U",
         "usn": "2102508611",
     }
+
+
+@app.get("/api/events")
+async def event_stream(request: Request):
+    """Server-Sent Events: `change` frames when assessments are created or deleted."""
+    queue = events.try_subscribe()
+    if queue is None:
+        return JSONResponse({"detail": "Too many live connections. Try again shortly."}, status_code=503)
+    return StreamingResponse(
+        events.stream(queue, request.is_disconnected),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"},
+    )
 
 
 # ==============================================================================
@@ -87,7 +109,9 @@ def assess(application: ApplicationIn, session: Session = Depends(get_session)) 
     
     SPEC §F15.
     """
-    return assess_application(application, persist=True, session=session)
+    result = assess_application(application, persist=True, session=session)
+    events.publish("assessment.created", ids=[result["id"]])
+    return result
 
 
 # ==============================================================================
@@ -108,26 +132,26 @@ def list_assessments(
     
     SPEC §F19.
     """
-    stmt = select(AssessmentRecord)
-
+    filters = []
     if q:
-        stmt = stmt.where(col(AssessmentRecord.full_name).contains(q.strip()))
+        # autoescape: a search for "50%" or "a_b" matches literally, not as a LIKE wildcard.
+        filters.append(col(AssessmentRecord.full_name).contains(q.strip(), autoescape=True))
     if outcome:
-        stmt = stmt.where(AssessmentRecord.outcome == outcome.upper())
+        filters.append(AssessmentRecord.outcome == outcome.upper())
     if grade:
-        stmt = stmt.where(AssessmentRecord.grade == grade.upper())
+        filters.append(AssessmentRecord.grade == grade.upper())
     if loan_type:
-        stmt = stmt.where(AssessmentRecord.loan_type == loan_type.lower())
+        filters.append(AssessmentRecord.loan_type == loan_type.lower())
 
-    stmt = stmt.order_by(desc(AssessmentRecord.created_at))
-
-    # Total matching
-    all_matching = session.exec(stmt).all()
-    total = len(all_matching)
-
-    # Paginate
-    offset = (page - 1) * page_size
-    records = all_matching[offset : offset + page_size]
+    # Count and page in SQL instead of loading every matching row into memory.
+    total = session.exec(select(func.count()).select_from(AssessmentRecord).where(*filters)).one()
+    records = session.exec(
+        select(AssessmentRecord)
+        .where(*filters)
+        .order_by(desc(AssessmentRecord.created_at))
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+    ).all()
 
     items = [json.loads(r.assessment_json) for r in records]
 
@@ -157,6 +181,7 @@ def delete_assessment(assessment_id: str, session: Session = Depends(get_session
         raise HTTPException(status_code=404, detail=f"Assessment {assessment_id} not found.")
     session.delete(record)
     session.commit()
+    events.publish("assessment.deleted", ids=[assessment_id])
     return {"status": "deleted", "id": assessment_id}
 
 
@@ -164,17 +189,22 @@ def delete_assessment(assessment_id: str, session: Session = Depends(get_session
 # F17: /api/batch & template (Batch CSV Upload)
 # ==============================================================================
 
+BATCH_FIELDS = [
+    "full_name", "age", "employment_type", "years_in_job", "city_tier",
+    "dependents", "residence", "monthly_income", "other_monthly_income",
+    "cibil_score", "credit_history_years", "open_credit_lines",
+    "credit_utilisation_pct", "missed_payments_24m", "enquiries_6m",
+    "past_default", "existing_emi", "outstanding_debt", "loan_type",
+    "loan_amount", "tenure_months", "collateral_value", "purpose",
+]
+BATCH_MAX_ROWS = 5000  # SPEC F17
+BATCH_MAX_BYTES = 5 * 1024 * 1024  # 5,000 template rows are ~1 MB; 5 MB leaves headroom
+
+
 @app.get("/api/batch/template")
 def get_batch_template() -> PlainTextResponse:
     """Download CSV template for batch loan applications."""
-    fields = [
-        "full_name", "age", "employment_type", "years_in_job", "city_tier",
-        "dependents", "residence", "monthly_income", "other_monthly_income",
-        "cibil_score", "credit_history_years", "open_credit_lines",
-        "credit_utilisation_pct", "missed_payments_24m", "enquiries_6m",
-        "past_default", "existing_emi", "outstanding_debt", "loan_type",
-        "loan_amount", "tenure_months", "collateral_value", "purpose"
-    ]
+    fields = BATCH_FIELDS
     sample = [
         "Aarav Sharma", "29", "salaried", "4.5", "1",
         "0", "rented", "85000", "0",
@@ -200,14 +230,39 @@ async def batch_score(
     
     SPEC §F17.
     """
-    content = await file.read()
+    content = await file.read(BATCH_MAX_BYTES + 1)
+    if len(content) > BATCH_MAX_BYTES:
+        raise HTTPException(status_code=413, detail="CSV is larger than 5 MB. Split it into smaller files.")
     text = content.decode("utf-8-sig", errors="replace")
     reader = csv.DictReader(io.StringIO(text))
+
+    # SPEC F17: the header must match the template (column order is free).
+    header = [h.strip() for h in (reader.fieldnames or [])]
+    missing = [f for f in BATCH_FIELDS if f not in header]
+    extra = [h for h in header if h not in BATCH_FIELDS]
+    if missing or extra:
+        parts = []
+        if missing:
+            parts.append("missing columns: " + ", ".join(missing))
+        if extra:
+            parts.append("unknown columns: " + ", ".join(extra))
+        raise HTTPException(
+            status_code=422,
+            detail="CSV header does not match the template (" + "; ".join(parts) + "). Download /api/batch/template.",
+        )
+    reader.fieldnames = header
+
+    rows = list(reader)
+    if len(rows) > BATCH_MAX_ROWS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"CSV has {len(rows):,} rows; the limit is {BATCH_MAX_ROWS:,} per upload.",
+        )
 
     results: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
 
-    for row_idx, row in enumerate(reader, start=1):
+    for row_idx, row in enumerate(rows, start=1):
         try:
             # Type casting from CSV strings
             clean_row: dict[str, Any] = {
@@ -249,6 +304,9 @@ async def batch_score(
                 "field": "application",
                 "message": str(e),
             })
+
+    if save and results:
+        events.publish("assessment.created", ids=[r["id"] for r in results if "id" in r], count=len(results))
 
     return {
         "total_rows": len(results) + len(errors),

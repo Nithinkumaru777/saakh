@@ -691,6 +691,67 @@ export function initSaakhRuntime(
   }
   syncBackendHistory();
 
+  /* ---------------------------------------------------------------------------------------
+     LIVE FEED (GET /api/events): assessments saved or deleted at another desk show up in
+     Applicants and Portfolio without a reload. Bursts (batch save) collapse into one sync.
+     --------------------------------------------------------------------------------------- */
+  const LIVE_LABEL: Record<string, string> = { live: "Live", connecting: "Reconnecting", offline: "Offline" };
+  function setLive(state: "live" | "connecting" | "offline") {
+    const el = document.getElementById("liveFeed");
+    if (!el) return;
+    el.dataset.state = state;
+    const t = el.querySelector(".txt");
+    if (t) t.textContent = LIVE_LABEL[state];
+  }
+  let livePending: string[] = [];
+  let liveTimer = 0;
+  function refreshLive() {
+    clearTimeout(liveTimer);
+    liveTimer = window.setTimeout(async () => {
+      // ponytail: "unknown id after 250 ms" = another desk; an own save that is slower than
+      // 250 ms would also toast. Send a client id with /api/assess if that ever matters.
+      const known = new Set(HISTORY.map((h) => h.id));
+      const remote = livePending.filter((id) => !known.has(id)).length;
+      livePending = [];
+      await syncBackendHistory();
+      if (remote > 0) toast(remote === 1 ? "New assessment from another desk" : `${remote} new assessments from other desks`);
+      const view = (document.querySelector(".view.on") as HTMLElement | null)?.dataset.view;
+      if (view === "applicants" && !document.getElementById("appList")?.hidden) renderTable();
+      portDrawn = false;
+      if (view === "portfolio") drawPortfolio();
+    }, 250);
+  }
+  if (typeof EventSource === "undefined") {
+    setLive("offline");
+  } else {
+    const es = new EventSource(`${API_BASE}/api/events`);
+    let everConnected = false;
+    es.addEventListener("ready", () => {
+      if (everConnected) refreshLive(); // events sent while we were offline were missed
+      everConnected = true;
+      setLive("live");
+    });
+    es.addEventListener("change", (msg) => {
+      let e: { kind?: string; ids?: unknown };
+      try {
+        e = JSON.parse((msg as MessageEvent<string>).data);
+      } catch {
+        return;
+      }
+      const ids = Array.isArray(e.ids) ? e.ids.filter((x): x is string => typeof x === "string") : [];
+      if (e.kind === "assessment.deleted") {
+        const gone = new Set(ids);
+        HISTORY = HISTORY.filter((h) => !gone.has(h.id));
+      } else if (e.kind === "assessment.created") {
+        livePending.push(...ids);
+      } else {
+        return;
+      }
+      refreshLive();
+    });
+    es.onerror = () => setLive(es.readyState === EventSource.CLOSED ? "offline" : "connecting");
+  }
+
   const fmtDate = (d: Date) => (d instanceof Date && !isNaN(+d) ? d : new Date()).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
   function pdToPos(pd: number) {
@@ -2050,7 +2111,8 @@ export function initSaakhRuntime(
     const D = synth();
     const P = D.filter((d) => d.y).length, N = D.length - P;
     const sorted = [...D].sort((a, b) => b.s.pd - a.s.pd);
-    let tp = 0, fp = 0, pts: Array<[number, number]> = [[0, 0]], auc = 0, px = 0, py = 0;
+    const pts: Array<[number, number]> = [[0, 0]];
+    let tp = 0, fp = 0, auc = 0, px = 0, py = 0;
     sorted.forEach((d) => {
       if (d.y) tp++;
       else fp++;
