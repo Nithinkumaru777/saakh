@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saakh — AI-Based Loan Eligibility & Risk Assessment System</title>
+<title>Saakh - AI-Based Loan Eligibility & Risk Assessment System</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%2317171A%22/%3E%3Cg%20transform%3D%22translate%284%2C%204%29%22%20stroke%3D%22%23F2C12E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M14%2013V8.5C14%207%2015%207%2015%205a3%203%200%200%200-6%200c0%202%201%202%201%203.5V13%22%20/%3E%3Cpath%20d%3D%22M20%2015.5a2.5%202.5%200%200%200-2.5-2.5h-11A2.5%202.5%200%200%200%204%2015.5V17a1%201%200%200%200%201%201h14a1%201%200%200%200%201-1z%22%20/%3E%3Cpath%20d%3D%22M5%2022h14%22%20/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
@@ -99,6 +103,12 @@ a{color:var(--ink);text-underline-offset:3px}
 .rail-foot{margin-top:auto;padding:12px 10px;font-size:12.5px;line-height:18px;color:var(--ink-3);border-top:1px solid var(--rule)}
 .main{min-width:0;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;gap:10px;padding:16px 40px;position:sticky;top:0;z-index:20;background:var(--canvas);border-bottom:1px solid var(--rule)}
+.topbar-brand{display:none;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.topbar-sep{display:none}
+@media (max-width:767px){
+  .topbar-brand{display:inline-flex}
+  .topbar-sep{display:inline}
+}
 .topbar .grow{flex:1}
 .crumb{font-size:14px;color:var(--ink-3);font-weight:500}
 .kbd{font-size:11.5px;padding:0 5px;border:1px solid var(--rule-strong);border-radius:var(--r);color:var(--ink-3);line-height:18px}
@@ -570,6 +580,8 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 
   <div class="main">
     <header class="topbar">
+      <a class="brand topbar-brand" href="#home" style="padding:0;text-decoration:none" aria-label="Saakh home"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name" style="font-size:20px">Saakh</span></a>
+      <span class="topbar-sep" style="color:var(--rule-strong);margin:0 4px">/</span>
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
       <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>

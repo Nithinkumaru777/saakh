@@ -1,4 +1,8 @@
 {
+  "F20": {
+    "executions": 200,
+    "failed": 0
+  },
   "F24": {
     "executions": 700,
     "failed": 0
@@ -13,10 +17,6 @@
   },
   "F01": {
     "executions": 100,
-    "failed": 0
-  },
-  "F20": {
-    "executions": 200,
     "failed": 0
   }
 }

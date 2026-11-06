@@ -96,6 +96,12 @@ a{color:var(--ink);text-underline-offset:3px}
 .rail-foot{margin-top:auto;padding:12px 10px;font-size:12.5px;line-height:18px;color:var(--ink-3);border-top:1px solid var(--rule)}
 .main{min-width:0;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;gap:10px;padding:16px 40px;position:sticky;top:0;z-index:20;background:var(--canvas);border-bottom:1px solid var(--rule)}
+.topbar-brand{display:none;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.topbar-sep{display:none}
+@media (max-width:767px){
+  .topbar-brand{display:inline-flex}
+  .topbar-sep{display:inline}
+}
 .topbar .grow{flex:1}
 .crumb{font-size:14px;color:var(--ink-3);font-weight:500}
 /* Live-feed status: flat hairline chip; green = connected (never red, red is DECLINED-only). */

@@ -32,6 +32,8 @@ export const SAAKH_MARKUP = `
 
   <div class="main">
     <header class="topbar">
+      <a class="brand topbar-brand" href="#home" style="padding:0;text-decoration:none" aria-label="Saakh home"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name" style="font-size:20px">Saakh</span></a>
+      <span class="topbar-sep" style="color:var(--rule-strong);margin:0 4px">/</span>
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
       <span class="livefeed" id="liveFeed" data-state="connecting" role="status" title="Live updates: new assessments from other desks appear without a reload"><span class="pulse" aria-hidden="true"></span><span class="txt">Connecting</span></span>

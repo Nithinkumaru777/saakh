@@ -7,8 +7,16 @@ const serif = Source_Serif_4({ variable: "--font-serif", subsets: ["latin"], axe
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Saakh — AI-Based Loan Eligibility & Risk Assessment System",
+  title: "Saakh - AI-Based Loan Eligibility & Risk Assessment System",
   description: "AI-based loan eligibility and risk assessment. AI for Finance CIA-2, Topic 4. NITHIN KUMAR U, USN 2102508611.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
