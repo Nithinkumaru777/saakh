@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, Sparkles, CircleCheck, BadgeAlert, Ban } from "lucide-react";
+import { ArrowRight, Sparkles, CircleCheck, BadgeAlert, Ban, Play } from "lucide-react";
 import { AnimatedIcon } from "@/components/icons/AnimatedIcon";
 import { RiskRuler } from "@/components/ui/RiskRuler";
 import { GradeChip } from "@/components/ui/GradeChip";
@@ -251,6 +251,12 @@ export function SentenceDemo() {
           <Button variant="secondary" size="lg" className="flex items-center gap-2">
             <span>See how the AI decides</span>
             <AnimatedIcon icon={Sparkles} preset="pop" size={18} />
+          </Button>
+        </Link>
+        <Link href="/tutorials">
+          <Button variant="secondary" size="lg" className="flex items-center gap-2">
+            <span>Watch tutorial video</span>
+            <AnimatedIcon icon={Play} preset="pop" size={18} />
           </Button>
         </Link>
       </div>
