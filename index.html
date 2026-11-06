@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saakh prototype: AI loan eligibility and risk assessment</title>
+<title>Saakh â€” AI-Based Loan Eligibility & Risk Assessment System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
 <style>
-/* ============ TOKENS: design-spec.md §3 "Ink & Haldi" ============ */
+/* ============ TOKENS: design-spec.md Â§3 "Ink & Haldi" ============ */
 :root{
   --canvas:#F6F6F3; --sheet:#FFFFFF; --sheet-2:#FAFAF8; --rule:#E1E0DA; --rule-strong:#C9C8C0; --dot:#DEDDD6;
   --ink:#17171A; --ink-2:#4D4E55; --ink-3:#6B6C73; --on-ink:#FFFFFF;
@@ -46,7 +46,7 @@ a{color:var(--ink);text-underline-offset:3px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .tnum{font-variant-numeric:tabular-nums}
 
-/* ============ TYPE: design-spec.md §4 ============ */
+/* ============ TYPE: design-spec.md Â§4 ============ */
 .display-xl{font-family:var(--f-display);font-weight:600;font-size:64px;line-height:64px;letter-spacing:-.025em;font-optical-sizing:auto;margin:0}
 .display-l{font-family:var(--f-display);font-weight:600;font-size:36px;line-height:42px;letter-spacing:-.02em;margin:0}
 .display-m{font-family:var(--f-display);font-weight:600;font-size:44px;line-height:48px;letter-spacing:-.02em;margin:0}
@@ -157,7 +157,7 @@ body.landing .content{padding:0;max-width:none}
 .ctl:disabled{background:var(--sheet-2);color:var(--ink-3)}
 .money{position:relative}
 .money .ctl{padding-left:28px}
-.money::before{content:"₹";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-weight:500;pointer-events:none}
+.money::before{content:"â‚¹";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-weight:500;pointer-events:none}
 .field.err .ctl{border-color:var(--decline);box-shadow:0 0 0 1px var(--decline);animation:fieldShake .24s var(--e-out)}
 @keyframes fieldShake{0%,100%{translate:0}20%{translate:-4px}40%{translate:4px}60%{translate:-3px}80%{translate:3px}}
 .errmsg{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--d-std) var(--e-out);color:var(--decline);font-size:13px;line-height:18px;font-weight:500}
@@ -564,7 +564,6 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       <a class="ih" href="#model" data-route="model"><i data-icon="brain" data-a="pulse"></i><span>Model</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
-      <a class="ih" href="#design-system" data-route="design-system"><i data-icon="palette" data-a="wiggle"></i><span>Design system</span></a>
     </nav>
     <div class="rail-foot">AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
   </aside>
@@ -594,9 +593,9 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
     <div class="demo-label"><i></i>Change any underlined value</div>
     <p class="sentence" id="sentence">
       A <label class="sr" for="sEmp">Employment</label><select class="inl" id="sEmp" style="width:6.6em"><option value="salaried">salaried</option><option value="self_employed">self-employed</option><option value="business_owner">business-owner</option></select>
-      applicant earning ₹<label class="sr" for="sInc">Monthly income</label><input class="inl" id="sInc" data-money inputmode="numeric" value="85000" style="width:5.2em">
+      applicant earning â‚¹<label class="sr" for="sInc">Monthly income</label><input class="inl" id="sInc" data-money inputmode="numeric" value="85000" style="width:5.2em">
       a month, with a CIBIL score of <label class="sr" for="sCib">CIBIL score</label><input class="inl" id="sCib" inputmode="numeric" value="760" style="width:2.6em">,
-      asks for ₹<label class="sr" for="sAmt">Loan amount</label><input class="inl" id="sAmt" data-money inputmode="numeric" value="800000" style="width:5.6em">
+      asks for â‚¹<label class="sr" for="sAmt">Loan amount</label><input class="inl" id="sAmt" data-money inputmode="numeric" value="800000" style="width:5.6em">
       over <label class="sr" for="sTen">Tenure in months</label><input class="inl" id="sTen" inputmode="numeric" value="48" style="width:1.9em"> months.
     </p>
     <div class="verdict" aria-live="polite">
@@ -710,10 +709,10 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       </div>
       <div id="mainRuler"></div>
       <div class="kv4">
-        <div><div class="k">EMI</div><div class="v" id="emiVal">₹0</div></div>
+        <div><div class="k">EMI</div><div class="v" id="emiVal">â‚¹0</div></div>
         <div><div class="k">Indicative rate</div><div class="v" id="rateVal">0%</div></div>
         <div><div class="k">EMI to income</div><div class="v" id="foirVal">0%</div></div>
-        <div><div class="k">Max eligible</div><div class="v" id="maxVal">₹0</div></div>
+        <div><div class="k">Max eligible</div><div class="v" id="maxVal">â‚¹0</div></div>
       </div>
       <div class="sh-div"></div>
       <div class="reasons" id="reasons"></div>
@@ -740,7 +739,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
           <div style="padding-bottom:10px"><div class="k" style="margin-bottom:6px">Risk grade</div><span class="gchip big" id="wiGrade"></span></div>
           <div style="padding-bottom:14px"><div class="k" style="margin-bottom:6px">Outcome</div><div id="wiOutcome"></div></div></div>
         <div id="wiRuler"></div>
-        <div class="kv4" style="grid-template-columns:1fr 1fr"><div><div class="k">EMI</div><div class="v" id="wiEmi">₹0</div></div><div><div class="k">EMIs vs income</div><div class="v" id="wiFoir">0%</div></div></div>
+        <div class="kv4" style="grid-template-columns:1fr 1fr"><div><div class="k">EMI</div><div class="v" id="wiEmi">â‚¹0</div></div><div><div class="k">EMIs vs income</div><div class="v" id="wiFoir">0%</div></div></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;margin-top:32px"><i data-icon="trending-up" data-a="draw" style="color:var(--sanction)"></i><h2 class="subtitle">Paths to a better grade</h2></div>
       <div class="cf" id="cfList"></div>
@@ -839,7 +838,6 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       </dl>
       <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
         <button class="btn btn-primary ih" id="aboutTour"><i data-icon="play" data-a="pop"></i><span class="lbl">Start guided demo</span></button>
-        <a class="btn btn-secondary ih" href="#design-system"><i data-icon="palette" data-a="wiggle"></i><span class="lbl">Open the design system</span></a>
       </div>
     </div>
     <div class="panel" style="grid-column:span 5;padding:28px">
@@ -852,54 +850,6 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       </ul>
     </div>
   </div>
-</section>
-
-<!-- ======================= DESIGN SYSTEM ======================= -->
-<section class="view" data-view="design-system" aria-label="Design system">
-  <div class="page-head"><div class="grow"><h1 class="display-m">Design system</h1><p>Every token, component and motion rule from DESIGN.md, live. Hover icons and buttons; press the play buttons to see each motion.</p></div></div>
-  <div class="ds-sec"><h2 class="title">References</h2><p>Every layout, colour and motion decision traces back to one of these three. Full reasoning in design-spec.md.</p>
-    <div class="refs">
-      <div><h3>Ramp</h3><p>Swiss restraint: ink on white, one highlighter accent rationed to a single job per screen, hierarchy from size, hairlines instead of shadows, dense tables.</p><p class="small">Used for: shell, tables, haldi accent, dot-grid canvas.</p></div>
-      <div><h3>Mercury</h3><p>A serif for headlines and a sans for everything else, so a bank reads like a financial review. Red only when something needs attention. State first, controls second.</p><p class="small">Used for: type split, decision headline, Assess layout, red reserved for declines.</p></div>
-      <div><h3>CRED NeoPOP</h3><p>Indian fintech with personality: sharp geometry, high contrast, and extruded pop buttons whose edge collapses when pressed.</p><p class="small">Used for: every button, the elevated sheet, the stamp's punch.</p></div>
-    </div></div>
-  <div class="ds-sec"><h2 class="title">Color</h2><p>Light theme is "Ink and haldi", dark theme is "Night ledger". Haldi does one job per screen. Switch the theme in the top bar to see both. Contrast is measured against the sheet color.</p><div class="sw-grid" id="swatches"></div></div>
-  <div class="ds-sec"><h2 class="title">Type</h2><p>Source Serif 4 for headlines (Mercury), Geist for everything else including every number (Ramp). Uppercase appears only inside the stamp.</p><div id="typeScale"></div></div>
-  <div class="ds-sec"><h2 class="title">Buttons</h2><p>NeoPOP: the 4 px ink edge collapses when pressed (90 ms down, 160 ms back). Loading keeps the width; success draws a check, then the label returns.</p>
-    <div class="demo-row"><span class="cap">Variants</span>
-      <button class="btn btn-primary ih" id="dsSave" style="min-width:150px"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Download report</span><span class="state load"><i data-icon="loader-circle" data-cls="spin"></i></span><span class="state ok"><span style="display:flex;gap:8px;align-items:center"><i data-icon="check" data-raw></i>Downloaded</span></span></button>
-      <button class="btn btn-secondary ih"><i data-icon="copy" data-a="nudge-x"></i><span class="lbl">Copy summary</span></button>
-      <button class="btn btn-ghost ih"><i data-icon="history" data-a="spin"></i><span class="lbl">View history</span></button>
-      <button class="btn btn-primary" disabled><span class="lbl">Disabled</span></button>
-      <button class="iconbtn ih" aria-label="Refresh"><i data-icon="refresh-cw" data-a="spin"></i></button>
-    </div>
-    <div class="demo-row"><span class="cap">Hold to confirm (loan officer override). Hold for 0.8 seconds; let go early and it drains back.</span>
-      <button class="btn hold ih" id="holdBtn"><span class="fill"></span><i data-icon="ban" data-a="draw"></i><span class="lbl">Hold to decline</span></button>
-    </div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Inputs</h2><p>Indian digit grouping as you type, amount in words below, and errors that shake once and say how to fix the value.</p>
-    <div class="demo-row" style="align-items:flex-start">
-      <div class="field" style="width:280px"><label for="dsMoney">Loan amount</label><div class="money"><input class="ctl" id="dsMoney" data-money value="1250000" inputmode="numeric"></div><span class="words" data-words="dsMoney"></span></div>
-      <div class="field" id="dsErrF" style="width:280px"><label for="dsErr">Monthly net income</label><div class="money"><input class="ctl" id="dsErr" data-money value="4000" inputmode="numeric"></div><div class="errmsg"><div></div></div><span class="help">Take-home pay after tax</span></div>
-      <button class="btn btn-secondary" id="dsErrBtn" style="margin-top:26px">Validate</button>
-    </div>
-    <div class="demo-row"><span class="cap">Segmented control, switch and slider</span>
-      <div class="seg" data-seg="demo"><span class="seg-ind"></span><button type="button" data-v="a" aria-pressed="true">Monthly</button><button type="button" data-v="b">Quarterly</button><button type="button" data-v="c">Yearly</button></div>
-      <label class="switch"><input type="checkbox" checked><span class="trk"></span>Email the report</label>
-      <div class="rng" style="width:260px"><label class="sr" for="dsR">Tenure</label><input type="range" id="dsR" min="12" max="120" value="48" data-fmt="mo"><span class="bub"></span></div>
-    </div>
-    <div class="demo-row"><span class="cap">Loading skeleton</span><div style="flex:1;display:grid;gap:8px;max-width:420px"><div class="skel" style="height:18px;width:60%"></div><div class="skel" style="height:12px"></div><div class="skel" style="height:12px;width:80%"></div></div></div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Decision chips and grades</h2><p>Decision color always comes with a word and an icon; the grade letter is always printed.</p>
-    <div class="demo-row" id="chipDemo"></div></div>
-  <div class="ds-sec"><h2 class="title">The decision stamp</h2><p>One of two signature moments, with the highlighter swipe. It lands with a stiff spring, nudges the sheet and leaves an ink ring.</p>
-    <div class="stampdemo" id="stampDemo"><div class="stamp" id="stamp2"><span class="inkring"></span><b>SANCTIONED</b><small>01 NOV 2026, SAAKH AI</small></div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-secondary btn-sm" data-st="SANCTIONED">Stamp sanctioned</button><button class="btn btn-secondary btn-sm" data-st="REFER">Stamp refer</button><button class="btn btn-secondary btn-sm" data-st="DECLINED">Stamp declined</button></div>
-  </div>
-  <div class="ds-sec"><h2 class="title">Motion tokens</h2><p>From Emil Kowalski’s rules: ease-out by default, nothing routine over 300 ms, springs only where physics helps. Reduced motion keeps opacity only.</p><div class="mot-grid" id="motGrid"></div></div>
-  <div class="ds-sec"><h2 class="title">Animated icons</h2><p>Lucide line icons at 1.75 px; in the app each one is the lucide-animated component of the same name. Hover a cell to play it.</p><div class="icgrid" id="icGrid"></div></div>
-  <div class="ds-sec"><h2 class="title">No emoji: what to use instead</h2><p>Wherever an emoji might be tempting, use the animated icon for that meaning.</p>
-    <div class="panel" style="overflow:hidden"><table class="map"><thead><tr><th>Meaning</th><th>Icon</th><th>Animation</th></tr></thead><tbody id="emojiMap"></tbody></table></div></div>
 </section>
 
     </main>
@@ -941,7 +891,7 @@ function hydrateIcons(root=document){
 }
 
 /* ====================================================================
-   MOTION HELPERS (DESIGN.md §7.1)
+   MOTION HELPERS (DESIGN.md Â§7.1)
 ==================================================================== */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPR = { snappy:{k:420,c:32,m:1}, gentle:{k:180,c:24,m:1}, marker:{k:260,c:20,m:1}, stamp:{k:650,c:20,m:1.3} };
@@ -977,8 +927,8 @@ function tweenNumber(el, to, fmt, ms=520){
 /* ====================================================================
    FORMATTING (SPEC F21)
 ==================================================================== */
-const fmtINR = n => '₹'+Math.round(n).toLocaleString('en-IN');
-const fmtShort = n => n>=1e7? '₹'+(n/1e7).toFixed(n>=1e8?0:1).replace(/\.0$/,'')+' Cr' : n>=1e5? '₹'+(n/1e5).toFixed(1).replace(/\.0$/,'')+' L' : fmtINR(n);
+const fmtINR = n => 'â‚¹'+Math.round(n).toLocaleString('en-IN');
+const fmtShort = n => n>=1e7? 'â‚¹'+(n/1e7).toFixed(n>=1e8?0:1).replace(/\.0$/,'')+' Cr' : n>=1e5? 'â‚¹'+(n/1e5).toFixed(1).replace(/\.0$/,'')+' L' : fmtINR(n);
 const fmtPct = (x,d=1) => (x*100).toFixed(d)+'%';
 const parseINR = s => +String(s).replace(/[^\d]/g,'')||0;
 function inrWords(n){
@@ -997,7 +947,7 @@ function inrWords(n){
    PROTOTYPE RISK MODEL
    Stand-in for the trained XGBoost model: same latent formula as the
    synthetic data generator in SPEC F06 (without noise). Policy rules,
-   grades, rates and limits follow SPEC F02–F14 exactly.
+   grades, rates and limits follow SPEC F02â€“F14 exactly.
 ==================================================================== */
 const BASE_RATE={home:8.5,auto:9.25,education:9.75,personal:11.5,business:13};
 const SPREAD={A:0,B:.75,C:1.75,D:3.25};
@@ -1081,7 +1031,7 @@ function policy(a,f){
   if(a.existing_emi/f.ti>=.55) K.push(['K6',`Existing EMIs already use ${Math.round(a.existing_emi/f.ti*100)}% of income.`]);
   if(a.past_default) R.push(['R1','A previous default needs a manual review.']);
   if(a.missed_payments_24m>=3) R.push(['R2',`${a.missed_payments_24m} missed payments in 24 months need a manual review.`]);
-  if(f.noHist&&a.loan_amount>500000) R.push(['R3','New to credit and asking for more than ₹5,00,000.']);
+  if(f.noHist&&a.loan_amount>500000) R.push(['R3','New to credit and asking for more than â‚¹5,00,000.']);
   if(f.foir>.55&&f.foir<=.65) R.push(['R4',`EMIs would take ${Math.round(f.foir*100)}% of income, above the 55% comfort limit.`]);
   return {K,R};
 }
@@ -1146,7 +1096,7 @@ const PERSONAS=[
   {...base,full_name:'Rahul Mehta',age:41,employment_type:'salaried',years_in_job:12,monthly_income:95000,cibil_score:742,credit_history_years:11,credit_utilisation_pct:25,enquiries_6m:2,existing_emi:3000,outstanding_debt:90000,dependents:2,loan_type:'home',loan_amount:4500000,tenure_months:240,collateral_value:6200000,purpose:'Flat in Pune',note:'Salaried, Pune'},
   {...base,full_name:'Fatima Shaikh',age:34,employment_type:'self_employed',years_in_job:6,monthly_income:70000,cibil_score:701,credit_history_years:8,credit_utilisation_pct:68,missed_payments_24m:1,enquiries_6m:3,existing_emi:4000,outstanding_debt:150000,dependents:1,loan_type:'business',loan_amount:1200000,tenure_months:60,purpose:'Second boutique outlet',note:'Boutique owner, Hyderabad'},
   {...base,full_name:'Karthik Iyer',age:26,employment_type:'salaried',years_in_job:3,monthly_income:48000,cibil_score:-1,credit_history_years:0,credit_utilisation_pct:0,open_credit_lines:0,enquiries_6m:2,existing_emi:0,loan_type:'auto',loan_amount:750000,tenure_months:60,collateral_value:920000,purpose:'First car',note:'New to credit, Chennai'},
-  {...base,full_name:'Priya Nair',age:38,employment_type:'salaried',years_in_job:10,monthly_income:62000,cibil_score:748,credit_history_years:12,credit_utilisation_pct:45,existing_emi:8000,outstanding_debt:240000,dependents:2,residence:'owned',city_tier:2,loan_type:'education',loan_amount:1500000,tenure_months:120,purpose:'Daughter’s engineering degree',note:'Teacher, Kochi'},
+  {...base,full_name:'Priya Nair',age:38,employment_type:'salaried',years_in_job:10,monthly_income:62000,cibil_score:748,credit_history_years:12,credit_utilisation_pct:45,existing_emi:8000,outstanding_debt:240000,dependents:2,residence:'owned',city_tier:2,loan_type:'education',loan_amount:1500000,tenure_months:120,purpose:'Daughterâ€™s engineering degree',note:'Teacher, Kochi'},
   {...base,full_name:'Vikram Singh',age:52,employment_type:'business_owner',years_in_job:18,monthly_income:210000,cibil_score:655,credit_history_years:20,credit_utilisation_pct:52,missed_payments_24m:4,enquiries_6m:2,existing_emi:22000,outstanding_debt:1100000,dependents:3,residence:'owned',city_tier:2,loan_type:'home',loan_amount:8000000,tenure_months:240,collateral_value:11500000,purpose:'Villa in Jaipur',note:'Business owner, Jaipur'},
   {...base,full_name:'Sneha Kulkarni',age:31,employment_type:'salaried',years_in_job:5,monthly_income:55000,cibil_score:712,credit_history_years:6,credit_utilisation_pct:61,enquiries_6m:4,existing_emi:31000,outstanding_debt:900000,loan_type:'personal',loan_amount:800000,tenure_months:48,purpose:'Wedding',note:'Salaried, Mumbai'},
   {...base,full_name:'Arjun Das',age:45,employment_type:'salaried',years_in_job:15,monthly_income:120000,cibil_score:812,credit_history_years:18,credit_utilisation_pct:12,enquiries_6m:0,existing_emi:5000,outstanding_debt:120000,dependents:2,residence:'owned',loan_type:'auto',loan_amount:1400000,tenure_months:60,collateral_value:1700000,purpose:'Family SUV',note:'Salaried, Kolkata'},
@@ -1179,7 +1129,7 @@ const HISTORY=[];
 const fmtDate=d=>d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 
 /* ====================================================================
-   DIAL (DESIGN.md §8 RiskDial): 220° sweep, 5 equal grade bands,
+   DIAL (DESIGN.md Â§8 RiskDial): 220Â° sweep, 5 equal grade bands,
    needle driven by a damped spring (stiffness 90, damping 11).
 ==================================================================== */
 const DA0=-200, DSPAN=220;
@@ -1268,7 +1218,7 @@ function rangeInit(wrap,fmt){
 }
 
 /* ====================================================================
-   CURRENCY INPUTS (DESIGN.md §7.6): Indian grouping, caret kept
+   CURRENCY INPUTS (DESIGN.md Â§7.6): Indian grouping, caret kept
 ==================================================================== */
 function moneyInit(inp){
   const words=document.querySelector(`[data-words="${inp.id}"]`);
@@ -1284,7 +1234,7 @@ function moneyInit(inp){
 }
 
 /* ====================================================================
-   BUTTON STATES (DESIGN.md §7.5)
+   BUTTON STATES (DESIGN.md Â§7.5)
 ==================================================================== */
 async function btnRun(btn,work,label){
   if(btn.classList.contains('loading')) return;
@@ -1346,12 +1296,12 @@ function validateStep(i){
     if(!(a.age>=18&&a.age<=75)) E('f_age','Enter an age between 18 and 75.');
     if(!(a.years_in_job>=0&&a.years_in_job<=Math.max(0,a.age-16))) E('f_job',`Enter 0 to ${Math.max(0,(a.age||16)-16)} years.`);
     if(!(a.dependents>=0&&a.dependents<=6)) E('f_dep','Enter 0 to 6 dependents.'); }
-  if(i===1){ if(!(a.monthly_income>=10000&&a.monthly_income<=5000000)) E('f_inc','Enter a monthly income between ₹10,000 and ₹50,00,000.');
-    if(!(a.other_monthly_income>=0&&a.other_monthly_income<=2000000)) E('f_oth','Enter up to ₹20,00,000.'); }
+  if(i===1){ if(!(a.monthly_income>=10000&&a.monthly_income<=5000000)) E('f_inc','Enter a monthly income between â‚¹10,000 and â‚¹50,00,000.');
+    if(!(a.other_monthly_income>=0&&a.other_monthly_income<=2000000)) E('f_oth','Enter up to â‚¹20,00,000.'); }
   if(i===2){ if(a.cibil_score!==-1&&!(a.cibil_score>=300&&a.cibil_score<=900)) E('f_cibil','Enter a score from 300 to 900, or turn on New to credit.');
     if(!(a.credit_utilisation_pct>=0&&a.credit_utilisation_pct<=100)) E('f_util','Enter a percentage from 0 to 100.');
     if(!(a.credit_history_years>=0&&a.credit_history_years<=40)) E('f_hist','Enter 0 to 40 years.'); }
-  if(i===3){ const [tmin,tmax]=TENURE[a.loan_type]; if(!(a.loan_amount>=10000&&a.loan_amount<=TYPE_MAX[a.loan_type])) E('f_amt',`Enter ₹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])} for a ${a.loan_type} loan.`);
+  if(i===3){ const [tmin,tmax]=TENURE[a.loan_type]; if(!(a.loan_amount>=10000&&a.loan_amount<=TYPE_MAX[a.loan_type])) E('f_amt',`Enter â‚¹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])} for a ${a.loan_type} loan.`);
     if(!(a.tenure_months>=tmin&&a.tenure_months<=tmax)) E('f_ten',`Tenure for a ${a.loan_type} loan must be ${tmin} to ${tmax} months.`);
     if((a.loan_type==='home'||a.loan_type==='auto')&&!(a.collateral_value>0)) E('f_col','Enter the value of the home or vehicle.'); }
   document.querySelectorAll(`.pane[data-step="${i}"] .field.err`).forEach(f=>f.classList.remove('err'));
@@ -1374,9 +1324,9 @@ function renderFactors(el,factors,animate){
   const rows=el.querySelectorAll('.fbar');
   if(rows.length!==factors.length || el.dataset.keys!==factors.map(f=>f.k).join()){
     el.dataset.keys=factors.map(f=>f.k).join();
-    el.innerHTML=factors.map(f=>`<div class="fbar ih" tabindex="0"><span class="fl">${iconSvg(f.ic,{s:16,a:'pop'})}<span>${f.label}</span></span><span class="track"><span class="b ${f.dir==='raises'?'hi':'lo'}"></span></span><span class="pp">${f.pp>0?'+':'−'}${Math.abs(f.pp).toFixed(1)}</span><span class="tip" role="tooltip">${f.sentence}</span></div>`).join('');
+    el.innerHTML=factors.map(f=>`<div class="fbar ih" tabindex="0"><span class="fl">${iconSvg(f.ic,{s:16,a:'pop'})}<span>${f.label}</span></span><span class="track"><span class="b ${f.dir==='raises'?'hi':'lo'}"></span></span><span class="pp">${f.pp>0?'+':'âˆ’'}${Math.abs(f.pp).toFixed(1)}</span><span class="tip" role="tooltip">${f.sentence}</span></div>`).join('');
   } else {
-    factors.forEach((f,i)=>{ const r=rows[i]; r.querySelector('.fl span').textContent=f.label; const b=r.querySelector('.b'); b.className='b '+(f.dir==='raises'?'hi':'lo'); r.querySelector('.pp').textContent=(f.pp>0?'+':'−')+Math.abs(f.pp).toFixed(1); r.querySelector('.tip').textContent=f.sentence; });
+    factors.forEach((f,i)=>{ const r=rows[i]; r.querySelector('.fl span').textContent=f.label; const b=r.querySelector('.b'); b.className='b '+(f.dir==='raises'?'hi':'lo'); r.querySelector('.pp').textContent=(f.pp>0?'+':'âˆ’')+Math.abs(f.pp).toFixed(1); r.querySelector('.tip').textContent=f.sentence; });
   }
   el.querySelectorAll('.fbar').forEach((r,i)=>{ const b=r.querySelector('.b'); const w=(Math.abs(factors[i].pp)/max*50)+'%';
     if(animate&&!reduce){ b.style.transition='none'; b.style.width='0'; void b.offsetWidth; setTimeout(()=>{ b.style.transition='width .5s cubic-bezier(.25,1,.5,1)'; b.style.width=w; },i*40); }
@@ -1572,7 +1522,7 @@ function initApplicants(){
 const TEMPLATE_COLS=['full_name','age','employment_type','years_in_job','city_tier','dependents','residence','monthly_income','other_monthly_income','cibil_score','credit_history_years','open_credit_lines','credit_utilisation_pct','missed_payments_24m','enquiries_6m','past_default','existing_emi','outstanding_debt','loan_type','loan_amount','tenure_months','collateral_value','purpose'];
 function rowErrors(a){
   if(!(a.age>=18&&a.age<=75)) return ['age','Age must be 18 to 75'];
-  if(!(a.monthly_income>=10000)) return ['monthly_income','Monthly income must be at least ₹10,000'];
+  if(!(a.monthly_income>=10000)) return ['monthly_income','Monthly income must be at least â‚¹10,000'];
   if(!TENURE[a.loan_type]) return ['loan_type','Unknown loan type'];
   const [t0,t1]=TENURE[a.loan_type]; if(!(a.tenure_months>=t0&&a.tenure_months<=t1)) return ['tenure_months',`Tenure must be ${t0} to ${t1} months`];
   if((a.loan_type==='home'||a.loan_type==='auto')&&!(a.collateral_value>0)) return ['collateral_value','Asset value is required for home and auto loans'];
@@ -1671,7 +1621,7 @@ document.head.appendChild(chartCss);
 /* ====================================================================
    MODEL PAGE: pipeline trace, ROC/AUC & confusion computed live
 ==================================================================== */
-const PIPE=[['file-check','Application','23 fields from the wizard or a CSV row'],['gavel','Policy rules','Six knock-outs and four review flags'],['layers','Features','FOIR, loan-to-income, loan-to-value, utilisation'],['brain','XGBoost model','Monotone gradient-boosted trees'],['gauge','Calibration','Platt scaling turns scores into probabilities'],['sparkles','SHAP explanation','Each input’s contribution in plain words'],['stamp','Decision','Sanctioned, refer or declined, with rate and limit']];
+const PIPE=[['file-check','Application','23 fields from the wizard or a CSV row'],['gavel','Policy rules','Six knock-outs and four review flags'],['layers','Features','FOIR, loan-to-income, loan-to-value, utilisation'],['brain','XGBoost model','Monotone gradient-boosted trees'],['gauge','Calibration','Platt scaling turns scores into probabilities'],['sparkles','SHAP explanation','Each inputâ€™s contribution in plain words'],['stamp','Decision','Sanctioned, refer or declined, with rate and limit']];
 let perfDrawn=false, impDrawn=false;
 function initModel(){
   document.getElementById('pipe').innerHTML=PIPE.map((p,i)=>`<div class="pnode ih"><span class="n">${i+1}</span><br>${iconSvg(p[0],{s:24,a:'pop'})}<h4>${p[1]}</h4><p>${p[2]}</p></div>${i<PIPE.length-1?'<span class="pedge"><span class="dot"></span></span>':''}`).join('');
@@ -1728,12 +1678,12 @@ function drawSwatches(){
 }
 function initDS(){
   drawSwatches();
-  const TS=[['display-xl','64/64 Source Serif 4 600','Know the risk before you lend.'],['display-m','44/48 Source Serif 4 600','Assess an application'],['display-l','36/42 Source Serif 4 600','Sanctioned at grade B'],['figure-l','36/40 Geist 600 tabular','₹18,420'],['title','28/34 Geist 600','Credit and debts'],['subtitle','20/28 Geist 600','Assessment sheet'],['body','16/26 Geist 400','Your EMIs would take 48% of your monthly income. Lenders prefer under 40%.'],['ui','14/20 Geist 500','Monthly net income'],['small','13/18 Geist 500','Take-home pay after tax']];
+  const TS=[['display-xl','64/64 Source Serif 4 600','Know the risk before you lend.'],['display-m','44/48 Source Serif 4 600','Assess an application'],['display-l','36/42 Source Serif 4 600','Sanctioned at grade B'],['figure-l','36/40 Geist 600 tabular','â‚¹18,420'],['title','28/34 Geist 600','Credit and debts'],['subtitle','20/28 Geist 600','Assessment sheet'],['body','16/26 Geist 400','Your EMIs would take 48% of your monthly income. Lenders prefer under 40%.'],['ui','14/20 Geist 500','Monthly net income'],['small','13/18 Geist 500','Take-home pay after tax']];
   document.getElementById('typeScale').innerHTML=TS.map(([c,m,t])=>`<div class="typerow"><div class="meta"><b style="color:var(--ink-2)">${c}</b><br>${m}</div><div class="${c==='body'?'':c}" style="${c==='display-xl'?'font-size:clamp(34px,6vw,61px);line-height:1.05':''}">${t}</div></div>`).join('');
   document.getElementById('dsSave').addEventListener('click',e=>{ btnRun(e.currentTarget,()=>sleep(1100)); setTimeout(()=>toast('Report downloaded'),1100); });
   holdInit(document.getElementById('holdBtn'),()=>toast('Marked as declined by the loan officer','bad'));
   document.querySelectorAll('#dsMoney,#dsErr').forEach(moneyInit);
-  document.getElementById('dsErrBtn').addEventListener('click',()=>{ const f=document.getElementById('dsErrF'); const v=parseINR(document.getElementById('dsErr').value); f.classList.remove('err'); if(v<10000||v>5000000){ f.querySelector('.errmsg > div').innerHTML=iconSvg('x',{s:16})+'<span>Enter a monthly income between ₹10,000 and ₹50,00,000.</span>'; void f.offsetWidth; f.classList.add('err'); } else toast('Income looks right'); });
+  document.getElementById('dsErrBtn').addEventListener('click',()=>{ const f=document.getElementById('dsErrF'); const v=parseINR(document.getElementById('dsErr').value); f.classList.remove('err'); if(v<10000||v>5000000){ f.querySelector('.errmsg > div').innerHTML=iconSvg('x',{s:16})+'<span>Enter a monthly income between â‚¹10,000 and â‚¹50,00,000.</span>'; void f.offsetWidth; f.classList.add('err'); } else toast('Income looks right'); });
   document.getElementById('dsErr').addEventListener('input',()=>document.getElementById('dsErrF').classList.remove('err'));
   document.querySelectorAll('#view-ds .seg, [data-view="design-system"] .seg').forEach(s=>segInit(s));
   rangeInit(document.getElementById('dsR').closest('.rng'),v=>v+' months');
@@ -1773,7 +1723,7 @@ function initHome(){
 /* ====================================================================
    ROUTER, NAV PILL, THEME, COMMAND PALETTE, TOUR
 ==================================================================== */
-const ROUTES={home:'Home',assess:'Assess','what-if':'What-if',applicants:'Applicants',batch:'Batch',portfolio:'Portfolio',model:'Model',about:'About','design-system':'Design system'};
+const ROUTES={home:'Home',assess:'Assess','what-if':'What-if',applicants:'Applicants',batch:'Batch',portfolio:'Portfolio',model:'Model',about:'About'};
 const inited={};
 function placePill(inst){
   const a=document.querySelector('#nav a[aria-current="page"]'); const pill=document.getElementById('navPill');
@@ -1788,7 +1738,7 @@ function route(){
   document.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('aria-current',a.dataset.route===r?'page':'false'));
   document.getElementById('crumb').textContent=ROUTES[r];
   placePill(!inited._pill); inited._pill=true;
-  const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel,'design-system':initDS};
+  const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel};
   if(!inited[r] && once[r]){ once[r](); inited[r]=true; }
   if(r==='what-if'){ if(!inited.assess){ initAssess(); inited.assess=true; } enterWhatIf(); }
   if(r==='applicants'){ document.getElementById('appDetail').hidden=true; document.getElementById('appList').hidden=false; renderTable(); }
@@ -1800,13 +1750,12 @@ window.addEventListener('hashchange',route);
 window.addEventListener('resize',()=>{ placePill(true); document.querySelectorAll('.view.on .seg').forEach(s=>s._place&&s._place()); const t=document.getElementById('mtabs'); t._place&&t._place(); });
 
 function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('saakh-theme',t);}catch(_){}
-  document.querySelectorAll('#themeBtn,[data-theme-toggle]').forEach(b=>b.setAttribute('aria-label',t==='dark'?'Switch to light theme':'Switch to dark theme'));
-  if(inited['design-system']) drawSwatches(); }
+  document.querySelectorAll('#themeBtn,[data-theme-toggle]').forEach(b=>b.setAttribute('aria-label',t==='dark'?'Switch to light theme':'Switch to dark theme')); }
 try{ const t=localStorage.getItem('saakh-theme'); if(t) document.documentElement.dataset.theme=t; }catch(_){}
 document.addEventListener('click',e=>{ if(e.target.closest('#themeBtn,[data-theme-toggle]')) setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'); });
 
 // Command palette
-const CMDS=[...Object.entries(ROUTES).map(([k,v])=>({g:'Go to',t:v,ic:{home:'house',assess:'file-check','what-if':'sliders-horizontal',applicants:'users',batch:'cloud-upload',portfolio:'chart-column-increasing',model:'brain',about:'circle-help','design-system':'palette'}[k],run:()=>location.hash=k})),
+const CMDS=[...Object.entries(ROUTES).map(([k,v])=>({g:'Go to',t:v,ic:{home:'house',assess:'file-check','what-if':'sliders-horizontal',applicants:'users',batch:'cloud-upload',portfolio:'chart-column-increasing',model:'brain',about:'circle-help'}[k],run:()=>location.hash=k})),
   ...PERSONAS.map((p,i)=>({g:'Load sample applicant',t:p.full_name+', '+p.note,ic:'id-card',run:()=>{ location.hash='assess'; setTimeout(()=>{ const s=document.getElementById('persona'); s.value=i; s.dispatchEvent(new Event('change')); },60); }})),
   {g:'Actions',t:'Toggle dark theme',ic:'sun-moon',run:()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')},
   {g:'Actions',t:'Start guided demo',ic:'play',run:()=>startTour()}];
@@ -1834,7 +1783,7 @@ document.getElementById('moreBtn').onclick=openCmd;
 // Guided demo (F24)
 const TOUR=[
   ['home','#sentence','Try it live','Change any underlined value. The model re-scores instantly and the marker moves along the A to E risk ruler.'],
-  ['assess','#persona','Sample data','Eight demo personas cover every outcome. Ananya Rao is loaded: a salaried engineer asking for a ₹6 lakh personal loan.'],
+  ['assess','#persona','Sample data','Eight demo personas cover every outcome. Ananya Rao is loaded: a salaried engineer asking for a â‚¹6 lakh personal loan.'],
   ['assess','#runBtn','Run the model','Press Run assessment. The sheet scans, the marker settles on the estimated risk, the headline is highlighted and the decision is stamped.'],
   ['assess','#fbars','Explainable AI','SHAP values show which inputs lowered or raised the risk, in percentage points. Hover a row for the plain-language reason.'],
   ['what-if','#wiSliders','What-if simulator','Move any slider and the model re-scores instantly. The cards below show the smallest single change that earns a better grade.'],

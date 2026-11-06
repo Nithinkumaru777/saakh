@@ -1,8 +1,0 @@
-packages:
-  - 'apps/*'
-  - 'services/*'
-
-allowBuilds:
-  sharp: false
-  unrs-resolver: false
-  esbuild: true
