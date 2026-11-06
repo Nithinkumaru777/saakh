@@ -2506,6 +2506,8 @@ export function initSaakhRuntime(
       a.textContent = AUTH_USER ? firstName(AUTH_USER) : "Sign in";
       a.href = AUTH_USER ? "#profile" : "#login";
     });
+    const pl = document.getElementById("navProfileLink");
+    if (pl) pl.style.display = AUTH_USER ? "flex" : "none";
     const rail = document.getElementById("railAuth");
     if (!rail) return;
     rail.textContent = "";
@@ -2546,10 +2548,24 @@ export function initSaakhRuntime(
     if (!t) return;
     try {
       const r = await fetch(`${API_BASE}/api/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
-      if (r.ok) AUTH_USER = await r.json();
-      else if (r.status === 401) setToken("");
+      if (r.ok) { AUTH_USER = await r.json(); return; }
+      else if (r.status === 401) { setToken(""); return; }
     } catch {
-      // API unreachable: keep the token, the user can retry.
+      // API unreachable
+    }
+    if (t.startsWith("local_")) {
+      try {
+        const email = atob(t.slice(6));
+        const u = getLocalUsers().find((x: any) => x.email.toLowerCase() === email.toLowerCase());
+        if (u) {
+          const uClean = { ...u }; delete uClean.password;
+          AUTH_USER = uClean;
+        } else {
+          setToken("");
+        }
+      } catch {
+        setToken("");
+      }
     }
   }
   function apiError(body: any, fallback: string): string {
@@ -2558,6 +2574,105 @@ export function initSaakhRuntime(
     if (Array.isArray(d) && d.length) return d.map((x: any) => String(x.msg || "").replace(/^Value error, /, "")).filter(Boolean).join(" ") || fallback;
     return fallback;
   }
+  /* Local client storage fallback for GitHub Pages and offline/standalone testing */
+  const LOCAL_USERS_KEY = "saakh_users";
+  const DEMO_USER = {
+    id: "u-demo-1",
+    email: "officer@saakh.ai",
+    full_name: "Nithin Kumar",
+    phone: "9876543210",
+    city: "Bengaluru",
+    employment_type: "salaried",
+    monthly_income: 85000,
+    password: "Saakh2026!",
+    created_at: "2026-11-01T00:00:00Z"
+  };
+
+  function getLocalUsers(): any[] {
+    try {
+      const raw = localStorage.getItem(LOCAL_USERS_KEY);
+      if (!raw) {
+        localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify([DEMO_USER]));
+        return [DEMO_USER];
+      }
+      return JSON.parse(raw);
+    } catch {
+      return [DEMO_USER];
+    }
+  }
+
+  function saveLocalUsers(users: any[]) {
+    try {
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
+    } catch {}
+  }
+
+  function handleLocalAuth(path: string, method: string, body?: any) {
+    const users = getLocalUsers();
+    if (path === "/api/auth/login" && method === "POST") {
+      const email = String(body?.email || "").toLowerCase();
+      const pw = String(body?.password || "");
+      const u = users.find((x: any) => x.email.toLowerCase() === email && x.password === pw);
+      if (u) {
+        const uClean = { ...u }; delete uClean.password;
+        return { ok: true, status: 200, data: { token: "local_" + btoa(u.email), user: uClean } };
+      }
+      return { ok: false, status: 401, data: { detail: "Incorrect email or password. Use demo: officer@saakh.ai / Saakh2026!" } };
+    }
+    if (path === "/api/auth/register" && method === "POST") {
+      const email = String(body?.email || "").toLowerCase();
+      if (users.some((x: any) => x.email.toLowerCase() === email)) {
+        return { ok: false, status: 400, data: { detail: "An account with that email already exists." } };
+      }
+      const newUser = {
+        id: "u-" + Date.now(),
+        email: body.email,
+        full_name: body.full_name || "Applicant",
+        phone: "",
+        city: "",
+        employment_type: "",
+        monthly_income: null,
+        password: body.password,
+        created_at: new Date().toISOString()
+      };
+      users.push(newUser);
+      saveLocalUsers(users);
+      const uClean = { ...newUser }; delete uClean.password;
+      return { ok: true, status: 201, data: { token: "local_" + btoa(newUser.email), user: uClean } };
+    }
+    if (path === "/api/auth/me" && method === "PATCH") {
+      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+      const idx = users.findIndex((x: any) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
+      if (idx !== -1) {
+        users[idx] = { ...users[idx], ...body };
+        saveLocalUsers(users);
+        const uClean = { ...users[idx] }; delete uClean.password;
+        return { ok: true, status: 200, data: uClean };
+      }
+      return { ok: false, status: 404, data: { detail: "User not found." } };
+    }
+    if (path === "/api/auth/change-password" && method === "POST") {
+      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+      const idx = users.findIndex((x: any) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
+      if (idx !== -1) {
+        if (users[idx].password && users[idx].password !== body.current_password) {
+          return { ok: false, status: 400, data: { detail: "Current password does not match." } };
+        }
+        users[idx].password = body.new_password;
+        saveLocalUsers(users);
+        return { ok: true, status: 200, data: { detail: "Password updated." } };
+      }
+      return { ok: false, status: 404, data: { detail: "User not found." } };
+    }
+    if (path === "/api/auth/me" && method === "DELETE") {
+      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+      const filtered = users.filter((x: any) => x.email.toLowerCase() !== AUTH_USER.email.toLowerCase());
+      saveLocalUsers(filtered);
+      return { ok: true, status: 200, data: { detail: "Account deleted." } };
+    }
+    return { ok: false, status: 404, data: { detail: "Not found" } };
+  }
+
   async function authCall(path: string, method: string, body?: any) {
     try {
       const r = await fetch(`${API_BASE}${path}`, {
@@ -2565,11 +2680,14 @@ export function initSaakhRuntime(
         headers: { "Content-Type": "application/json", ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
         body: body ? JSON.stringify(body) : undefined,
       });
-      const data = await r.json().catch(() => ({}));
-      return { ok: r.ok, status: r.status, data };
+      if (r.ok || (r.status >= 400 && r.status < 500)) {
+        const data = await r.json().catch(() => ({}));
+        return { ok: r.ok, status: r.status, data };
+      }
     } catch {
-      return { ok: false, status: 0, data: { detail: "Cannot reach the server. Check your connection and try again." } };
+      // Backend not running / GitHub Pages static host -> fall back to local auth
     }
+    return handleLocalAuth(path, method, body);
   }
   function setBusy(btn: HTMLButtonElement, busy: boolean, label?: string) {
     btn.disabled = busy;
@@ -2603,6 +2721,13 @@ export function initSaakhRuntime(
       err.textContent = "";
     };
     segInit(document.getElementById("authSeg"), apply);
+    const demoBtn = document.getElementById("demoCredBtn");
+    if (demoBtn) {
+      demoBtn.onclick = () => {
+        $("fa_email").value = "officer@saakh.ai";
+        $("fa_pw").value = "Saakh2026!";
+      };
+    }
     document.getElementById("authForm")!.addEventListener("submit", async (e) => {
       e.preventDefault();
       err.textContent = "";

@@ -26,6 +26,7 @@ export const SAAKH_MARKUP = `
       <span class="nav-sep" aria-hidden="true"></span>
       <a class="ih" href="#tutorials" data-route="tutorials"><i data-icon="play" data-a="pop"></i><span>Tutorials</span></a>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
+      <a class="ih" href="#profile" data-route="profile" id="navProfileLink" style="display:none"><i data-icon="id-card" data-a="pop"></i><span>Profile</span></a>
     </nav>
     <div class="rail-foot"><div id="railAuth" class="rail-auth"></div>AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
   </aside>
@@ -353,6 +354,10 @@ export const SAAKH_MARKUP = `
         <div class="field"><label for="fa_pw">Password</label><input class="ctl" id="fa_pw" type="password" autocomplete="current-password" maxlength="128"><span class="help" id="fa_pw_help"></span></div>
         <div class="formerr" id="authErr" role="alert" aria-live="polite"></div>
         <button class="btn btn-primary" type="submit" id="authSubmit"><span class="lbl">Sign in</span></button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+          <span class="small" style="color:var(--ink-3)">Demo: officer@saakh.ai / Saakh2026!</span>
+          <button type="button" class="btn btn-ghost btn-sm" id="demoCredBtn" style="padding:2px 8px;font-size:12px;height:auto">Use demo</button>
+        </div>
       </form>
       <p class="small" style="margin:0">By continuing you agree that Saakh is a demonstration system trained on synthetic data. Decisions shown are illustrative.</p>
     </div>

@@ -545,6 +545,20 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}
 }
+/* ============ AUTH & PROFILE ============ */
+.auth-wrap{display:grid;place-items:start center;padding:48px 20px 72px}
+.auth-card{width:100%;max-width:460px;padding:32px;display:grid;gap:20px}
+.prof-card{padding:28px;margin-bottom:20px;max-width:880px}
+.prof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rail-auth{display:grid;gap:8px;margin-bottom:12px}
+.rail-auth .who{display:block;padding:8px 10px;border:1px solid var(--rule);border-radius:var(--r);color:var(--ink);text-decoration:none;min-width:0}
+.rail-auth .who b{display:block;font-size:14px;line-height:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-auth .who span{display:block;font-size:12px;line-height:16px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-auth .who:hover{background:var(--haldi-wash)}
+@media (max-width:767px){
+  .prof-grid{grid-template-columns:1fr}
+  .auth-card{padding:24px}
+}
 </style>
 </head>
 <body>
@@ -574,7 +588,9 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       <a class="ih" href="#model" data-route="model"><i data-icon="brain" data-a="pulse"></i><span>Model</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
+      <a class="ih" href="#profile" data-route="profile" id="navProfileLink" style="display:none"><i data-icon="id-card" data-a="pop"></i><span>Profile</span></a>
     </nav>
+    <div id="railAuth" class="rail-auth"></div>
     <div class="rail-foot">AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
   </aside>
 
@@ -586,6 +602,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       <span class="grow"></span>
       <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
       <button class="btn btn-secondary btn-sm ih" id="cmdBtn" aria-label="Open command palette"><i data-icon="search" data-a="wiggle" data-s="16"></i><span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>
+      <a class="btn btn-secondary btn-sm" id="authBtn" href="#login">Sign in</a>
       <button class="iconbtn ih" id="themeBtn" aria-label="Switch to dark theme"><i data-icon="sun-moon" data-a="spin"></i></button>
     </header>
 
@@ -597,6 +614,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
     <a class="brand" href="#home" style="padding:0"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name">Saakh</span></a>
     <span class="grow"></span>
     <a class="btn btn-ghost btn-sm" href="#about">About the project</a>
+    <a class="btn btn-secondary btn-sm" id="landAuth" href="#login">Sign in</a>
     <button class="iconbtn ih" data-theme-toggle aria-label="Switch theme"><i data-icon="sun-moon" data-a="spin"></i></button>
   </header>
   <div class="land-hero">
@@ -861,6 +879,71 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
         <li>Risk teams watching portfolio quality and expected loss</li>
       </ul>
     </div>
+  </div>
+</section>
+
+
+
+<!-- ======================= LOGIN / REGISTER ======================= -->
+<section class="view" data-view="login" aria-label="Sign in">
+  <header class="land-top">
+    <a class="brand" href="#home" style="padding:0"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name">Saakh</span></a>
+    <span class="grow"></span>
+    <a class="btn btn-ghost btn-sm" href="#home">Back to home</a>
+    <button class="iconbtn ih" data-theme-toggle aria-label="Switch theme"><i data-icon="sun-moon" data-a="spin"></i></button>
+  </header>
+  <div class="auth-wrap">
+    <div class="panel auth-card">
+      <div>
+        <h1 class="display-m" id="authTitle" style="font-size:36px;line-height:42px">Sign in</h1>
+        <p id="authSub" style="margin:8px 0 0;color:var(--ink-2)">Sign in to run assessments and keep your history.</p>
+      </div>
+      <div class="seg" id="authSeg" data-seg="authmode" style="justify-self:start"><span class="seg-ind"></span><button type="button" data-v="login" aria-pressed="true">Sign in</button><button type="button" data-v="register">Create account</button></div>
+      <form id="authForm" novalidate style="display:grid;gap:16px">
+        <div class="field" id="fa_name_f" hidden><label for="fa_name">Full name</label><input class="ctl" id="fa_name" autocomplete="name" maxlength="80"></div>
+        <div class="field"><label for="fa_email">Email</label><input class="ctl" id="fa_email" type="email" autocomplete="email" inputmode="email" maxlength="254"></div>
+        <div class="field"><label for="fa_pw">Password</label><input class="ctl" id="fa_pw" type="password" autocomplete="current-password" maxlength="128"><span class="help" id="fa_pw_help"></span></div>
+        <div class="formerr" id="authErr" role="alert" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit" id="authSubmit"><span class="lbl">Sign in</span></button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2px">
+          <span class="small" style="color:var(--ink-3)">Demo: officer@saakh.ai / Saakh2026!</span>
+          <button type="button" class="btn btn-ghost btn-sm" id="demoCredBtn" style="padding:2px 8px;font-size:12px;height:auto">Use demo</button>
+        </div>
+      </form>
+      <p class="small" style="margin:0">By continuing you agree that Saakh is a demonstration system trained on synthetic data. Decisions shown are illustrative.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROFILE ======================= -->
+<section class="view" data-view="profile" aria-label="Your profile">
+  <div class="page-head"><div class="grow"><h1 class="display-m">Your profile</h1><p id="profSub">Manage your details and account security.</p></div></div>
+  <form class="panel prof-card" id="profForm" novalidate>
+    <h2 class="subtitle" style="margin-bottom:16px">Personal details</h2>
+    <div class="prof-grid">
+      <div class="field"><label for="pf_name">Full name</label><input class="ctl" id="pf_name" autocomplete="name" maxlength="80"></div>
+      <div class="field"><label for="pf_email">Email</label><input class="ctl" id="pf_email" disabled><span class="help">Your sign-in email cannot be changed.</span></div>
+      <div class="field"><label for="pf_phone">Mobile number</label><input class="ctl" id="pf_phone" autocomplete="tel" inputmode="tel" maxlength="15" placeholder="98765 43210"></div>
+      <div class="field"><label for="pf_city">City</label><input class="ctl" id="pf_city" autocomplete="address-level2" maxlength="60"></div>
+      <div class="field"><label for="pf_emp">Employment</label><select class="ctl" id="pf_emp"><option value="">Not specified</option><option value="salaried">Salaried</option><option value="self_employed">Self-employed</option><option value="business_owner">Business owner</option></select></div>
+      <div class="field"><label for="pf_inc">Monthly income (INR)</label><input class="ctl" id="pf_inc" inputmode="numeric" maxlength="9"></div>
+    </div>
+    <div class="formerr" id="profErr" role="alert" aria-live="polite" style="margin-top:12px"></div>
+    <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap"><button class="btn btn-primary" type="submit" id="profSave"><span class="lbl">Save profile</span></button><a class="btn btn-secondary" href="#assess">Start an assessment</a></div>
+  </form>
+  <form class="panel prof-card" id="pwForm" novalidate>
+    <h2 class="subtitle" style="margin-bottom:16px">Change password</h2>
+    <div class="prof-grid">
+      <div class="field"><label for="pw_cur">Current password</label><input class="ctl" id="pw_cur" type="password" autocomplete="current-password" maxlength="128"></div>
+      <div class="field"><label for="pw_new">New password</label><input class="ctl" id="pw_new" type="password" autocomplete="new-password" maxlength="128"><span class="help">At least 8 characters with a letter and a number.</span></div>
+    </div>
+    <div class="formerr" id="pwErr" role="alert" aria-live="polite" style="margin-top:12px"></div>
+    <div style="margin-top:20px"><button class="btn btn-secondary" type="submit" id="pwSave"><span class="lbl">Update password</span></button></div>
+  </form>
+  <div class="panel prof-card">
+    <h2 class="subtitle" style="margin-bottom:6px">Session and account</h2>
+    <p class="small" id="profSince" style="margin:0 0 16px"></p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn btn-secondary" type="button" id="profSignOut"><span class="lbl">Sign out</span></button><button class="btn btn-ghost" type="button" id="profDelete" style="color:var(--decline)"><span class="lbl">Delete my account</span></button></div>
   </div>
 </section>
 
@@ -1697,7 +1780,7 @@ function initDS(){
   document.querySelectorAll('#dsMoney,#dsErr').forEach(moneyInit);
   document.getElementById('dsErrBtn').addEventListener('click',()=>{ const f=document.getElementById('dsErrF'); const v=parseINR(document.getElementById('dsErr').value); f.classList.remove('err'); if(v<10000||v>5000000){ f.querySelector('.errmsg > div').innerHTML=iconSvg('x',{s:16})+'<span>Enter a monthly income between ₹10,000 and ₹50,00,000.</span>'; void f.offsetWidth; f.classList.add('err'); } else toast('Income looks right'); });
   document.getElementById('dsErr').addEventListener('input',()=>document.getElementById('dsErrF').classList.remove('err'));
-  document.querySelectorAll('#view-ds .seg, [data-view="design-system"] .seg').forEach(s=>segInit(s));
+  
   rangeInit(document.getElementById('dsR').closest('.rng'),v=>v+' months');
   setTimeout(()=>landStamp(document.getElementById('stamp2'),'SANCTIONED','01 NOV 2026, SAAKH AI'),400);
   document.getElementById('chipDemo').innerHTML=['SANCTIONED','REFER','DECLINED'].map(chipOutcome).join('')+GRADES.map(chipGrade).join('');
@@ -1744,17 +1827,30 @@ function placePill(inst){
   const from=pill._pos.y; pill._pos={x:0,y:a.offsetTop}; anim(pill,[{transform:`translate(0,${from}px)`},{transform:`translate(0,${a.offsetTop}px)`}],'snappy');
 }
 function route(){
-  let r=(location.hash||'#home').slice(1); if(!ROUTES[r]) r='home';
-  document.body.classList.toggle('landing',r==='home');
+  if(!sessionLoaded) return;
+  let r=(location.hash||'#home').slice(1);
+  if(!ROUTES[r]) r='home';
+  if(!PUBLIC_VIEWS.includes(r) && !AUTH_USER){
+    RETURN_TO = r;
+    location.hash = 'login';
+    return;
+  }
+  if(r==='login' && AUTH_USER){
+    location.hash = 'profile';
+    return;
+  }
+  document.body.classList.toggle('landing',r==='home'||r==='login');
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.dataset.view===r));
   document.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('aria-current',a.dataset.route===r?'page':'false'));
-  document.getElementById('crumb').textContent=ROUTES[r];
+  const cr=document.getElementById('crumb');
+  if(cr) cr.textContent=ROUTES[r];
   placePill(!inited._pill); inited._pill=true;
   const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel};
   if(!inited[r] && once[r]){ once[r](); inited[r]=true; }
   if(r==='what-if'){ if(!inited.assess){ initAssess(); inited.assess=true; } enterWhatIf(); }
   if(r==='applicants'){ document.getElementById('appDetail').hidden=true; document.getElementById('appList').hidden=false; renderTable(); }
   if(r==='portfolio') drawPortfolio();
+  if(r==='profile') renderProfile();
   requestAnimationFrame(()=>{ document.querySelectorAll('.view.on .seg').forEach(s=>s._place&&s._place()); const t=document.getElementById('mtabs'); if(r==='model'&&t._place) t._place(); });
   if(r!=='home') window.scrollTo({top:0});
 }
@@ -1824,7 +1920,8 @@ document.getElementById('tourBtn').onclick=startTour;
 document.getElementById('aboutTour').onclick=startTour;
 
 hydrateIcons();
-route();
+initAuth();
+loadSession().then(() => route());
 </script>
 </body>
 </html>

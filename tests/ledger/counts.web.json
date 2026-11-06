@@ -3,12 +3,12 @@
     "executions": 200,
     "failed": 0
   },
-  "F24": {
-    "executions": 700,
-    "failed": 0
-  },
   "F25": {
     "executions": 200,
+    "failed": 0
+  },
+  "F24": {
+    "executions": 700,
     "failed": 0
   },
   "F21": {
