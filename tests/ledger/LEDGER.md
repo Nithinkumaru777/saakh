@@ -1,12 +1,12 @@
 # Test ledger
 
-Generated 2026-11-03 06:32 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
+Generated 2026-11-05 08:42 UTC by `python scripts/test_ledger.py`. Rule (SPEC §T): a function is done at >= 100 executions and 0 failures.
 
 **26 of 26 function cards PASS.** PENDING means the function has not been built yet.
 
 | Function | Spec | Executions | Passed | Failed | Status |
 |---|---|---|---|---|---|
-| F01 validate_application | SPEC §F01 | 101 | 101 | 0 | PASS |
+| F01 validate_application | SPEC §F01 | 201 | 201 | 0 | PASS |
 | F02 calc_emi | SPEC §F02 | 101 | 101 | 0 | PASS |
 | F03 calc_foir | SPEC §F03 | 101 | 101 | 0 | PASS |
 | F04 engineer_features | SPEC §F04 | 100 | 100 | 0 | PASS |
@@ -25,11 +25,11 @@ Generated 2026-11-03 06:32 UTC by `python scripts/test_ledger.py`. Rule (SPEC §
 | F17 batch_score (POST /api/batch) | SPEC §F17 | 201 | 201 | 0 | PASS |
 | F18 portfolio_stats (GET /api/portfolio) | SPEC §F18 | 100 | 100 | 0 | PASS |
 | F19 history list / get / delete | SPEC §F19 | 404 | 404 | 0 | PASS |
-| F20 ReportPdf (web) | SPEC §F20 | 100 | 100 | 0 | PASS |
+| F20 ReportPdf (web) | SPEC §F20 | 200 | 200 | 0 | PASS |
 | F21 web formatting (lib/format.ts) | SPEC §F21 | 300 | 300 | 0 | PASS |
 | F22 personas and sample data (GET /api/personas) | SPEC §F22 | 100 | 100 | 0 | PASS |
 | F23 model page data (GET /api/model) | SPEC §F23 | 100 | 100 | 0 | PASS |
-| F24 shell features (web) | SPEC §F24 | 500 | 500 | 0 | PASS |
+| F24 shell features (web) | SPEC §F24 | 700 | 700 | 0 | PASS |
 | F25 quality gate: no emoji | SPEC §F25 | 200 | 200 | 0 | PASS |
 | F26 report and docs | SPEC §F26 | 100 | 100 | 0 | PASS |
 
@@ -37,5 +37,5 @@ Generated 2026-11-03 06:32 UTC by `python scripts/test_ledger.py`. Rule (SPEC §
 
 | Report | Tests | Failed | Skipped |
 |---|---|---|---|
-| junit-api.xml | 41 | 0 | 0 |
-| junit-web.xml | 26 | 0 | 0 |
+| junit-api.xml | 50 | 0 | 0 |
+| junit-web.xml | 36 | 0 | 0 |

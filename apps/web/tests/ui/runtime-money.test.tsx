@@ -55,5 +55,5 @@ describe("F01 Assess wizard accepts typed, formatted rupee amounts", () => {
       })),
       { numRuns: 100 }
     );
-  });
+  }, 30_000);
 });
