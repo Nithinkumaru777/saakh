@@ -34,6 +34,7 @@ assert len(mojibake) == 0, f"Found mojibake in source: {mojibake[:5]}"
 # Write to worktree as pure binary bytes
 with open(os.path.join(worktree_dir, 'index.html'), 'wb') as f:
     f.write(html_bytes)
+print("Wrote index.html to gh-pages worktree")
 
 # Copy favicons and .nojekyll
 for fname in ['favicon.svg', 'favicon.png', 'favicon.ico']:
@@ -44,6 +45,14 @@ for fname in ['favicon.svg', 'favicon.png', 'favicon.ico']:
 
 with open(os.path.join(worktree_dir, '.nojekyll'), 'wb') as f:
     f.write(b'')
+
+# Copy tutorial assets (full.mp4, poster.jpg, and all 44 clips)
+tut_src = os.path.join(repo_dir, 'apps', 'web', 'public', 'tutorial')
+tut_dst = os.path.join(worktree_dir, 'tutorial')
+if os.path.exists(tut_dst):
+    shutil.rmtree(tut_dst)
+shutil.copytree(tut_src, tut_dst)
+print("Copied tutorial directory to gh-pages worktree")
 
 readme_content = """# Saakh — Live Demo (GitHub Pages)
 
@@ -64,7 +73,7 @@ diff_res = subprocess.run(['git', 'status', '--porcelain'], cwd=worktree_dir, ca
 print("Git status in worktree:\n", diff_res.stdout)
 
 if diff_res.stdout.strip():
-    commit_msg = "Fix(gh-pages): restore pure UTF-8 encoding and add SVG/PNG/ICO favicons"
+    commit_msg = "Deploy: fix responsive layout overlap and add full tutorial video suite"
     subprocess.run(['git', 'commit', '-m', commit_msg], cwd=worktree_dir, check=True)
     push_res = subprocess.run(['git', 'push', 'origin', 'gh-pages', '--force'], cwd=worktree_dir, capture_output=True, text=True)
     print("Git push result:", push_res.returncode, push_res.stdout, push_res.stderr)

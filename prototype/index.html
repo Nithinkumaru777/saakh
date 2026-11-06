@@ -489,13 +489,53 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 .skel{background:linear-gradient(90deg,var(--sheet-2) 0%,var(--rule) 50%,var(--sheet-2) 100%);background-size:200% 100%;animation:shimmer 1.4s linear infinite}
 @keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
 
+/* ============ AUTH & PROFILE ============ */
+.auth-wrap{display:grid;place-items:start center;padding:48px 20px 72px}
+.auth-card{width:100%;max-width:460px;padding:32px;display:grid;gap:20px}
+.formerr{color:var(--decline);font-size:13.5px;line-height:19px;font-weight:500}
+.formerr:empty{display:none}
+.prof-card{padding:28px;margin-bottom:20px;max-width:880px}
+.prof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rail-auth{display:grid;gap:8px;margin-bottom:12px;overflow:hidden;max-width:100%}
+.rail-auth .who{display:block;padding:8px 10px;border:1px solid var(--rule);border-radius:var(--r);color:var(--ink);text-decoration:none;min-width:0;max-width:100%;overflow:hidden;box-sizing:border-box}
+.rail-auth .who b{display:block;font-size:14px;line-height:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-auth .who span{display:block;font-size:12px;line-height:16px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-auth .who:hover{background:var(--haldi-wash)}
+
+/* ============ TUTORIALS ============ */
+.tut-root{max-width:1040px}
+.tut-full{padding:20px;margin-bottom:40px}
+.tut-video{background:#17171A;border-radius:var(--r);overflow:hidden}
+.tut-video video{display:block;width:100%;aspect-ratio:16/9}
+.tut-error{margin:0;padding:48px 24px;text-align:center;color:#fff}
+.tut-full-cap{margin:12px 0 0;font-size:14px;color:var(--ink-2)}
+.tut-head{font-family:var(--f-display);font-weight:600;font-size:28px;line-height:34px;letter-spacing:-.01em;margin:0 0 14px}
+.tut-search{display:block;width:100%;height:44px;padding:0 14px;font:inherit;font-size:15px;color:var(--ink);background:var(--sheet);border:1px solid var(--rule-strong);border-radius:var(--r);margin-bottom:28px}
+.tut-search:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.tut-chapter{margin-bottom:32px}
+.tut-chapter>h2{margin-bottom:10px}
+.tut-topic{border-top:1px solid var(--rule)}
+.tut-topic:last-child{border-bottom:1px solid var(--rule)}
+.tut-toggle{display:flex;align-items:center;gap:16px;width:100%;min-height:52px;padding:10px 4px;font:inherit;font-size:15px;font-weight:500;color:var(--ink);text-align:left;background:none;border:0;cursor:pointer}
+.tut-toggle:hover{background:var(--haldi-wash)}
+.tut-toggle:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.tut-title{flex:1;min-width:0}
+.tut-dur{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tut-arrow{display:inline-flex;transition:transform var(--d-std) var(--e-out)}
+.tut-topic.open .tut-arrow{transform:rotate(90deg)}
+.tut-panel{padding:6px 4px 24px}
+.tut-panel[hidden]{display:none}
+.tut-desc{margin:16px 0 0;max-width:72ch;font-size:15px;line-height:24px;color:var(--ink-2)}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width:1180px){
   .app{grid-template-columns:64px 1fr}
   .rail{padding:18px 10px}
-  .rail .brand-name,.nav a span,.rail-foot{display:none}
+  .rail .brand-name,.nav a span,.rail-foot,.rail-auth,#railAuth{display:none !important}
   .brand{padding:2px 8px 18px}
   .nav a{padding:0;justify-content:center}
+  .topbar{padding:14px 20px;gap:8px}
+  #tourBtn .lbl,#cmdBtn .kbd{display:none}
   .assess,.wi,.detail-grid{grid-template-columns:1fr}
   .assess > .asheet,.assess > .stepcard{grid-column:1;grid-row:auto}
   .asheet{position:relative;top:0}
@@ -506,7 +546,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 }
 @media (max-width:767px){
   .app{grid-template-columns:1fr}
-  .rail{display:none}
+  .rail{display:none !important}
   .topbar{padding:12px 16px}
   #tourBtn .lbl,#cmdBtn .lbl,#cmdBtn .kbd{display:none}
   #tourBtn,#cmdBtn{width:40px;padding:0}
@@ -519,6 +559,8 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
   .kpi:nth-child(n+3){border-top:1px solid var(--rule);padding-top:14px}
   .charts{grid-template-columns:1fr}
   .mc{columns:1}
+  .prof-grid{grid-template-columns:1fr}
+  .auth-card{padding:24px}
   .land-top,.land-hero,.band,.land-foot{padding-left:18px;padding-right:18px}
   .land-hero{padding-top:44px;padding-bottom:56px}
   .band ol{grid-template-columns:1fr}
@@ -544,20 +586,6 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}
-}
-/* ============ AUTH & PROFILE ============ */
-.auth-wrap{display:grid;place-items:start center;padding:48px 20px 72px}
-.auth-card{width:100%;max-width:460px;padding:32px;display:grid;gap:20px}
-.prof-card{padding:28px;margin-bottom:20px;max-width:880px}
-.prof-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-.rail-auth{display:grid;gap:8px;margin-bottom:12px}
-.rail-auth .who{display:block;padding:8px 10px;border:1px solid var(--rule);border-radius:var(--r);color:var(--ink);text-decoration:none;min-width:0}
-.rail-auth .who b{display:block;font-size:14px;line-height:19px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rail-auth .who span{display:block;font-size:12px;line-height:16px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rail-auth .who:hover{background:var(--haldi-wash)}
-@media (max-width:767px){
-  .prof-grid{grid-template-columns:1fr}
-  .auth-card{padding:24px}
 }
 </style>
 </head>
@@ -587,6 +615,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       <a class="ih" href="#portfolio" data-route="portfolio"><i data-icon="chart-column-increasing" data-a="bars"></i><span>Portfolio</span></a>
       <a class="ih" href="#model" data-route="model"><i data-icon="brain" data-a="pulse"></i><span>Model</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
+            <a class="ih" href="#tutorials" data-route="tutorials"><i data-icon="play" data-a="pop"></i><span>Tutorials</span></a>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
       <a class="ih" href="#profile" data-route="profile" id="navProfileLink" style="display:none"><i data-icon="id-card" data-a="pop"></i><span>Profile</span></a>
     </nav>
@@ -883,6 +912,12 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 </section>
 
 
+
+<!-- ======================= TUTORIALS ======================= -->
+<section class="view" data-view="tutorials" aria-label="Tutorials">
+  <div class="page-head"><div class="grow"><h1 class="display-m">Tutorials</h1><p>A full guide to Saakh, and 44 short clips covering each feature. Search by name or description to jump straight to a topic.</p></div></div>
+  <div class="tut-root" id="tutRoot"></div>
+</section>
 
 <!-- ======================= LOGIN / REGISTER ======================= -->
 <section class="view" data-view="login" aria-label="Sign in">
@@ -2174,8 +2209,546 @@ function renderProfile() {
   if (sinceEl) sinceEl.textContent = since && !isNaN(+since) ? `Member since ${since.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}.` : "";
 }
 
-const ROUTES={home:'Home',assess:'Assess','what-if':'What-if',applicants:'Applicants',batch:'Batch',portfolio:'Portfolio',model:'Model',about:'About',login:'Sign in',profile:'Your profile'};
-const PUBLIC_VIEWS=['home','login','about','model'];
+/* ====================================================================
+   TUTORIALS ENGINE
+   ==================================================================== */
+const TUTORIAL_DATA = {
+  "full": {
+    "src": "/tutorial/full.mp4",
+    "poster": "/tutorial/poster.jpg",
+    "duration": "25:46"
+  },
+  "chapters": [
+    {
+      "num": 1,
+      "title": "The problem",
+      "topics": [
+        {
+          "id": "h1",
+          "title": "The problem Saakh solves",
+          "description": "It is ten in the morning at a lending branch in Pune. A credit officer has eleven loan applications on her desk, and every one of them asks the same question: will this person repay? Getting the answer wrong is expensive. According to the Reserve Bank of India's Financial Stability Report of December 2025, unsecured loans made up 53.1 percent of all retail loans that slipped into bad debt. The files are long, the ratios are worked out by hand, and the officer still has to explain every decision to the applicant and to the auditor.",
+          "duration": "0:43",
+          "src": "/tutorial/clips/h1.mp4"
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "title": "What Saakh is",
+      "topics": [
+        {
+          "id": "w1",
+          "title": "What Saakh is",
+          "description": "This is Saakh, an AI based loan eligibility and risk assessment system. It is built for credit officers at banks and NBFCs, for risk teams who watch the whole loan book, and for applicants who want to know where they stand. Saakh reads an application, estimates the chance of default, and shows exactly which factors moved the decision. The outcome is a clear decision, with reasons, in seconds instead of hours.",
+          "duration": "0:33",
+          "src": "/tutorial/clips/w1.mp4"
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "title": "How it works",
+      "topics": [
+        {
+          "id": "a1",
+          "title": "Architecture and data flow",
+          "description": "Here is how it works. The credit officer works in a Next.js web app in the browser. Every change is sent to a FastAPI service written in Python. First, six policy rules screen the application, such as declining any request where EMIs would take more than sixty five percent of income. Next, the raw inputs become the ratios lenders use: FOIR, loan to income and loan to value. A monotone XGBoost model estimates the probability of default, Platt scaling calibrates it, and SHAP values explain how much each input pushed the risk up or down. The decision is saved to a SQLite database, and a live event stream tells every open browser that something has changed.",
+          "duration": "0:54",
+          "src": "/tutorial/clips/a1.mp4"
+        },
+        {
+          "id": "a2",
+          "title": "The tech stack",
+          "description": "The stack is deliberately simple. Next.js, React and Tailwind on the front end. FastAPI, scikit-learn, XGBoost and SHAP on the back end. SQLModel and SQLite for storage, and server sent events for real time updates. On held out test data, the model reaches an AUC of 0.81.",
+          "duration": "0:27",
+          "src": "/tutorial/clips/a2.mp4"
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "title": "Getting started",
+      "topics": [
+        {
+          "id": "g1",
+          "title": "Open the app and find your way around",
+          "description": "Getting started takes one step. Open the app in your browser at localhost, port 3000. There is no sign up and no password, because Saakh is an internal tool, so it opens straight on the home page. Press Assess a full application to enter the workspace. Here, the left rail is your main navigation, the top bar shows which page you are on, and this small chip shows the live connection to the server. Live means decisions from other desks will appear without a reload.",
+          "duration": "0:39",
+          "src": "/tutorial/clips/g1.mp4"
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "title": "Home: try it live",
+      "topics": [
+        {
+          "id": "hm1",
+          "title": "Try the live calculator",
+          "description": "Back on the home page, the sentence in the middle is a live calculator, and every underlined value can be changed. Switch the applicant from salaried to self employed, and the estimate moves. Lower the monthly income to fifty five thousand rupees. Drop the CIBIL score to six hundred and eighty. Ask for twelve lakh rupees instead of eight, over sixty months. Each time, the model scores the sentence again, the percentage updates, the grade changes colour, and the marker slides along the A to E risk ruler.",
+          "duration": "0:39",
+          "src": "/tutorial/clips/hm1.mp4"
+        },
+        {
+          "id": "hm2",
+          "title": "How a decision is made, in five steps",
+          "description": "Scroll down, and the band explains how every decision is made, in five steps: policy rules, features, the risk model, the explanation, and the decision. Back at the top, two buttons lead on. Assess a full application opens the wizard. See how the AI decides opens the model page, which we will explore later.",
+          "duration": "0:26",
+          "src": "/tutorial/clips/hm2.mp4"
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "title": "Assess an application",
+      "topics": [
+        {
+          "id": "as1",
+          "title": "Load a sample applicant",
+          "description": "The Assess page is where a credit officer spends most of the day. On the left is a four step application, and on the right is the assessment sheet. To explore quickly, use Load sample applicant. Eight demo personas cover every kind of outcome. Choose Rahul Mehta, a salaried professional in Pune asking for a home loan. A toast confirms that he is loaded, every field fills in, and the sheet immediately shows a live estimate: the chance of default, the grade, the EMI, the indicative rate, EMIs as a share of income, and the maximum amount he could borrow.",
+          "duration": "0:44",
+          "src": "/tutorial/clips/as1.mp4"
+        },
+        {
+          "id": "as2",
+          "title": "Step 1: enter the applicant",
+          "description": "Now let us enter an applicant by hand. Press Clear to empty the form. Step one is the applicant. Type the full name as it appears on the PAN card: Meera Iyer. Age thirty one. Five years in her current job. Pick the employment type with the segmented control: salaried. Choose the city, here a Tier two city, enter one dependent, and set residence to rented. Then press Continue. Saakh checks every step before it lets you move on.",
+          "duration": "0:38",
+          "src": "/tutorial/clips/as2.mp4"
+        },
+        {
+          "id": "as3",
+          "title": "Step 2: enter income",
+          "description": "Step two is income. Enter the take home pay after tax: ninety two thousand rupees a month. Notice the Indian digit grouping as you type, and the amount written out in words underneath, which catches a missing zero before it becomes a mistake. Other income, such as rent, counts at half its value. Enter eight thousand, and continue.",
+          "duration": "0:27",
+          "src": "/tutorial/clips/as3.mp4"
+        },
+        {
+          "id": "as4",
+          "title": "Step 3: enter credit and debts",
+          "description": "Step three covers credit and debts, taken from the CIBIL report and loan statements. Enter a score of seven hundred and forty eight. If the applicant had no credit history, you would switch on New to credit, and the score field would lock. Add six years of credit history and three open credit lines. Card limit used is fifty two percent. No missed payments, and one enquiry in the last six months. The switch for a previous default stays off. Finally, enter existing EMIs of nine thousand five hundred rupees, and an outstanding balance of two lakh forty thousand.",
+          "duration": "0:45",
+          "src": "/tutorial/clips/as4.mp4"
+        },
+        {
+          "id": "as5",
+          "title": "Step 4: enter the loan request",
+          "description": "Step four is the loan request, and the loan type changes the rules. Click Home, and a new field appears for the value of the property, because a secured loan needs collateral. Click Auto, and you see the same. Then choose Personal, the type Meera wants, and the field disappears. Enter six lakh fifty thousand rupees, over forty eight months. The help text shows the tenure range allowed for this loan type. Finally, add a purpose: home renovation.",
+          "duration": "0:36",
+          "src": "/tutorial/clips/as5.mp4"
+        },
+        {
+          "id": "as6",
+          "title": "Run the assessment and read the result",
+          "description": "Now press Run assessment. The sheet scans, the marker settles on the estimated risk, and the decision is stamped, here Sanctioned, with today's date. The headline is highlighted, and the assessment is saved to the database. Below, What moved the score lists each factor in percentage points. Dark bars lowered the risk, and yellow bars raised it. Hover any row to read the reason in plain language, the same sentence a credit officer can say to the applicant.",
+          "duration": "0:36",
+          "src": "/tutorial/clips/as6.mp4"
+        },
+        {
+          "id": "as7",
+          "title": "Download the PDF and try changes",
+          "description": "After a run, two more buttons matter. Download PDF creates a sanction report with the decision, the numbers and the explanation, ready to file or to share. Try changes carries this exact application into the What if simulator, so you can test alternatives without touching the saved record.",
+          "duration": "0:22",
+          "src": "/tutorial/clips/as7.mp4"
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "title": "What-if simulator",
+      "topics": [
+        {
+          "id": "wi1",
+          "title": "Use the What-if sliders",
+          "description": "The What if simulator answers the question every applicant asks: what would it take? Each slider is one lever. Raise the loan amount, and watch the risk climb. Change the tenure. Lower the monthly income, add existing EMIs, push card usage up, drop the CIBIL score, or add recent credit enquiries. The model scores again after every move, and the card on the right shows the new chance of default, the grade, the outcome, the EMI, and EMIs as a share of income.",
+          "duration": "0:38",
+          "src": "/tutorial/clips/wi1.mp4"
+        },
+        {
+          "id": "wi2",
+          "title": "Find paths to a better grade",
+          "description": "Below, Paths to a better grade lists the smallest single change that earns a better grade. Each card names one lever, the new value, and the grade it would reach. Press Apply, and the slider glides to that value, the result updates, and a toast confirms the new grade. It turns a refusal into advice an applicant can act on.",
+          "duration": "0:26",
+          "src": "/tutorial/clips/wi2.mp4"
+        },
+        {
+          "id": "wi3",
+          "title": "Reset the sliders and the best-grade message",
+          "description": "Reset to application puts every slider back to the values from the Assess page. And when an application is already excellent, like Arjun Das here, the panel simply says that it is already at the best grade.",
+          "duration": "0:16",
+          "src": "/tutorial/clips/wi3.mp4"
+        }
+      ]
+    },
+    {
+      "num": 8,
+      "title": "Applicants",
+      "topics": [
+        {
+          "id": "ap1",
+          "title": "Search and filter applicants",
+          "description": "Applicants is the history of every assessment, newest first, with the loan type, amount, grade, decision, risk and date. Search by name to find one person in seconds: type Kulkarni. Clear the search, and use the filter to see only declined files, then only the refer cases waiting for a human decision, then all of them again. The table shows twelve rows per page. Next and Previous move through the rest, and the counter tells you exactly where you are.",
+          "duration": "0:36",
+          "src": "/tutorial/clips/ap1.mp4"
+        },
+        {
+          "id": "ap2",
+          "title": "Open a full decision record",
+          "description": "Click any row to open the full decision. The name and grade glide into place, and the page shows the application facts, the chance of default on the ruler, the EMI, the rate, EMIs against income and the maximum eligible amount, followed by the factors that moved the score and the paths to a better grade. Download report saves a PDF of this exact decision, and Back to applicants returns to the list.",
+          "duration": "0:30",
+          "src": "/tutorial/clips/ap2.mp4"
+        },
+        {
+          "id": "ap3",
+          "title": "Live updates across desks",
+          "description": "Saakh is built for teams. Watch the chip in the top bar: it says Live. Right now, a colleague at another desk saves an assessment for Harpreet Sandhu. Without any reload, a toast announces a new assessment from another desk, and the row appears at the top of the table. If the connection drops, the chip changes to Reconnecting, and the page catches up as soon as it is back.",
+          "duration": "0:30",
+          "src": "/tutorial/clips/ap3.mp4"
+        }
+      ]
+    },
+    {
+      "num": 9,
+      "title": "Batch scoring",
+      "topics": [
+        {
+          "id": "bt1",
+          "title": "Score a whole file",
+          "description": "Batch scoring handles a whole file at once, for example the applications collected at a loan camp. Start with Download CSV template, which gives the twenty three columns Saakh expects, with one example row. You can drop a CSV file onto this area, or choose one. To see it in action, press Use the fifty row sample. A progress bar counts through every application as each one is validated and scored.",
+          "duration": "0:33",
+          "src": "/tutorial/clips/bt1.mp4"
+        },
+        {
+          "id": "bt2",
+          "title": "Read batch results and fix rows",
+          "description": "The result summarises the batch: how many were scored, how many need fixing, and how many were sanctioned, referred and declined. The strip shows the grade mix from A to E. Rows to fix lists every problem by row and field, such as an applicant aged seventeen or a tenure of four hundred months, so the file can be corrected and sent again. Download results CSV exports every score for the bank's own systems.",
+          "duration": "0:31",
+          "src": "/tutorial/clips/bt2.mp4"
+        },
+        {
+          "id": "bt3",
+          "title": "Upload your own CSV file",
+          "description": "You can also upload your own file. Press Choose file, and pick a CSV prepared from the template. This one holds twelve applications from a branch in Nagpur. Saakh validates and scores every row the same way, and all twelve are ready, with nothing to fix.",
+          "duration": "0:22",
+          "src": "/tutorial/clips/bt3.mp4"
+        }
+      ]
+    },
+    {
+      "num": 10,
+      "title": "Portfolio",
+      "topics": [
+        {
+          "id": "pf1",
+          "title": "Read the portfolio charts",
+          "description": "Portfolio is the view for risk teams. Four counters sum up the book: the number of applications, the sanction rate, the average default risk, and the expected loss in rupees. Applications by grade shows where the book sits from A to E. Default risk distribution groups applicants into five point bands. Decisions by loan type compares how often personal, home, auto, education and business loans are sanctioned, referred or declined. And EMI burden against risk plots every applicant, so you can see that heavy EMIs and high risk travel together. Like Applicants, these charts refresh live whenever any desk saves a decision.",
+          "duration": "0:49",
+          "src": "/tutorial/clips/pf1.mp4"
+        }
+      ]
+    },
+    {
+      "num": 11,
+      "title": "How the AI decides",
+      "topics": [
+        {
+          "id": "md1",
+          "title": "Trace an application through the pipeline",
+          "description": "The Model page opens the black box. The Pipeline tab lays out the seven stages every application passes through: the application itself, policy rules, features, the XGBoost model, calibration, the SHAP explanation, and the decision. Choose an applicant to trace, here Fatima Shaikh's business loan, and press Trace an application. A marker travels stage by stage, and the inspector below fills with what each stage computed. A toast reports her final outcome.",
+          "duration": "0:37",
+          "src": "/tutorial/clips/md1.mp4"
+        },
+        {
+          "id": "md2",
+          "title": "Inspect each pipeline stage",
+          "description": "Click any stage to inspect it. Policy rules shows the six hard knock out checks and the four referral flags. Features shows the ratios: FOIR, loan to income, debt to income, and loan to value. The XGBoost stage shows the raw score in log odds, and the monotone constraints that guarantee a better CIBIL score can never raise the risk. Calibration turns that score into a probability and a grade. SHAP explanation shows the contribution bars, and Decision shows the verdict, the rate, the EMI and the maximum amount.",
+          "duration": "0:41",
+          "src": "/tutorial/clips/md2.mp4"
+        },
+        {
+          "id": "md3",
+          "title": "Check model performance",
+          "description": "The Performance tab reports how well the model works on data it never saw during training. The test AUC is 0.807, the calibrated Brier score is about 0.09, and the KS statistic is 0.5. The ROC curve, and the confusion matrix at the grade E cut off, show the trade off between catching defaulters and turning away good borrowers.",
+          "duration": "0:29",
+          "src": "/tutorial/clips/md3.mp4"
+        },
+        {
+          "id": "md4",
+          "title": "Explainability and the model card",
+          "description": "Explainability ranks the inputs that matter most across all applicants, measured as the average absolute SHAP value in percentage points. The Model card states the intended use, the data, the inputs and the limitations, and one important promise: gender, religion, caste and other protected attributes are never collected or used.",
+          "duration": "0:25",
+          "src": "/tutorial/clips/md4.mp4"
+        }
+      ]
+    },
+    {
+      "num": 12,
+      "title": "Power tools",
+      "topics": [
+        {
+          "id": "pt1",
+          "title": "Use the command palette",
+          "description": "A few tools make daily work faster. Press Control K, or the Search button, to open the command palette. Type to filter. Portfolio jumps straight to that page. From here you can also load a sample applicant, toggle the theme, or start the guided demo, using the arrow keys and Enter without touching the mouse. Escape closes it.",
+          "duration": "0:27",
+          "src": "/tutorial/clips/pt1.mp4"
+        },
+        {
+          "id": "pt2",
+          "title": "Switch to the dark theme",
+          "description": "The sun and moon button switches to the dark theme, for long shifts or a dim branch office, and the colours for grades and decisions stay the same. Press it again to return to light.",
+          "duration": "0:14",
+          "src": "/tutorial/clips/pt2.mp4"
+        },
+        {
+          "id": "pt3",
+          "title": "Take the guided demo",
+          "description": "Guided demo is a built in tour for new staff. It spotlights one feature at a time, with a short explanation and a step counter, starting with the live sentence. Press Next to move through all eight steps. First, the sample data. Next, running the model. Then, the explanation of the score. After that, the What if simulator. Then, the applicant history. Then, the portfolio. And last, the model pipeline. Finish ends the tour with a confirmation.",
+          "duration": "0:39",
+          "src": "/tutorial/clips/pt3.mp4"
+        },
+        {
+          "id": "pt4",
+          "title": "The About page",
+          "description": "About lists the project, the course, the student and the stack, along with the practical uses: banks and NBFCs screening loans, officers explaining decisions, applicants checking eligibility, and risk teams watching the book. Start guided demo is available here too.",
+          "duration": "0:20",
+          "src": "/tutorial/clips/pt4.mp4"
+        }
+      ]
+    },
+    {
+      "num": 13,
+      "title": "Validation and edge cases",
+      "topics": [
+        {
+          "id": "va1",
+          "title": "Applicant and income errors",
+          "description": "Good software refuses bad data politely. On the Assess page, clear the form and type a name with a digit in it. The field turns red and asks for letters only. An age of sixteen is rejected, because applicants must be eighteen to seventy five. Years in the job cannot be more than the age minus sixteen. On the income step, a monthly income of five thousand rupees is below the ten thousand minimum. Each message says exactly what is allowed, and the cursor jumps to the first problem.",
+          "duration": "0:40",
+          "src": "/tutorial/clips/va1.mp4"
+        },
+        {
+          "id": "va2",
+          "title": "Credit and loan errors",
+          "description": "On the credit step, a CIBIL score of nine hundred and fifty is impossible, so Saakh asks for a score from three hundred to nine hundred, or New to credit. On the loan step, a personal loan of fifty lakh rupees is above the forty lakh limit. A home loan over ten months is too short, and a home loan without a property value is stopped. If you press Run assessment while any step is still invalid, Saakh jumps to that step and shows a toast asking you to fix the highlighted field.",
+          "duration": "0:36",
+          "src": "/tutorial/clips/va2.mp4"
+        },
+        {
+          "id": "va3",
+          "title": "Policy knock-outs",
+          "description": "Some applications are valid, but break policy. Sneha Kulkarni already pays thirty one thousand rupees a month in EMIs on a salary of fifty five thousand. With the new loan, her EMIs would take ninety five percent of her income, far above the sixty five percent limit. So the policy rules decline her before the model's estimate can approve anything, and the sheet says exactly why.",
+          "duration": "0:31",
+          "src": "/tutorial/clips/va3.mp4"
+        },
+        {
+          "id": "va4",
+          "title": "Bad files and empty results",
+          "description": "Other edge cases are handled too. A CSV file with missing columns is refused, with a message naming the missing columns. A search that matches nobody shows a clear empty state with a way forward. And the command palette says when nothing matches.",
+          "duration": "0:20",
+          "src": "/tutorial/clips/va4.mp4"
+        },
+        {
+          "id": "va5",
+          "title": "Server-side validation",
+          "description": "Finally, the server checks every request again. In the API documentation, open the score endpoint, press Try it out, and send an application with an age of sixteen. The API answers with a 422 validation error that names the field, so bad data can never reach the model, whatever the client.",
+          "duration": "0:25",
+          "src": "/tutorial/clips/va5.mp4"
+        }
+      ]
+    },
+    {
+      "num": 14,
+      "title": "A real day: one applicant, end to end",
+      "topics": [
+        {
+          "id": "rw1",
+          "title": "Worked example: enter the applicant",
+          "description": "Now, a working morning in miniature. Kavya Deshpande is a credit officer at an NBFC branch in Pune. Her first file is Rajesh Kulkarni, thirty four, a salaried supervisor at an auto parts plant, asking for a nine lakh rupee personal loan for his mother's knee surgery and home repairs. Kavya clears the form and enters his details exactly as they appear in his documents: seven years in the job, two dependents, a rented flat, and take home pay of seventy eight thousand rupees a month.",
+          "duration": "0:39",
+          "src": "/tutorial/clips/rw1.mp4"
+        },
+        {
+          "id": "rw2",
+          "title": "Worked example: enter credit and the loan",
+          "description": "From his CIBIL report: a score of seven hundred and five, eight years of history, four open credit lines, cards sixty four percent used, one missed payment and three recent enquiries. He already pays fourteen thousand five hundred rupees a month in EMIs, with four lakh twenty thousand outstanding. The request is a personal loan of nine lakh rupees over forty eight months.",
+          "duration": "0:29",
+          "src": "/tutorial/clips/rw2.mp4"
+        },
+        {
+          "id": "rw3",
+          "title": "Worked example: read the result",
+          "description": "Kavya runs the assessment. The stamp says Refer, grade D, with an estimated 16.4 percent chance of default. The explanation tells her why: card usage of sixty four percent and one missed payment raise the risk, while a CIBIL score of seven hundred and five pulls it down. At 14.75 percent interest, the EMI would take almost half of his income. This is not a refusal. It is a case for a conversation.",
+          "duration": "0:35",
+          "src": "/tutorial/clips/rw3.mp4"
+        },
+        {
+          "id": "rw4",
+          "title": "Worked example: find a better path",
+          "description": "She opens What if with Try changes. Paths to a better grade offers three options: bring card usage down to forty four percent, add a co applicant earning twenty three thousand four hundred a month, or reduce the loan to about five lakh eighty five thousand. Rajesh says six lakh rupees would cover the surgery. Kavya moves the loan slider to six lakh, and the result improves to grade B and Sanctioned.",
+          "duration": "0:31",
+          "src": "/tutorial/clips/rw4.mp4"
+        },
+        {
+          "id": "rw5",
+          "title": "Worked example: sanction and report",
+          "description": "Back on the Assess page, she updates the loan amount to six lakh rupees and runs the assessment again. This time the stamp says Sanctioned. She downloads the PDF sanction report for the file, and when she opens Applicants, Rajesh is at the top of the list, with every other desk already able to see the decision. The whole assessment took minutes, and every number in it can be explained.",
+          "duration": "0:30",
+          "src": "/tutorial/clips/rw5.mp4"
+        }
+      ]
+    },
+    {
+      "num": 15,
+      "title": "Real-world impact",
+      "topics": [
+        {
+          "id": "im1",
+          "title": "Real-world impact",
+          "description": "What does this change in real life? Without a tool like Saakh, an officer works out FOIR and ratios by hand, reads every statement, and writes a justification for each file. With Saakh, the ratios, the risk estimate and the reasons are ready as soon as the data is entered, in about twelve milliseconds per score on the server. Applicants get a clear answer and a concrete path to approval. Risk teams see the whole book, live. And because every decision is explained and stored, an auditor can trace exactly why each loan was approved or declined.",
+          "duration": "0:45",
+          "src": "/tutorial/clips/im1.mp4"
+        },
+        {
+          "id": "im2",
+          "title": "What comes next",
+          "description": "There is more to build. The model is trained on synthetic data, so the first step is to retrain and validate it on real repayment history. After that come account aggregator consent to pull bank statements automatically, separate logins for officers and supervisors, a review queue for referred cases, explanations in Indian languages for applicants, and monitoring for model drift and fairness.",
+          "duration": "0:30",
+          "src": "/tutorial/clips/im2.mp4"
+        }
+      ]
+    }
+  ]
+};
+
+function resolveTutUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+  const clean = url.replace(/^\/+/, '');
+  if (typeof location !== 'undefined' && location.pathname.includes('/saakh')) {
+    return '/saakh/' + clean;
+  }
+  return './' + clean;
+}
+
+function pauseTutorials(keep) {
+  document.querySelectorAll('.tut-root video').forEach(v => { if (v !== keep) v.pause(); });
+}
+
+function tutEl(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function makeTutVideo(src, label, poster) {
+  const wrap = tutEl('div', 'tut-video');
+  const video = tutEl('video');
+  video.controls = true;
+  video.preload = poster ? 'none' : 'metadata';
+  video.setAttribute('playsinline', '');
+  video.setAttribute('aria-label', label);
+  if (poster) video.poster = resolveTutUrl(poster);
+  video.addEventListener('error', () => wrap.replaceChildren(tutEl('p', 'tut-error', 'This video could not be loaded. Please try again later.')));
+  video.addEventListener('play', () => pauseTutorials(video));
+  video.src = resolveTutUrl(src);
+  wrap.append(video);
+  return wrap;
+}
+
+function setTutOpen(row, open) {
+  const toggle = row.querySelector('.tut-toggle');
+  const panel = row.querySelector('.tut-panel');
+  if (!toggle || !panel) return;
+  toggle.setAttribute('aria-expanded', String(open));
+  panel.hidden = !open;
+  row.classList.toggle('open', open);
+  if (!open) {
+    const v = panel.querySelector('video');
+    if (v) v.pause();
+  }
+}
+
+function makeTutTopic(topic) {
+  const row = tutEl('article', 'tut-topic');
+  row.dataset.topic = topic.id;
+  const toggle = tutEl('button', 'tut-toggle ih');
+  toggle.type = 'button';
+  toggle.setAttribute('aria-expanded', 'false');
+  const arrow = tutEl('span', 'tut-arrow');
+  arrow.innerHTML = iconSvg('chevron-right', { s: 16 });
+  toggle.append(arrow, tutEl('span', 'tut-title', topic.title), tutEl('span', 'tut-dur', topic.duration));
+  const panel = tutEl('div', 'tut-panel');
+  panel.hidden = true;
+  toggle.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    if (open) {
+      document.querySelectorAll('.tut-topic.open').forEach(r => { if (r !== row) setTutOpen(r, false); });
+      if (!panel.querySelector('video')) {
+        panel.prepend(makeTutVideo(topic.src, topic.title));
+      }
+    }
+    setTutOpen(row, open);
+  });
+  panel.append(tutEl('p', 'tut-desc', topic.description));
+  row.append(toggle, panel);
+  return row;
+}
+
+function filterTutChapters(chapters, query) {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) return chapters;
+  return chapters.map(c => ({
+    ...c,
+    topics: c.topics.filter(t => {
+      const text = `${c.title} ${t.title} ${t.description}`.toLowerCase();
+      return words.every(w => text.includes(w));
+    })
+  })).filter(c => c.topics.length > 0);
+}
+
+function renderTutList(container, tutorial, query) {
+  const matched = filterTutChapters(tutorial.chapters, query);
+  if (!matched.length) {
+    container.replaceChildren(tutEl('p', 'sub empty', `No tutorials match "${query}". Try searching for "CIBIL", "XGBoost", "PDF", or "What-if".`));
+    return;
+  }
+  const chapters = matched.map(c => {
+    const sec = tutEl('section', 'tut-chapter');
+    sec.append(tutEl('h2', 'subtitle', `${c.num}. ${c.title}`));
+    c.topics.forEach(t => sec.append(makeTutTopic(t)));
+    return sec;
+  });
+  container.replaceChildren(...chapters);
+  hydrateIcons(container);
+}
+
+function initTutorials() {
+  const root = document.getElementById('tutRoot');
+  if (!root || root._inited) return;
+  root._inited = true;
+  const full = tutEl('section', 'panel tut-full');
+  full.append(
+    makeTutVideo(TUTORIAL_DATA.full.src, 'Full guide to Saakh', TUTORIAL_DATA.full.poster),
+    tutEl('p', 'tut-full-cap', `Full guide, ${TUTORIAL_DATA.full.duration}. Every feature from start to finish.`)
+  );
+  const search = tutEl('input', 'input tut-search');
+  search.type = 'search';
+  search.id = 'tutSearch';
+  search.placeholder = 'Search topics, such as PDF or CIBIL';
+  search.setAttribute('aria-label', 'Search tutorial topics');
+  const list = tutEl('div', 'tut-list');
+  search.addEventListener('input', () => {
+    pauseTutorials();
+    renderTutList(list, TUTORIAL_DATA, search.value);
+  });
+  root.replaceChildren(full, tutEl('h2', 'tut-head', 'Learn one feature'), search, list);
+  renderTutList(list, TUTORIAL_DATA, '');
+}
+
+
+const ROUTES={home:'Home',assess:'Assess','what-if':'What-if',applicants:'Applicants',batch:'Batch',portfolio:'Portfolio',model:'Model',tutorials:'Tutorials',about:'About',login:'Sign in',profile:'Your profile'};
+const PUBLIC_VIEWS=['home','tutorials','login','about','model'];
 const inited={};
 function placePill(inst){
   const a=document.querySelector('#nav a[aria-current="page"]'); const pill=document.getElementById('navPill');
@@ -2185,6 +2758,7 @@ function placePill(inst){
 }
 function route(){
   if(!sessionLoaded) return;
+  pauseTutorials();
   let r=(location.hash||'#home').slice(1);
   if(!ROUTES[r]) r='home';
   if(!PUBLIC_VIEWS.includes(r) && !AUTH_USER){
@@ -2202,7 +2776,7 @@ function route(){
   const cr=document.getElementById('crumb');
   if(cr) cr.textContent=ROUTES[r];
   placePill(!inited._pill); inited._pill=true;
-  const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel};
+  const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel,tutorials:initTutorials};
   if(!inited[r] && once[r]){ once[r](); inited[r]=true; }
   if(r==='what-if'){ if(!inited.assess){ initAssess(); inited.assess=true; } enterWhatIf(); }
   if(r==='applicants'){ document.getElementById('appDetail').hidden=true; document.getElementById('appList').hidden=false; renderTable(); }
