@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { pauseTutorials, renderTutorials } from "./tutorial/tutorials";
 
 export function initSaakhRuntime(
   initialView?: string,
@@ -16,6 +17,24 @@ export function initSaakhRuntime(
   w.__saakhInited = true;
 
   const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+  /* ---------------- auth core (token + authenticated fetch) ---------------- */
+  const TOKEN_KEY = "saakh-token";
+  let AUTH_USER: any = null;
+  let sessionLoaded = false;
+  let RETURN_TO = "";
+  const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch { return ""; } };
+  const setToken = (t: string) => { try { if (t) localStorage.setItem(TOKEN_KEY, t); else localStorage.removeItem(TOKEN_KEY); } catch {} };
+  function apiFetch(url: string, init: RequestInit = {}) {
+    const t = getToken();
+    const headers: Record<string, string> = { ...((init.headers as Record<string, string>) || {}) };
+    if (t) headers.Authorization = `Bearer ${t}`;
+    return fetch(url, { ...init, headers }).then((r) => {
+      if (r.status === 401 && t) signOut(true);
+      return r;
+    });
+  }
+  const esc = (v: any) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" } as Record<string, string>)[c]);
 
   const ICONS: Record<string, string> = {
     "file-check": '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="m9 15 2 2 4-4" />',
@@ -545,13 +564,14 @@ export function initSaakhRuntime(
     try {
       const payload = cleanPayload(a);
       const endpoint = persist ? `${API_BASE}/api/assess` : `${API_BASE}/api/score`;
-      const resp = await fetch(endpoint, {
+      const resp = await apiFetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
+      if (persist && data.id) OWN_SAVES.add(data.id); // live feed must not call our own save "another desk"
       const mapped = mapApiAssessment(data, a);
       if (withCf && (!data.counterfactuals || !data.counterfactuals.length)) {
         mapped.cf = counterfactuals(a, mapped);
@@ -672,7 +692,7 @@ export function initSaakhRuntime(
 
   async function syncBackendHistory() {
     try {
-      const resp = await fetch(`${API_BASE}/api/assessments?page=1&page_size=100`);
+      const resp = await apiFetch(`${API_BASE}/api/assessments?page=1&page_size=100`);
       if (!resp.ok) return;
       const data = await resp.json();
       if (Array.isArray(data.items) && data.items.length > 0) {
@@ -705,13 +725,15 @@ export function initSaakhRuntime(
   }
   let livePending: string[] = [];
   let liveTimer = 0;
+  // Ids this browser saved via /api/assess. The local row is added to HISTORY only after the stamp
+  // animation (~1 s), so without this every own save would toast as "another desk".
+  const OWN_SAVES = new Set<string>();
   function refreshLive() {
     clearTimeout(liveTimer);
     liveTimer = window.setTimeout(async () => {
-      // ponytail: "unknown id after 250 ms" = another desk; an own save that is slower than
-      // 250 ms would also toast. Send a client id with /api/assess if that ever matters.
+      // "unknown id after 250 ms and not saved by us" = another desk.
       const known = new Set(HISTORY.map((h) => h.id));
-      const remote = livePending.filter((id) => !known.has(id)).length;
+      const remote = livePending.filter((id) => !known.has(id) && !OWN_SAVES.has(id)).length;
       livePending = [];
       await syncBackendHistory();
       if (remote > 0) toast(remote === 1 ? "New assessment from another desk" : `${remote} new assessments from other desks`);
@@ -1042,7 +1064,7 @@ export function initSaakhRuntime(
       const k = el.dataset.k;
       let v = a[k];
       if (k === "cibil_score" && v === -1) v = "";
-      if (el.dataset.money) {
+      if ("money" in el.dataset) {
         el.value = v ? (+v).toLocaleString("en-IN") : "";
         el._fmt && el._fmt();
       } else el.value = v ?? "";
@@ -1067,7 +1089,8 @@ export function initSaakhRuntime(
         a[k] = el.value;
         return;
       }
-      a[k] = el.dataset.money ? parseINR(el.value) : el.value === "" ? NaN : +el.value;
+      // `data-money` is a bare attribute, so dataset.money is "" (falsy); test presence, not value.
+      a[k] = "money" in el.dataset ? parseINR(el.value) : el.value === "" ? NaN : +el.value;
     });
     const ntc = document.getElementById("f_ntc") as HTMLInputElement;
     const def = document.getElementById("f_def") as HTMLInputElement;
@@ -2262,8 +2285,12 @@ export function initSaakhRuntime(
     batch: "Batch",
     portfolio: "Portfolio",
     model: "Model",
+    tutorials: "Tutorials",
     about: "About",
+    login: "Sign in",
+    profile: "Your profile",
   };
+  const PUBLIC_VIEWS = ["home", "login", "about", "model"];
   const inited: Record<string, boolean> = {};
   function placePill(inst?: boolean) {
     const a = document.querySelector('#nav a[aria-current="page"]') as HTMLElement;
@@ -2284,12 +2311,22 @@ export function initSaakhRuntime(
     anim(pill, [{ transform: `translate(0,${from}px)` }, { transform: `translate(0,${a.offsetTop}px)` }], "snappy");
   }
   function route() {
+    if (!sessionLoaded) return;
     let r = (location.hash || "").slice(1);
     if (!ROUTES[r]) {
       const p = location.pathname.replace(/^\/+|\/+$/g, "");
       r = ROUTES[p] ? p : initialView && ROUTES[initialView] ? initialView : "home";
     }
-    document.body.classList.toggle("landing", r === "home");
+    if (!PUBLIC_VIEWS.includes(r) && !AUTH_USER) {
+      RETURN_TO = r;
+      location.hash = "login";
+      return;
+    }
+    if (r === "login" && AUTH_USER) {
+      location.hash = "profile";
+      return;
+    }
+    document.body.classList.toggle("landing", r === "home" || r === "login");
     document.querySelectorAll(".view").forEach((v: any) => v.classList.toggle("on", v.dataset.view === r));
     document.querySelectorAll("[data-route]").forEach((a: any) => a.setAttribute("aria-current", a.dataset.route === r ? "page" : "false"));
     const cr = document.getElementById("crumb");
@@ -2303,7 +2340,9 @@ export function initSaakhRuntime(
       applicants: initApplicants,
       batch: initBatch,
       model: initModel,
+      tutorials: () => renderTutorials(document.getElementById("tutRoot")!, hydrateIcons),
     };
+    if (r !== "tutorials") pauseTutorials();
     if (!inited[r] && once[r]) {
       once[r]();
       inited[r] = true;
@@ -2321,6 +2360,7 @@ export function initSaakhRuntime(
       renderTable();
     }
     if (r === "portfolio") drawPortfolio();
+    if (r === "profile") renderProfile();
     requestAnimationFrame(() => {
       document.querySelectorAll(".view.on .seg").forEach((s: any) => s._place && s._place());
       const t: any = document.getElementById("mtabs");
@@ -2354,7 +2394,7 @@ export function initSaakhRuntime(
 
   // Command palette
   const CMDS = [
-    ...Object.entries(ROUTES).map(([k, v]) => ({
+    ...Object.entries(ROUTES).filter(([k]) => k !== "login").map(([k, v]) => ({
       g: "Go to",
       t: v,
       ic: ({
@@ -2365,7 +2405,9 @@ export function initSaakhRuntime(
         batch: "cloud-upload",
         portfolio: "chart-column-increasing",
         model: "brain",
+        tutorials: "play",
         about: "circle-help",
+        profile: "id-card",
       } as Record<string, string>)[k],
       run: () => (location.hash = k),
     })),
@@ -2450,6 +2492,201 @@ export function initSaakhRuntime(
   });
   document.getElementById("moreBtn")!.onclick = openCmd;
 
+  /* ====================================================================
+     ACCOUNTS: sign in, register, profile
+  ==================================================================== */
+  function firstName(u: any) {
+    return String(u?.full_name || "").trim().split(/\s+/)[0] || "Account";
+  }
+  function updateAuthUI() {
+    const topA = document.getElementById("authBtn") as HTMLAnchorElement | null;
+    const landA = document.getElementById("landAuth") as HTMLAnchorElement | null;
+    [topA, landA].forEach((a) => {
+      if (!a) return;
+      a.textContent = AUTH_USER ? firstName(AUTH_USER) : "Sign in";
+      a.href = AUTH_USER ? "#profile" : "#login";
+    });
+    const rail = document.getElementById("railAuth");
+    if (!rail) return;
+    rail.textContent = "";
+    if (AUTH_USER) {
+      const who = document.createElement("a");
+      who.className = "who";
+      who.href = "#profile";
+      const b = document.createElement("b");
+      b.textContent = AUTH_USER.full_name;
+      const sp = document.createElement("span");
+      sp.textContent = AUTH_USER.email;
+      who.append(b, sp);
+      const out = document.createElement("button");
+      out.className = "btn btn-ghost btn-sm";
+      out.type = "button";
+      out.textContent = "Sign out";
+      out.onclick = () => signOut(false);
+      rail.append(who, out);
+    } else {
+      const a = document.createElement("a");
+      a.className = "btn btn-primary btn-sm";
+      a.href = "#login";
+      a.textContent = "Sign in";
+      rail.append(a);
+    }
+  }
+  function signOut(expired: boolean) {
+    const hadUser = !!AUTH_USER;
+    setToken("");
+    AUTH_USER = null;
+    updateAuthUI();
+    if (hadUser || expired) toast(expired ? "Your session expired. Sign in again." : "You are signed out", expired ? "bad" : "ok");
+    location.hash = "login";
+    route();
+  }
+  async function loadSession() {
+    const t = getToken();
+    if (!t) return;
+    try {
+      const r = await fetch(`${API_BASE}/api/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
+      if (r.ok) AUTH_USER = await r.json();
+      else if (r.status === 401) setToken("");
+    } catch {
+      // API unreachable: keep the token, the user can retry.
+    }
+  }
+  function apiError(body: any, fallback: string): string {
+    const d = body && body.detail;
+    if (typeof d === "string") return d;
+    if (Array.isArray(d) && d.length) return d.map((x: any) => String(x.msg || "").replace(/^Value error, /, "")).filter(Boolean).join(" ") || fallback;
+    return fallback;
+  }
+  async function authCall(path: string, method: string, body?: any) {
+    try {
+      const r = await fetch(`${API_BASE}${path}`, {
+        method,
+        headers: { "Content-Type": "application/json", ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await r.json().catch(() => ({}));
+      return { ok: r.ok, status: r.status, data };
+    } catch {
+      return { ok: false, status: 0, data: { detail: "Cannot reach the server. Check your connection and try again." } };
+    }
+  }
+  function setBusy(btn: HTMLButtonElement, busy: boolean, label?: string) {
+    btn.disabled = busy;
+    btn.setAttribute("aria-busy", String(busy));
+    const l = btn.querySelector(".lbl");
+    if (l && label) l.textContent = label;
+  }
+  function onSignedIn(data: any, msg: string) {
+    setToken(data.token);
+    AUTH_USER = data.user;
+    updateAuthUI();
+    syncBackendHistory();
+    toast(msg);
+    const go = RETURN_TO && RETURN_TO !== "login" ? RETURN_TO : "assess";
+    RETURN_TO = "";
+    location.hash = go;
+  }
+  function initAuth() {
+    let mode = "login";
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+    const err = document.getElementById("authErr")!;
+    const apply = (m: string) => {
+      mode = m;
+      const reg = m === "register";
+      (document.getElementById("fa_name_f") as HTMLElement).hidden = !reg;
+      document.getElementById("authTitle")!.textContent = reg ? "Create your account" : "Sign in";
+      document.getElementById("authSub")!.textContent = reg ? "Create a free account to run assessments and keep your history." : "Sign in to run assessments and keep your history.";
+      $("fa_pw").autocomplete = reg ? "new-password" : "current-password";
+      document.getElementById("fa_pw_help")!.textContent = reg ? "At least 8 characters with a letter and a number." : "";
+      document.querySelector("#authSubmit .lbl")!.textContent = reg ? "Create account" : "Sign in";
+      err.textContent = "";
+    };
+    segInit(document.getElementById("authSeg"), apply);
+    document.getElementById("authForm")!.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      const email = $("fa_email").value.trim();
+      const password = $("fa_pw").value;
+      const full_name = $("fa_name").value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(email)) { err.textContent = "Enter a valid email address."; $("fa_email").focus(); return; }
+      if (!password) { err.textContent = "Enter your password."; $("fa_pw").focus(); return; }
+      if (mode === "register") {
+        if (!/^[A-Za-z .'-]{2,80}$/.test(full_name)) { err.textContent = "Enter your full name using letters only."; $("fa_name").focus(); return; }
+        if (password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) { err.textContent = "Password must be at least 8 characters with a letter and a number."; $("fa_pw").focus(); return; }
+      }
+      const btn = document.getElementById("authSubmit") as HTMLButtonElement;
+      const idle = mode === "register" ? "Create account" : "Sign in";
+      setBusy(btn, true, mode === "register" ? "Creating..." : "Signing in...");
+      const res = await authCall(`/api/auth/${mode}`, "POST", mode === "register" ? { email, password, full_name } : { email, password });
+      setBusy(btn, false, idle);
+      if (!res.ok) { err.textContent = apiError(res.data, "Something went wrong. Try again."); return; }
+      $("fa_pw").value = "";
+      onSignedIn(res.data, mode === "register" ? `Welcome to Saakh, ${firstName(res.data.user)}` : `Welcome back, ${firstName(res.data.user)}`);
+    });
+
+    // ---- profile
+    const pe = document.getElementById("profErr")!;
+    document.getElementById("profForm")!.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      pe.textContent = "";
+      const body: any = {
+        full_name: $("pf_name").value.trim(),
+        phone: $("pf_phone").value.trim(),
+        city: $("pf_city").value.trim(),
+        employment_type: $("pf_emp").value,
+      };
+      const inc = $("pf_inc").value.replace(/[^0-9]/g, "");
+      if (inc) body.monthly_income = Number(inc);
+      const btn = document.getElementById("profSave") as HTMLButtonElement;
+      setBusy(btn, true, "Saving...");
+      const res = await authCall("/api/auth/me", "PATCH", body);
+      setBusy(btn, false, "Save profile");
+      if (!res.ok) { pe.textContent = apiError(res.data, "Could not save your profile."); return; }
+      AUTH_USER = res.data;
+      updateAuthUI();
+      renderProfile();
+      toast("Profile saved");
+    });
+    const we = document.getElementById("pwErr")!;
+    document.getElementById("pwForm")!.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      we.textContent = "";
+      const btn = document.getElementById("pwSave") as HTMLButtonElement;
+      setBusy(btn, true, "Updating...");
+      const res = await authCall("/api/auth/change-password", "POST", { current_password: $("pw_cur").value, new_password: $("pw_new").value });
+      setBusy(btn, false, "Update password");
+      if (!res.ok) { we.textContent = apiError(res.data, "Could not update the password."); return; }
+      $("pw_cur").value = "";
+      $("pw_new").value = "";
+      toast("Password updated");
+    });
+    document.getElementById("profSignOut")!.addEventListener("click", () => signOut(false));
+    document.getElementById("profDelete")!.addEventListener("click", async () => {
+      if (!window.confirm("Delete your account permanently? This cannot be undone.")) return;
+      const res = await authCall("/api/auth/me", "DELETE");
+      if (!res.ok) { pe.textContent = apiError(res.data, "Could not delete the account."); return; }
+      AUTH_USER = null;
+      setToken("");
+      updateAuthUI();
+      toast("Your account was deleted");
+      location.hash = "home";
+    });
+  }
+  function renderProfile() {
+    if (!AUTH_USER) return;
+    const set = (id: string, v: any) => ((document.getElementById(id) as HTMLInputElement).value = v == null ? "" : String(v));
+    set("pf_name", AUTH_USER.full_name);
+    set("pf_email", AUTH_USER.email);
+    set("pf_phone", AUTH_USER.phone);
+    set("pf_city", AUTH_USER.city);
+    set("pf_emp", AUTH_USER.employment_type);
+    set("pf_inc", AUTH_USER.monthly_income ? AUTH_USER.monthly_income : "");
+    document.getElementById("profSub")!.textContent = `Signed in as ${AUTH_USER.email}.`;
+    const since = AUTH_USER.created_at ? new Date(AUTH_USER.created_at) : null;
+    document.getElementById("profSince")!.textContent = since && !isNaN(+since) ? `Member since ${since.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}.` : "";
+  }
+
   // Guided demo (F24)
   const TOUR = [
     ["home", "#sentence", "Try it live", "Change any underlined value. The model re-scores instantly and the marker moves along the A to E risk ruler."],
@@ -2519,5 +2756,11 @@ export function initSaakhRuntime(
     location.hash = initialView;
   }
   hydrateIcons();
-  route();
+  initAuth();
+  updateAuthUI();
+  loadSession().then(() => {
+    sessionLoaded = true;
+    updateAuthUI();
+    route();
+  });
 }

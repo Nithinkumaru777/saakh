@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from sqlmodel import Session, col, desc, func, select
 
+from app.auth import check_config, require_user, router as auth_router
 from app.db import AssessmentRecord, get_session, init_db, seed_database_if_empty
 from app import events
 from app.pipeline import assess_application, build_assessment, score_application, warm_up
@@ -30,6 +31,7 @@ ARTIFACTS_DIR = API_DIR / "artifacts"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize database and seed with demo personas and generated assessments."""
+    check_config()  # production refuses to start without SAAKH_SECRET_KEY
     init_db()
     seed_database_if_empty()
     # Load model + SHAP explainer now so the first real applicant isn't the one paying ~200 ms.
@@ -37,12 +39,30 @@ async def lifespan(app: FastAPI):
     yield
 
 
+IS_PROD = os.environ.get("SAAKH_ENV") == "production"
+
 app = FastAPI(
     title="Saakh API",
     description="AI-Based Loan Eligibility & Risk Assessment System",
     version="1.0.0",
     lifespan=lifespan,
+    # Interactive docs are a development convenience; hide them from the public internet.
+    docs_url=None if IS_PROD else "/docs",
+    redoc_url=None,
+    openapi_url=None if IS_PROD else "/openapi.json",
 )
+app.include_router(auth_router)
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    resp = await call_next(request)
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "no-referrer")
+    if IS_PROD:
+        resp.headers.setdefault("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+    return resp
 
 # CORS setup
 app.add_middleware(
@@ -103,7 +123,7 @@ def score(application: ApplicationIn) -> dict[str, Any]:
 # F15: /api/assess (Full Pipeline + Persistence)
 # ==============================================================================
 
-@app.post("/api/assess", response_model=AssessmentOut)
+@app.post("/api/assess", response_model=AssessmentOut, dependencies=[Depends(require_user)])
 def assess(application: ApplicationIn, session: Session = Depends(get_session)) -> dict[str, Any]:
     """Full credit assessment pipeline with counterfactual advice and SQLite persistence.
     
@@ -118,7 +138,7 @@ def assess(application: ApplicationIn, session: Session = Depends(get_session)) 
 # F19: /api/assessments (History CRUD & Search)
 # ==============================================================================
 
-@app.get("/api/assessments")
+@app.get("/api/assessments", dependencies=[Depends(require_user)])
 def list_assessments(
     q: Optional[str] = Query(None, description="Search by applicant full name"),
     outcome: Optional[str] = Query(None, description="Filter by outcome: SANCTIONED | REFER | DECLINED"),
@@ -164,7 +184,7 @@ def list_assessments(
     }
 
 
-@app.get("/api/assessments/{assessment_id}")
+@app.get("/api/assessments/{assessment_id}", dependencies=[Depends(require_user)])
 def get_assessment(assessment_id: str, session: Session = Depends(get_session)) -> dict[str, Any]:
     """Retrieve full assessment record by ID."""
     record = session.get(AssessmentRecord, assessment_id)
@@ -173,7 +193,7 @@ def get_assessment(assessment_id: str, session: Session = Depends(get_session)) 
     return json.loads(record.assessment_json)
 
 
-@app.delete("/api/assessments/{assessment_id}")
+@app.delete("/api/assessments/{assessment_id}", dependencies=[Depends(require_user)])
 def delete_assessment(assessment_id: str, session: Session = Depends(get_session)) -> dict[str, Any]:
     """Delete an assessment record by ID."""
     record = session.get(AssessmentRecord, assessment_id)
@@ -220,7 +240,7 @@ def get_batch_template() -> PlainTextResponse:
     return PlainTextResponse(output.getvalue(), media_type="text/csv")
 
 
-@app.post("/api/batch")
+@app.post("/api/batch", dependencies=[Depends(require_user)])
 async def batch_score(
     file: UploadFile = File(...),
     save: bool = Query(False, description="Whether to persist valid applications"),
@@ -321,7 +341,7 @@ async def batch_score(
 # F18: /api/portfolio (Portfolio Analytics)
 # ==============================================================================
 
-@app.get("/api/portfolio")
+@app.get("/api/portfolio", dependencies=[Depends(require_user)])
 def portfolio_stats(session: Session = Depends(get_session)) -> dict[str, Any]:
     """Aggregate portfolio metrics over stored loan assessments.
     

@@ -1,4 +1,4 @@
-"""SPEC §T: the 100-run rule.
+"""SPEC Â§T: the 100-run rule.
 
 Usage (decorator order matters: @counts goes on top):
 
@@ -30,6 +30,9 @@ import pytest
 # Tests must never write into the committed demo database (data/saakh.db). This runs before
 # any test module imports app.db, so the engine is created against a temp file.
 os.environ.setdefault("SAAKH_DB_PATH", str(Path(tempfile.mkdtemp(prefix="saakh-test-")) / "saakh.db"))
+
+# The legacy API tests call data endpoints anonymously; auth has its own tests (test_auth.py).
+os.environ.setdefault("SAAKH_REQUIRE_AUTH", "0")
 
 pytest_plugins = ["pytester"]
 

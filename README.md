@@ -136,3 +136,42 @@ node scripts/check_no_emoji.mjs
 - **Student Name:** NITHIN KUMAR U
 - **USN:** 2102508611
 - **Academic Year:** 2026–2027
+
+## Tutorial videos
+
+The Tutorials page plays the full guide and one short clip per feature. The clips are generated, and are not in git because of their size (GitHub allows 100 MB per file). To create them after cloning, run `node video/web-export.mjs` from the project root; it needs `video/output/` from the video pipeline and ffmpeg. They are written to `apps/web/public/tutorial/`. Copy that folder when deploying. Without it, the page still opens and shows "This video could not be loaded".
+
+
+## Accounts and production deployment
+
+### Customer accounts
+- Visitors can open Home, About and Model without an account. The Home page live score stays public.
+- Assess, What-if, Applicants, Batch, Portfolio and Profile require sign in. Create an account from the Sign in page.
+- Profile page: name, mobile, city, employment, monthly income, change password, sign out, delete account.
+- Passwords are hashed with scrypt (salted). Sessions are HMAC-signed bearer tokens (7 days by default).
+  Five failed sign-ins for one email from one address locks that pair for 10 minutes.
+- Auth endpoints: `POST /api/auth/register`, `POST /api/auth/login`, `GET|PATCH|DELETE /api/auth/me`,
+  `POST /api/auth/change-password`.
+
+### Configure
+Copy `.env.example` to `.env` and set at least:
+
+| Variable | Purpose |
+| --- | --- |
+| `SAAKH_ENV=production` | Hides `/docs`, enables HSTS, makes the secret key mandatory |
+| `SAAKH_SECRET_KEY` | Token signing key (`python -c "import secrets; print(secrets.token_hex(32))"`) |
+| `SAAKH_CORS_ORIGINS` | Public website URL(s), comma separated |
+| `SAAKH_DB_PATH` | SQLite file on a persistent disk or volume |
+| `NEXT_PUBLIC_API_URL` | Public API URL. Baked in at build time, so set it before `pnpm build` |
+
+### Deploy
+- Docker: `docker compose --env-file .env up --build -d` (API on 8000, web on 3000).
+  Put both behind HTTPS (a reverse proxy such as Caddy or nginx, or your host's TLS).
+- Without Docker: run `uvicorn app.main:app --host 0.0.0.0 --port 8000` in `services/api`
+  and `pnpm build && pnpm start` in `apps/web`, with the variables above exported.
+
+### Known limits
+- The assessment history, portfolio and seeded demo records are shared by all signed-in users
+  (they are not yet filtered per customer).
+- SQLite suits a single server. Move to PostgreSQL before running several API instances.
+- The model is trained on synthetic data; decisions are illustrative, not real credit decisions.

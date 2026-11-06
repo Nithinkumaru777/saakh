@@ -24,9 +24,10 @@ export const SAAKH_MARKUP = `
       <a class="ih" href="#portfolio" data-route="portfolio"><i data-icon="chart-column-increasing" data-a="bars"></i><span>Portfolio</span></a>
       <a class="ih" href="#model" data-route="model"><i data-icon="brain" data-a="pulse"></i><span>Model</span></a>
       <span class="nav-sep" aria-hidden="true"></span>
+      <a class="ih" href="#tutorials" data-route="tutorials"><i data-icon="play" data-a="pop"></i><span>Tutorials</span></a>
       <a class="ih" href="#about" data-route="about"><i data-icon="circle-help" data-a="wiggle"></i><span>About</span></a>
     </nav>
-    <div class="rail-foot">AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
+    <div class="rail-foot"><div id="railAuth" class="rail-auth"></div>AI for Finance CIA-2<br>Nithin Kumar U<br>USN 2102508611</div>
   </aside>
 
   <div class="main">
@@ -36,6 +37,7 @@ export const SAAKH_MARKUP = `
       <span class="livefeed" id="liveFeed" data-state="connecting" role="status" title="Live updates: new assessments from other desks appear without a reload"><span class="pulse" aria-hidden="true"></span><span class="txt">Connecting</span></span>
       <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
       <button class="btn btn-secondary btn-sm ih" id="cmdBtn" aria-label="Open command palette"><i data-icon="search" data-a="wiggle" data-s="16"></i><span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>
+      <a class="btn btn-secondary btn-sm" id="authBtn" href="#login">Sign in</a>
       <button class="iconbtn ih" id="themeBtn" aria-label="Switch to dark theme"><i data-icon="sun-moon" data-a="spin"></i></button>
     </header>
 
@@ -47,6 +49,7 @@ export const SAAKH_MARKUP = `
     <a class="brand" href="#home" style="padding:0"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name">Saakh</span></a>
     <span class="grow"></span>
     <a class="btn btn-ghost btn-sm" href="#about">About the project</a>
+    <a class="btn btn-secondary btn-sm" id="landAuth" href="#login">Sign in</a>
     <button class="iconbtn ih" data-theme-toggle aria-label="Switch theme"><i data-icon="sun-moon" data-a="spin"></i></button>
   </header>
   <div class="land-hero">
@@ -289,6 +292,13 @@ export const SAAKH_MARKUP = `
   </div></div></div>
 </section>
 
+<!-- ======================= TUTORIALS ======================= -->
+<section class="view" data-view="tutorials" aria-label="Tutorial videos">
+  <div class="page-head"><div class="grow"><h1 class="display-m">Tutorial videos</h1>
+    <p>Watch the full guide, or open one topic to see a short video and a written explanation of that feature.</p></div></div>
+  <div class="tut-root" id="tutRoot"></div>
+</section>
+
 <!-- ======================= ABOUT ======================= -->
 <section class="view" data-view="about" aria-label="About this project">
   <div class="page-head"><div class="grow"><h1 class="display-m">About this project</h1></div></div>
@@ -317,6 +327,65 @@ export const SAAKH_MARKUP = `
         <li>Risk teams watching portfolio quality and expected loss</li>
       </ul>
     </div>
+  </div>
+</section>
+
+<!-- ======================= LOGIN / REGISTER ======================= -->
+<section class="view" data-view="login" aria-label="Sign in">
+  <header class="land-top">
+    <a class="brand" href="#home" style="padding:0"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name">Saakh</span></a>
+    <span class="grow"></span>
+    <a class="btn btn-ghost btn-sm" href="#home">Back to home</a>
+    <button class="iconbtn ih" data-theme-toggle aria-label="Switch theme"><i data-icon="sun-moon" data-a="spin"></i></button>
+  </header>
+  <div class="auth-wrap">
+    <div class="panel auth-card">
+      <div>
+        <h1 class="display-m" id="authTitle" style="font-size:36px;line-height:42px">Sign in</h1>
+        <p id="authSub" style="margin:8px 0 0;color:var(--ink-2)">Sign in to run assessments and keep your history.</p>
+      </div>
+      <div class="seg" id="authSeg" data-seg="authmode" style="justify-self:start"><span class="seg-ind"></span><button type="button" data-v="login" aria-pressed="true">Sign in</button><button type="button" data-v="register">Create account</button></div>
+      <form id="authForm" novalidate style="display:grid;gap:16px">
+        <div class="field" id="fa_name_f" hidden><label for="fa_name">Full name</label><input class="ctl" id="fa_name" autocomplete="name" maxlength="80"></div>
+        <div class="field"><label for="fa_email">Email</label><input class="ctl" id="fa_email" type="email" autocomplete="email" inputmode="email" maxlength="254"></div>
+        <div class="field"><label for="fa_pw">Password</label><input class="ctl" id="fa_pw" type="password" autocomplete="current-password" maxlength="128"><span class="help" id="fa_pw_help"></span></div>
+        <div class="formerr" id="authErr" role="alert" aria-live="polite"></div>
+        <button class="btn btn-primary" type="submit" id="authSubmit"><span class="lbl">Sign in</span></button>
+      </form>
+      <p class="small" style="margin:0">By continuing you agree that Saakh is a demonstration system trained on synthetic data. Decisions shown are illustrative.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROFILE ======================= -->
+<section class="view" data-view="profile" aria-label="Your profile">
+  <div class="page-head"><div class="grow"><h1 class="display-m">Your profile</h1><p id="profSub">Manage your details and account security.</p></div></div>
+  <form class="panel prof-card" id="profForm" novalidate>
+    <h2 class="subtitle" style="margin-bottom:16px">Personal details</h2>
+    <div class="prof-grid">
+      <div class="field"><label for="pf_name">Full name</label><input class="ctl" id="pf_name" autocomplete="name" maxlength="80"></div>
+      <div class="field"><label for="pf_email">Email</label><input class="ctl" id="pf_email" disabled><span class="help">Your sign-in email cannot be changed.</span></div>
+      <div class="field"><label for="pf_phone">Mobile number</label><input class="ctl" id="pf_phone" autocomplete="tel" inputmode="tel" maxlength="15" placeholder="98765 43210"></div>
+      <div class="field"><label for="pf_city">City</label><input class="ctl" id="pf_city" autocomplete="address-level2" maxlength="60"></div>
+      <div class="field"><label for="pf_emp">Employment</label><select class="ctl" id="pf_emp"><option value="">Not specified</option><option value="salaried">Salaried</option><option value="self_employed">Self-employed</option><option value="business_owner">Business owner</option></select></div>
+      <div class="field"><label for="pf_inc">Monthly income (INR)</label><input class="ctl" id="pf_inc" inputmode="numeric" maxlength="9"></div>
+    </div>
+    <div class="formerr" id="profErr" role="alert" aria-live="polite" style="margin-top:12px"></div>
+    <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap"><button class="btn btn-primary" type="submit" id="profSave"><span class="lbl">Save profile</span></button><a class="btn btn-secondary" href="#assess">Start an assessment</a></div>
+  </form>
+  <form class="panel prof-card" id="pwForm" novalidate>
+    <h2 class="subtitle" style="margin-bottom:16px">Change password</h2>
+    <div class="prof-grid">
+      <div class="field"><label for="pw_cur">Current password</label><input class="ctl" id="pw_cur" type="password" autocomplete="current-password" maxlength="128"></div>
+      <div class="field"><label for="pw_new">New password</label><input class="ctl" id="pw_new" type="password" autocomplete="new-password" maxlength="128"><span class="help">At least 8 characters with a letter and a number.</span></div>
+    </div>
+    <div class="formerr" id="pwErr" role="alert" aria-live="polite" style="margin-top:12px"></div>
+    <div style="margin-top:20px"><button class="btn btn-secondary" type="submit" id="pwSave"><span class="lbl">Update password</span></button></div>
+  </form>
+  <div class="panel prof-card">
+    <h2 class="subtitle" style="margin-bottom:6px">Session and account</h2>
+    <p class="small" id="profSince" style="margin:0 0 16px"></p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn btn-secondary" type="button" id="profSignOut"><span class="lbl">Sign out</span></button><button class="btn btn-ghost" type="button" id="profDelete" style="color:var(--decline)"><span class="lbl">Delete my account</span></button></div>
   </div>
 </section>
 
