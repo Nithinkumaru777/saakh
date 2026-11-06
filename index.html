@@ -1,14 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saakh â€” AI-Based Loan Eligibility & Risk Assessment System</title>
+<title>Saakh - AI-Based Loan Eligibility & Risk Assessment System</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%2317171A%22/%3E%3Cg%20transform%3D%22translate%284%2C%204%29%22%20stroke%3D%22%23F2C12E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M14%2013V8.5C14%207%2015%207%2015%205a3%203%200%200%200-6%200c0%202%201%202%201%203.5V13%22%20/%3E%3Cpath%20d%3D%22M20%2015.5a2.5%202.5%200%200%200-2.5-2.5h-11A2.5%202.5%200%200%200%204%2015.5V17a1%201%200%200%200%201%201h14a1%201%200%200%200%201-1z%22%20/%3E%3Cpath%20d%3D%22M5%2022h14%22%20/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
 <style>
-/* ============ TOKENS: design-spec.md Â§3 "Ink & Haldi" ============ */
+/* ============ TOKENS: design-spec.md §3 "Ink & Haldi" ============ */
 :root{
   --canvas:#F6F6F3; --sheet:#FFFFFF; --sheet-2:#FAFAF8; --rule:#E1E0DA; --rule-strong:#C9C8C0; --dot:#DEDDD6;
   --ink:#17171A; --ink-2:#4D4E55; --ink-3:#6B6C73; --on-ink:#FFFFFF;
@@ -46,7 +50,7 @@ a{color:var(--ink);text-underline-offset:3px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .tnum{font-variant-numeric:tabular-nums}
 
-/* ============ TYPE: design-spec.md Â§4 ============ */
+/* ============ TYPE: design-spec.md §4 ============ */
 .display-xl{font-family:var(--f-display);font-weight:600;font-size:64px;line-height:64px;letter-spacing:-.025em;font-optical-sizing:auto;margin:0}
 .display-l{font-family:var(--f-display);font-weight:600;font-size:36px;line-height:42px;letter-spacing:-.02em;margin:0}
 .display-m{font-family:var(--f-display);font-weight:600;font-size:44px;line-height:48px;letter-spacing:-.02em;margin:0}
@@ -99,6 +103,12 @@ a{color:var(--ink);text-underline-offset:3px}
 .rail-foot{margin-top:auto;padding:12px 10px;font-size:12.5px;line-height:18px;color:var(--ink-3);border-top:1px solid var(--rule)}
 .main{min-width:0;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;gap:10px;padding:16px 40px;position:sticky;top:0;z-index:20;background:var(--canvas);border-bottom:1px solid var(--rule)}
+.topbar-brand{display:none;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.topbar-sep{display:none}
+@media (max-width:767px){
+  .topbar-brand{display:inline-flex}
+  .topbar-sep{display:inline}
+}
 .topbar .grow{flex:1}
 .crumb{font-size:14px;color:var(--ink-3);font-weight:500}
 .kbd{font-size:11.5px;padding:0 5px;border:1px solid var(--rule-strong);border-radius:var(--r);color:var(--ink-3);line-height:18px}
@@ -157,7 +167,7 @@ body.landing .content{padding:0;max-width:none}
 .ctl:disabled{background:var(--sheet-2);color:var(--ink-3)}
 .money{position:relative}
 .money .ctl{padding-left:28px}
-.money::before{content:"â‚¹";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-weight:500;pointer-events:none}
+.money::before{content:"₹";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-weight:500;pointer-events:none}
 .field.err .ctl{border-color:var(--decline);box-shadow:0 0 0 1px var(--decline);animation:fieldShake .24s var(--e-out)}
 @keyframes fieldShake{0%,100%{translate:0}20%{translate:-4px}40%{translate:4px}60%{translate:-3px}80%{translate:3px}}
 .errmsg{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--d-std) var(--e-out);color:var(--decline);font-size:13px;line-height:18px;font-weight:500}
@@ -570,6 +580,8 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 
   <div class="main">
     <header class="topbar">
+      <a class="brand topbar-brand" href="#home" style="padding:0;text-decoration:none" aria-label="Saakh home"><span class="brand-mark" data-icon="stamp" data-s="16"></span><span class="brand-name" style="font-size:20px">Saakh</span></a>
+      <span class="topbar-sep" style="color:var(--rule-strong);margin:0 4px">/</span>
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
       <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
@@ -593,9 +605,9 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
     <div class="demo-label"><i></i>Change any underlined value</div>
     <p class="sentence" id="sentence">
       A <label class="sr" for="sEmp">Employment</label><select class="inl" id="sEmp" style="width:6.6em"><option value="salaried">salaried</option><option value="self_employed">self-employed</option><option value="business_owner">business-owner</option></select>
-      applicant earning â‚¹<label class="sr" for="sInc">Monthly income</label><input class="inl" id="sInc" data-money inputmode="numeric" value="85000" style="width:5.2em">
+      applicant earning ₹<label class="sr" for="sInc">Monthly income</label><input class="inl" id="sInc" data-money inputmode="numeric" value="85000" style="width:5.2em">
       a month, with a CIBIL score of <label class="sr" for="sCib">CIBIL score</label><input class="inl" id="sCib" inputmode="numeric" value="760" style="width:2.6em">,
-      asks for â‚¹<label class="sr" for="sAmt">Loan amount</label><input class="inl" id="sAmt" data-money inputmode="numeric" value="800000" style="width:5.6em">
+      asks for ₹<label class="sr" for="sAmt">Loan amount</label><input class="inl" id="sAmt" data-money inputmode="numeric" value="800000" style="width:5.6em">
       over <label class="sr" for="sTen">Tenure in months</label><input class="inl" id="sTen" inputmode="numeric" value="48" style="width:1.9em"> months.
     </p>
     <div class="verdict" aria-live="polite">
@@ -709,10 +721,10 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       </div>
       <div id="mainRuler"></div>
       <div class="kv4">
-        <div><div class="k">EMI</div><div class="v" id="emiVal">â‚¹0</div></div>
+        <div><div class="k">EMI</div><div class="v" id="emiVal">₹0</div></div>
         <div><div class="k">Indicative rate</div><div class="v" id="rateVal">0%</div></div>
         <div><div class="k">EMI to income</div><div class="v" id="foirVal">0%</div></div>
-        <div><div class="k">Max eligible</div><div class="v" id="maxVal">â‚¹0</div></div>
+        <div><div class="k">Max eligible</div><div class="v" id="maxVal">₹0</div></div>
       </div>
       <div class="sh-div"></div>
       <div class="reasons" id="reasons"></div>
@@ -739,7 +751,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
           <div style="padding-bottom:10px"><div class="k" style="margin-bottom:6px">Risk grade</div><span class="gchip big" id="wiGrade"></span></div>
           <div style="padding-bottom:14px"><div class="k" style="margin-bottom:6px">Outcome</div><div id="wiOutcome"></div></div></div>
         <div id="wiRuler"></div>
-        <div class="kv4" style="grid-template-columns:1fr 1fr"><div><div class="k">EMI</div><div class="v" id="wiEmi">â‚¹0</div></div><div><div class="k">EMIs vs income</div><div class="v" id="wiFoir">0%</div></div></div>
+        <div class="kv4" style="grid-template-columns:1fr 1fr"><div><div class="k">EMI</div><div class="v" id="wiEmi">₹0</div></div><div><div class="k">EMIs vs income</div><div class="v" id="wiFoir">0%</div></div></div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;margin-top:32px"><i data-icon="trending-up" data-a="draw" style="color:var(--sanction)"></i><h2 class="subtitle">Paths to a better grade</h2></div>
       <div class="cf" id="cfList"></div>
@@ -891,7 +903,7 @@ function hydrateIcons(root=document){
 }
 
 /* ====================================================================
-   MOTION HELPERS (DESIGN.md Â§7.1)
+   MOTION HELPERS (DESIGN.md §7.1)
 ==================================================================== */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPR = { snappy:{k:420,c:32,m:1}, gentle:{k:180,c:24,m:1}, marker:{k:260,c:20,m:1}, stamp:{k:650,c:20,m:1.3} };
@@ -927,8 +939,8 @@ function tweenNumber(el, to, fmt, ms=520){
 /* ====================================================================
    FORMATTING (SPEC F21)
 ==================================================================== */
-const fmtINR = n => 'â‚¹'+Math.round(n).toLocaleString('en-IN');
-const fmtShort = n => n>=1e7? 'â‚¹'+(n/1e7).toFixed(n>=1e8?0:1).replace(/\.0$/,'')+' Cr' : n>=1e5? 'â‚¹'+(n/1e5).toFixed(1).replace(/\.0$/,'')+' L' : fmtINR(n);
+const fmtINR = n => '₹'+Math.round(n).toLocaleString('en-IN');
+const fmtShort = n => n>=1e7? '₹'+(n/1e7).toFixed(n>=1e8?0:1).replace(/\.0$/,'')+' Cr' : n>=1e5? '₹'+(n/1e5).toFixed(1).replace(/\.0$/,'')+' L' : fmtINR(n);
 const fmtPct = (x,d=1) => (x*100).toFixed(d)+'%';
 const parseINR = s => +String(s).replace(/[^\d]/g,'')||0;
 function inrWords(n){
@@ -947,7 +959,7 @@ function inrWords(n){
    PROTOTYPE RISK MODEL
    Stand-in for the trained XGBoost model: same latent formula as the
    synthetic data generator in SPEC F06 (without noise). Policy rules,
-   grades, rates and limits follow SPEC F02â€“F14 exactly.
+   grades, rates and limits follow SPEC F02–F14 exactly.
 ==================================================================== */
 const BASE_RATE={home:8.5,auto:9.25,education:9.75,personal:11.5,business:13};
 const SPREAD={A:0,B:.75,C:1.75,D:3.25};
@@ -1031,7 +1043,7 @@ function policy(a,f){
   if(a.existing_emi/f.ti>=.55) K.push(['K6',`Existing EMIs already use ${Math.round(a.existing_emi/f.ti*100)}% of income.`]);
   if(a.past_default) R.push(['R1','A previous default needs a manual review.']);
   if(a.missed_payments_24m>=3) R.push(['R2',`${a.missed_payments_24m} missed payments in 24 months need a manual review.`]);
-  if(f.noHist&&a.loan_amount>500000) R.push(['R3','New to credit and asking for more than â‚¹5,00,000.']);
+  if(f.noHist&&a.loan_amount>500000) R.push(['R3','New to credit and asking for more than ₹5,00,000.']);
   if(f.foir>.55&&f.foir<=.65) R.push(['R4',`EMIs would take ${Math.round(f.foir*100)}% of income, above the 55% comfort limit.`]);
   return {K,R};
 }
@@ -1096,7 +1108,7 @@ const PERSONAS=[
   {...base,full_name:'Rahul Mehta',age:41,employment_type:'salaried',years_in_job:12,monthly_income:95000,cibil_score:742,credit_history_years:11,credit_utilisation_pct:25,enquiries_6m:2,existing_emi:3000,outstanding_debt:90000,dependents:2,loan_type:'home',loan_amount:4500000,tenure_months:240,collateral_value:6200000,purpose:'Flat in Pune',note:'Salaried, Pune'},
   {...base,full_name:'Fatima Shaikh',age:34,employment_type:'self_employed',years_in_job:6,monthly_income:70000,cibil_score:701,credit_history_years:8,credit_utilisation_pct:68,missed_payments_24m:1,enquiries_6m:3,existing_emi:4000,outstanding_debt:150000,dependents:1,loan_type:'business',loan_amount:1200000,tenure_months:60,purpose:'Second boutique outlet',note:'Boutique owner, Hyderabad'},
   {...base,full_name:'Karthik Iyer',age:26,employment_type:'salaried',years_in_job:3,monthly_income:48000,cibil_score:-1,credit_history_years:0,credit_utilisation_pct:0,open_credit_lines:0,enquiries_6m:2,existing_emi:0,loan_type:'auto',loan_amount:750000,tenure_months:60,collateral_value:920000,purpose:'First car',note:'New to credit, Chennai'},
-  {...base,full_name:'Priya Nair',age:38,employment_type:'salaried',years_in_job:10,monthly_income:62000,cibil_score:748,credit_history_years:12,credit_utilisation_pct:45,existing_emi:8000,outstanding_debt:240000,dependents:2,residence:'owned',city_tier:2,loan_type:'education',loan_amount:1500000,tenure_months:120,purpose:'Daughterâ€™s engineering degree',note:'Teacher, Kochi'},
+  {...base,full_name:'Priya Nair',age:38,employment_type:'salaried',years_in_job:10,monthly_income:62000,cibil_score:748,credit_history_years:12,credit_utilisation_pct:45,existing_emi:8000,outstanding_debt:240000,dependents:2,residence:'owned',city_tier:2,loan_type:'education',loan_amount:1500000,tenure_months:120,purpose:'Daughter’s engineering degree',note:'Teacher, Kochi'},
   {...base,full_name:'Vikram Singh',age:52,employment_type:'business_owner',years_in_job:18,monthly_income:210000,cibil_score:655,credit_history_years:20,credit_utilisation_pct:52,missed_payments_24m:4,enquiries_6m:2,existing_emi:22000,outstanding_debt:1100000,dependents:3,residence:'owned',city_tier:2,loan_type:'home',loan_amount:8000000,tenure_months:240,collateral_value:11500000,purpose:'Villa in Jaipur',note:'Business owner, Jaipur'},
   {...base,full_name:'Sneha Kulkarni',age:31,employment_type:'salaried',years_in_job:5,monthly_income:55000,cibil_score:712,credit_history_years:6,credit_utilisation_pct:61,enquiries_6m:4,existing_emi:31000,outstanding_debt:900000,loan_type:'personal',loan_amount:800000,tenure_months:48,purpose:'Wedding',note:'Salaried, Mumbai'},
   {...base,full_name:'Arjun Das',age:45,employment_type:'salaried',years_in_job:15,monthly_income:120000,cibil_score:812,credit_history_years:18,credit_utilisation_pct:12,enquiries_6m:0,existing_emi:5000,outstanding_debt:120000,dependents:2,residence:'owned',loan_type:'auto',loan_amount:1400000,tenure_months:60,collateral_value:1700000,purpose:'Family SUV',note:'Salaried, Kolkata'},
@@ -1129,7 +1141,7 @@ const HISTORY=[];
 const fmtDate=d=>d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 
 /* ====================================================================
-   DIAL (DESIGN.md Â§8 RiskDial): 220Â° sweep, 5 equal grade bands,
+   DIAL (DESIGN.md §8 RiskDial): 220° sweep, 5 equal grade bands,
    needle driven by a damped spring (stiffness 90, damping 11).
 ==================================================================== */
 const DA0=-200, DSPAN=220;
@@ -1218,7 +1230,7 @@ function rangeInit(wrap,fmt){
 }
 
 /* ====================================================================
-   CURRENCY INPUTS (DESIGN.md Â§7.6): Indian grouping, caret kept
+   CURRENCY INPUTS (DESIGN.md §7.6): Indian grouping, caret kept
 ==================================================================== */
 function moneyInit(inp){
   const words=document.querySelector(`[data-words="${inp.id}"]`);
@@ -1234,7 +1246,7 @@ function moneyInit(inp){
 }
 
 /* ====================================================================
-   BUTTON STATES (DESIGN.md Â§7.5)
+   BUTTON STATES (DESIGN.md §7.5)
 ==================================================================== */
 async function btnRun(btn,work,label){
   if(btn.classList.contains('loading')) return;
@@ -1296,12 +1308,12 @@ function validateStep(i){
     if(!(a.age>=18&&a.age<=75)) E('f_age','Enter an age between 18 and 75.');
     if(!(a.years_in_job>=0&&a.years_in_job<=Math.max(0,a.age-16))) E('f_job',`Enter 0 to ${Math.max(0,(a.age||16)-16)} years.`);
     if(!(a.dependents>=0&&a.dependents<=6)) E('f_dep','Enter 0 to 6 dependents.'); }
-  if(i===1){ if(!(a.monthly_income>=10000&&a.monthly_income<=5000000)) E('f_inc','Enter a monthly income between â‚¹10,000 and â‚¹50,00,000.');
-    if(!(a.other_monthly_income>=0&&a.other_monthly_income<=2000000)) E('f_oth','Enter up to â‚¹20,00,000.'); }
+  if(i===1){ if(!(a.monthly_income>=10000&&a.monthly_income<=5000000)) E('f_inc','Enter a monthly income between ₹10,000 and ₹50,00,000.');
+    if(!(a.other_monthly_income>=0&&a.other_monthly_income<=2000000)) E('f_oth','Enter up to ₹20,00,000.'); }
   if(i===2){ if(a.cibil_score!==-1&&!(a.cibil_score>=300&&a.cibil_score<=900)) E('f_cibil','Enter a score from 300 to 900, or turn on New to credit.');
     if(!(a.credit_utilisation_pct>=0&&a.credit_utilisation_pct<=100)) E('f_util','Enter a percentage from 0 to 100.');
     if(!(a.credit_history_years>=0&&a.credit_history_years<=40)) E('f_hist','Enter 0 to 40 years.'); }
-  if(i===3){ const [tmin,tmax]=TENURE[a.loan_type]; if(!(a.loan_amount>=10000&&a.loan_amount<=TYPE_MAX[a.loan_type])) E('f_amt',`Enter â‚¹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])} for a ${a.loan_type} loan.`);
+  if(i===3){ const [tmin,tmax]=TENURE[a.loan_type]; if(!(a.loan_amount>=10000&&a.loan_amount<=TYPE_MAX[a.loan_type])) E('f_amt',`Enter ₹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])} for a ${a.loan_type} loan.`);
     if(!(a.tenure_months>=tmin&&a.tenure_months<=tmax)) E('f_ten',`Tenure for a ${a.loan_type} loan must be ${tmin} to ${tmax} months.`);
     if((a.loan_type==='home'||a.loan_type==='auto')&&!(a.collateral_value>0)) E('f_col','Enter the value of the home or vehicle.'); }
   document.querySelectorAll(`.pane[data-step="${i}"] .field.err`).forEach(f=>f.classList.remove('err'));
@@ -1324,9 +1336,9 @@ function renderFactors(el,factors,animate){
   const rows=el.querySelectorAll('.fbar');
   if(rows.length!==factors.length || el.dataset.keys!==factors.map(f=>f.k).join()){
     el.dataset.keys=factors.map(f=>f.k).join();
-    el.innerHTML=factors.map(f=>`<div class="fbar ih" tabindex="0"><span class="fl">${iconSvg(f.ic,{s:16,a:'pop'})}<span>${f.label}</span></span><span class="track"><span class="b ${f.dir==='raises'?'hi':'lo'}"></span></span><span class="pp">${f.pp>0?'+':'âˆ’'}${Math.abs(f.pp).toFixed(1)}</span><span class="tip" role="tooltip">${f.sentence}</span></div>`).join('');
+    el.innerHTML=factors.map(f=>`<div class="fbar ih" tabindex="0"><span class="fl">${iconSvg(f.ic,{s:16,a:'pop'})}<span>${f.label}</span></span><span class="track"><span class="b ${f.dir==='raises'?'hi':'lo'}"></span></span><span class="pp">${f.pp>0?'+':'−'}${Math.abs(f.pp).toFixed(1)}</span><span class="tip" role="tooltip">${f.sentence}</span></div>`).join('');
   } else {
-    factors.forEach((f,i)=>{ const r=rows[i]; r.querySelector('.fl span').textContent=f.label; const b=r.querySelector('.b'); b.className='b '+(f.dir==='raises'?'hi':'lo'); r.querySelector('.pp').textContent=(f.pp>0?'+':'âˆ’')+Math.abs(f.pp).toFixed(1); r.querySelector('.tip').textContent=f.sentence; });
+    factors.forEach((f,i)=>{ const r=rows[i]; r.querySelector('.fl span').textContent=f.label; const b=r.querySelector('.b'); b.className='b '+(f.dir==='raises'?'hi':'lo'); r.querySelector('.pp').textContent=(f.pp>0?'+':'−')+Math.abs(f.pp).toFixed(1); r.querySelector('.tip').textContent=f.sentence; });
   }
   el.querySelectorAll('.fbar').forEach((r,i)=>{ const b=r.querySelector('.b'); const w=(Math.abs(factors[i].pp)/max*50)+'%';
     if(animate&&!reduce){ b.style.transition='none'; b.style.width='0'; void b.offsetWidth; setTimeout(()=>{ b.style.transition='width .5s cubic-bezier(.25,1,.5,1)'; b.style.width=w; },i*40); }
@@ -1522,7 +1534,7 @@ function initApplicants(){
 const TEMPLATE_COLS=['full_name','age','employment_type','years_in_job','city_tier','dependents','residence','monthly_income','other_monthly_income','cibil_score','credit_history_years','open_credit_lines','credit_utilisation_pct','missed_payments_24m','enquiries_6m','past_default','existing_emi','outstanding_debt','loan_type','loan_amount','tenure_months','collateral_value','purpose'];
 function rowErrors(a){
   if(!(a.age>=18&&a.age<=75)) return ['age','Age must be 18 to 75'];
-  if(!(a.monthly_income>=10000)) return ['monthly_income','Monthly income must be at least â‚¹10,000'];
+  if(!(a.monthly_income>=10000)) return ['monthly_income','Monthly income must be at least ₹10,000'];
   if(!TENURE[a.loan_type]) return ['loan_type','Unknown loan type'];
   const [t0,t1]=TENURE[a.loan_type]; if(!(a.tenure_months>=t0&&a.tenure_months<=t1)) return ['tenure_months',`Tenure must be ${t0} to ${t1} months`];
   if((a.loan_type==='home'||a.loan_type==='auto')&&!(a.collateral_value>0)) return ['collateral_value','Asset value is required for home and auto loans'];
@@ -1621,7 +1633,7 @@ document.head.appendChild(chartCss);
 /* ====================================================================
    MODEL PAGE: pipeline trace, ROC/AUC & confusion computed live
 ==================================================================== */
-const PIPE=[['file-check','Application','23 fields from the wizard or a CSV row'],['gavel','Policy rules','Six knock-outs and four review flags'],['layers','Features','FOIR, loan-to-income, loan-to-value, utilisation'],['brain','XGBoost model','Monotone gradient-boosted trees'],['gauge','Calibration','Platt scaling turns scores into probabilities'],['sparkles','SHAP explanation','Each inputâ€™s contribution in plain words'],['stamp','Decision','Sanctioned, refer or declined, with rate and limit']];
+const PIPE=[['file-check','Application','23 fields from the wizard or a CSV row'],['gavel','Policy rules','Six knock-outs and four review flags'],['layers','Features','FOIR, loan-to-income, loan-to-value, utilisation'],['brain','XGBoost model','Monotone gradient-boosted trees'],['gauge','Calibration','Platt scaling turns scores into probabilities'],['sparkles','SHAP explanation','Each input’s contribution in plain words'],['stamp','Decision','Sanctioned, refer or declined, with rate and limit']];
 let perfDrawn=false, impDrawn=false;
 function initModel(){
   document.getElementById('pipe').innerHTML=PIPE.map((p,i)=>`<div class="pnode ih"><span class="n">${i+1}</span><br>${iconSvg(p[0],{s:24,a:'pop'})}<h4>${p[1]}</h4><p>${p[2]}</p></div>${i<PIPE.length-1?'<span class="pedge"><span class="dot"></span></span>':''}`).join('');
@@ -1678,12 +1690,12 @@ function drawSwatches(){
 }
 function initDS(){
   drawSwatches();
-  const TS=[['display-xl','64/64 Source Serif 4 600','Know the risk before you lend.'],['display-m','44/48 Source Serif 4 600','Assess an application'],['display-l','36/42 Source Serif 4 600','Sanctioned at grade B'],['figure-l','36/40 Geist 600 tabular','â‚¹18,420'],['title','28/34 Geist 600','Credit and debts'],['subtitle','20/28 Geist 600','Assessment sheet'],['body','16/26 Geist 400','Your EMIs would take 48% of your monthly income. Lenders prefer under 40%.'],['ui','14/20 Geist 500','Monthly net income'],['small','13/18 Geist 500','Take-home pay after tax']];
+  const TS=[['display-xl','64/64 Source Serif 4 600','Know the risk before you lend.'],['display-m','44/48 Source Serif 4 600','Assess an application'],['display-l','36/42 Source Serif 4 600','Sanctioned at grade B'],['figure-l','36/40 Geist 600 tabular','₹18,420'],['title','28/34 Geist 600','Credit and debts'],['subtitle','20/28 Geist 600','Assessment sheet'],['body','16/26 Geist 400','Your EMIs would take 48% of your monthly income. Lenders prefer under 40%.'],['ui','14/20 Geist 500','Monthly net income'],['small','13/18 Geist 500','Take-home pay after tax']];
   document.getElementById('typeScale').innerHTML=TS.map(([c,m,t])=>`<div class="typerow"><div class="meta"><b style="color:var(--ink-2)">${c}</b><br>${m}</div><div class="${c==='body'?'':c}" style="${c==='display-xl'?'font-size:clamp(34px,6vw,61px);line-height:1.05':''}">${t}</div></div>`).join('');
   document.getElementById('dsSave').addEventListener('click',e=>{ btnRun(e.currentTarget,()=>sleep(1100)); setTimeout(()=>toast('Report downloaded'),1100); });
   holdInit(document.getElementById('holdBtn'),()=>toast('Marked as declined by the loan officer','bad'));
   document.querySelectorAll('#dsMoney,#dsErr').forEach(moneyInit);
-  document.getElementById('dsErrBtn').addEventListener('click',()=>{ const f=document.getElementById('dsErrF'); const v=parseINR(document.getElementById('dsErr').value); f.classList.remove('err'); if(v<10000||v>5000000){ f.querySelector('.errmsg > div').innerHTML=iconSvg('x',{s:16})+'<span>Enter a monthly income between â‚¹10,000 and â‚¹50,00,000.</span>'; void f.offsetWidth; f.classList.add('err'); } else toast('Income looks right'); });
+  document.getElementById('dsErrBtn').addEventListener('click',()=>{ const f=document.getElementById('dsErrF'); const v=parseINR(document.getElementById('dsErr').value); f.classList.remove('err'); if(v<10000||v>5000000){ f.querySelector('.errmsg > div').innerHTML=iconSvg('x',{s:16})+'<span>Enter a monthly income between ₹10,000 and ₹50,00,000.</span>'; void f.offsetWidth; f.classList.add('err'); } else toast('Income looks right'); });
   document.getElementById('dsErr').addEventListener('input',()=>document.getElementById('dsErrF').classList.remove('err'));
   document.querySelectorAll('#view-ds .seg, [data-view="design-system"] .seg').forEach(s=>segInit(s));
   rangeInit(document.getElementById('dsR').closest('.rng'),v=>v+' months');
@@ -1783,7 +1795,7 @@ document.getElementById('moreBtn').onclick=openCmd;
 // Guided demo (F24)
 const TOUR=[
   ['home','#sentence','Try it live','Change any underlined value. The model re-scores instantly and the marker moves along the A to E risk ruler.'],
-  ['assess','#persona','Sample data','Eight demo personas cover every outcome. Ananya Rao is loaded: a salaried engineer asking for a â‚¹6 lakh personal loan.'],
+  ['assess','#persona','Sample data','Eight demo personas cover every outcome. Ananya Rao is loaded: a salaried engineer asking for a ₹6 lakh personal loan.'],
   ['assess','#runBtn','Run the model','Press Run assessment. The sheet scans, the marker settles on the estimated risk, the headline is highlighted and the decision is stamped.'],
   ['assess','#fbars','Explainable AI','SHAP values show which inputs lowered or raised the risk, in percentage points. Hover a row for the plain-language reason.'],
   ['what-if','#wiSliders','What-if simulator','Move any slider and the model re-scores instantly. The cards below show the smallest single change that earns a better grade.'],
