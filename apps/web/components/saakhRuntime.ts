@@ -30,7 +30,8 @@ export function initSaakhRuntime(
     const headers: Record<string, string> = { ...((init.headers as Record<string, string>) || {}) };
     if (t) headers.Authorization = `Bearer ${t}`;
     return fetch(url, { ...init, headers }).then((r) => {
-      if (r.status === 401 && t) signOut(true);
+      // Only if this token is still the current one: an answer to an older request says nothing about a later session or sign-out.
+      if (r.status === 401 && t && getToken() === t) signOut(true);
       return r;
     });
   }
@@ -572,7 +573,8 @@ export function initSaakhRuntime(
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const data = await resp.json();
       if (persist && data.id) OWN_SAVES.add(data.id); // live feed must not call our own save "another desk"
-      const mapped = mapApiAssessment(data, a);
+      const mapped: any = mapApiAssessment(data, a);
+      mapped.saved = persist;
       if (withCf && (!data.counterfactuals || !data.counterfactuals.length)) {
         mapped.cf = counterfactuals(a, mapped);
       }
@@ -691,23 +693,40 @@ export function initSaakhRuntime(
   })();
 
   async function syncBackendHistory() {
+    let replaced = false;
     try {
-      const resp = await apiFetch(`${API_BASE}/api/assessments?page=1&page_size=100`);
-      if (!resp.ok) return;
-      const data = await resp.json();
-      if (Array.isArray(data.items) && data.items.length > 0) {
-        const dbItems = data.items.map((item: any) => ({
+      // ponytail: loads at most 1,000 records into the browser; page through the API if a book ever outgrows that.
+      const items: any[] = [];
+      for (let p = 1; p <= 10; p++) {
+        if (!getToken()) return; // signed out, perhaps mid-load: the endpoint requires sign-in, so asking only logs a 401
+        const resp = await apiFetch(`${API_BASE}/api/assessments?page=${p}&page_size=100`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (!Array.isArray(data.items) || !data.items.length) break;
+        items.push(...data.items);
+        if (data.items.length < 100) break;
+      }
+      if (items.length > 0) {
+        const dbItems = items.map((item: any) => ({
           id: item.id,
           app: item.application,
           res: mapApiAssessment(item, item.application),
           date: item.created_at ? new Date(item.created_at) : new Date(),
         }));
         const existingIds = new Set(dbItems.map((d: any) => d.id));
-        HISTORY = [...dbItems, ...HISTORY.filter((h) => !existingIds.has(h.id))];
+        // The server is the record: the browser's offline sample rows (p0.., g0..) would duplicate its seed data.
+        HISTORY = [...dbItems, ...HISTORY.filter((h) => !existingIds.has(h.id) && !/^[pg]\d+$/.test(h.id))];
+        portDrawn = false;
+        replaced = true;
       }
     } catch {
       // Fallback to seeded history if offline
     }
+    if (!replaced) return;
+    // Rows on screen may name ids that no longer exist, and clicking one of those would do nothing.
+    const view = (document.querySelector(".view.on") as HTMLElement | null)?.dataset.view;
+    if (view === "applicants" && !document.getElementById("appList")?.hidden) renderTable();
+    if (view === "portfolio") drawPortfolio();
   }
   syncBackendHistory();
 
@@ -737,10 +756,6 @@ export function initSaakhRuntime(
       livePending = [];
       await syncBackendHistory();
       if (remote > 0) toast(remote === 1 ? "New assessment from another desk" : `${remote} new assessments from other desks`);
-      const view = (document.querySelector(".view.on") as HTMLElement | null)?.dataset.view;
-      if (view === "applicants" && !document.getElementById("appList")?.hidden) renderTable();
-      portDrawn = false;
-      if (view === "portfolio") drawPortfolio();
     }, 250);
   }
   if (typeof EventSource === "undefined") {
@@ -889,7 +904,7 @@ export function initSaakhRuntime(
     if (!box) return;
     const t = document.createElement("div");
     t.className = "toast " + kind;
-    t.innerHTML = iconSvg(kind === "ok" ? "check" : "x") + `<span>${msg}</span>`;
+    t.innerHTML = iconSvg(kind === "ok" ? "check" : "x") + `<span>${esc(msg)}</span>`;
     box.appendChild(t);
     const all = document.querySelectorAll(".toast:not(.out)");
     if (all.length > 3) all[0].remove();
@@ -1372,7 +1387,9 @@ export function initSaakhRuntime(
         if (pdfBtn) pdfBtn.style.display = "inline-flex";
         HISTORY.unshift(lastRun);
         portDrawn = false;
-        toast("Assessment saved to database");
+        // scoreViaBackend falls back to the in-browser model, so a decision here does not prove it was stored.
+        if (res.saved) toast("Assessment saved to database");
+        else toast("The server could not be reached. This result was not saved.", "bad");
       },
       "Run again"
     );
@@ -1392,9 +1409,14 @@ export function initSaakhRuntime(
     document.getElementById("clearForm")?.addEventListener("click", () => {
       document.querySelectorAll("#stage [data-k]").forEach((el: any) => (el.value = ""));
       sel.value = "";
+      (document.getElementById("f_ntc") as HTMLInputElement).checked = false;
+      (document.getElementById("f_def") as HTMLInputElement).checked = false;
+      (document.getElementById("f_cibil") as HTMLInputElement).disabled = false;
+      document.querySelectorAll("#stage .field.err").forEach((f) => f.classList.remove("err"));
       maxStep = 0;
       goStep(0);
       renderStepper();
+      liveUpdate(); // lifts an old decision stamp too, so it cannot stay on an empty form
     });
     document.querySelectorAll("#stage [data-money]").forEach(moneyInit);
     document.querySelectorAll("#stage .seg").forEach((sg: any) =>
@@ -1483,7 +1505,7 @@ export function initSaakhRuntime(
   function buildSliders() {
     const box = document.getElementById("wiSliders")!;
     box.innerHTML =
-      `<h2 class="subtitle" style="margin-bottom:4px">${WI.full_name || "Applicant"}</h2><p class="small" style="margin:0 0 6px">${WI.loan_type[0].toUpperCase() + WI.loan_type.slice(1)} loan. Values from the Assess page.</p>` +
+      `<h2 class="subtitle" style="margin-bottom:4px">${esc(WI.full_name || "Applicant")}</h2><p class="small" style="margin:0 0 6px">${WI.loan_type[0].toUpperCase() + WI.loan_type.slice(1)} loan. Values from the Assess page.</p>` +
       WISL.map(([k, lab, rf]) => {
         const [mn, mx, st] = rf(WI);
         return `<div class="srow"><div class="lab"><span>${lab}</span></div><div class="rng" style="padding-top:28px"><label class="sr" for="wi_${k}">${lab}</label><input type="range" id="wi_${k}" data-k="${k}" min="${mn}" max="${mx}" step="${st}" value="${Math.min(mx, Math.max(mn, WI[k]))}"><span class="bub"></span></div></div>`;
@@ -1569,18 +1591,21 @@ export function initSaakhRuntime(
     const slice = rows.slice(page * per, page * per + per);
     const tb = document.getElementById("tbody");
     if (tb) {
+      // Live updates redraw this table at any moment; keep a keyboard user's place in it.
+      const focusId = (document.activeElement as HTMLElement | null)?.closest?.("#tbody tr")?.getAttribute("data-id");
       tb.innerHTML = slice
         .map(
           (h) =>
-            `<tr data-id="${h.id}" tabindex="0"><td class="nm"><span data-vt="name">${h.app.full_name}</span></td><td>${h.app.loan_type[0].toUpperCase() + h.app.loan_type.slice(1)}</td><td class="num">${fmtINR(h.app.loan_amount)}</td><td><span data-vt="grade">${chipGrade(h.res.grade)}</span></td><td>${chipOutcome(h.res.outcome)}</td><td class="num">${fmtPct(h.res.pd)}</td><td>${fmtDate(h.date)}</td></tr>`
+            `<tr data-id="${esc(h.id)}" tabindex="0"><td class="nm"><span data-vt="name">${esc(h.app.full_name)}</span></td><td>${esc(h.app.loan_type[0].toUpperCase() + h.app.loan_type.slice(1))}</td><td class="num">${fmtINR(h.app.loan_amount)}</td><td><span data-vt="grade">${chipGrade(h.res.grade)}</span></td><td>${chipOutcome(h.res.outcome)}</td><td class="num">${fmtPct(h.res.pd)}</td><td>${fmtDate(h.date)}</td></tr>`
         )
         .join("");
+      if (focusId) ([...tb.querySelectorAll("tr")].find((r) => r.dataset.id === focusId) as HTMLElement | undefined)?.focus();
     }
     const te = document.getElementById("tblEmpty");
     if (te) {
       te.innerHTML = rows.length
         ? ""
-        : `<div class="empty">${iconSvg("users", { s: 40 })}<p style="margin:0 0 14px">No applicants match "${query}". Clear the search or run a new assessment.</p><a class="btn btn-primary" href="#assess">Assess an application</a></div>`;
+        : `<div class="empty">${iconSvg("users", { s: 40 })}<p style="margin:0 0 14px">No applicants match "${esc(query)}". Clear the search or run a new assessment.</p><a class="btn btn-primary" href="#assess">Assess an application</a></div>`;
     }
     const pi = document.getElementById("pinfo");
     if (pi) pi.textContent = rows.length ? `Showing ${page * per + 1} to ${page * per + slice.length} of ${rows.length}` : "";
@@ -1596,6 +1621,8 @@ export function initSaakhRuntime(
   function openDetail(id: string, fromRow?: HTMLElement) {
     const h = HISTORY.find((x) => x.id === id);
     if (!h) return;
+    // A row closed in the last 600 ms still holds these names, and a duplicate name aborts the transition.
+    document.querySelectorAll('[style*="view-transition-name"]').forEach((e: any) => (e.style.viewTransitionName = ""));
     if (fromRow) {
       (fromRow.querySelector('[data-vt="name"]') as HTMLElement).style.viewTransitionName = "ap-name";
       (fromRow.querySelector('[data-vt="grade"]') as HTMLElement).style.viewTransitionName = "ap-grade";
@@ -1606,14 +1633,14 @@ export function initSaakhRuntime(
       const res = h.res.factors && h.res.cf ? h.res : score(a, true);
       const d = document.getElementById("appDetail")!;
       d.innerHTML = `<button class="btn btn-ghost ih" id="detBack" style="margin-left:-12px"><i data-icon="arrow-left" data-a="nudge-x"></i><span class="lbl">Back to applicants</span></button>
-      <div class="detail-head"><span class="nm" style="view-transition-name:ap-name">${a.full_name}</span><span style="view-transition-name:ap-grade">${chipGrade(res.grade)}</span>${chipOutcome(res.outcome)}<span class="grow" style="flex:1"></span>
+      <div class="detail-head"><span class="nm" style="view-transition-name:ap-name">${esc(a.full_name)}</span><span style="view-transition-name:ap-grade">${chipGrade(res.grade)}</span>${chipOutcome(res.outcome)}<span class="grow" style="flex:1"></span>
         <button class="btn btn-primary ih" id="detPdf" style="min-width:180px"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Download report</span><span class="state load"><i data-icon="loader-circle" data-cls="spin"></i></span><span class="state ok"><span style="display:flex;gap:8px;align-items:center"><i data-icon="check" data-raw></i>Report downloaded</span></span></button></div>
       <div class="detail-grid">
         <div class="panel" style="padding:24px"><h2 class="subtitle" style="margin-bottom:14px">Application</h2><dl class="dl">
-          <dt>Age</dt><dd>${a.age}</dd><dt>Employment</dt><dd>${({ salaried: "Salaried", self_employed: "Self-employed", business_owner: "Business owner" } as Record<string, string>)[a.employment_type] || a.employment_type}, ${a.years_in_job} years</dd>
+          <dt>Age</dt><dd>${a.age}</dd><dt>Employment</dt><dd>${({ salaried: "Salaried", self_employed: "Self-employed", business_owner: "Business owner" } as Record<string, string>)[a.employment_type] || esc(a.employment_type)}, ${esc(a.years_in_job)} years</dd>
           <dt>Monthly income</dt><dd>${fmtINR(a.monthly_income)}</dd><dt>CIBIL score</dt><dd>${a.cibil_score === -1 ? "New to credit" : a.cibil_score}</dd>
           <dt>Existing EMIs</dt><dd>${fmtINR(a.existing_emi)}</dd><dt>Card limit used</dt><dd>${a.credit_utilisation_pct}%</dd>
-          <dt>Loan</dt><dd>${fmtINR(a.loan_amount)} ${a.loan_type}, ${a.tenure_months} months</dd>${a.collateral_value ? `<dt>Asset value</dt><dd>${fmtINR(a.collateral_value)}</dd>` : ""}
+          <dt>Loan</dt><dd>${fmtINR(a.loan_amount)} ${esc(a.loan_type)}, ${esc(a.tenure_months)} months</dd>${a.collateral_value ? `<dt>Asset value</dt><dd>${fmtINR(a.collateral_value)}</dd>` : ""}
           <dt>Assessed</dt><dd>${fmtDate(h.date)}</dd></dl></div>
         <div class="sheet" style="padding:22px 24px"><div class="sh-figs"><div><div class="k">Estimated chance of default</div><div class="bigpd">${fmtPct(res.pd)}</div></div></div><div id="detRuler"></div>
           <div class="kv4"><div><div class="k">EMI</div><div class="v">${fmtINR(res.emi)}</div></div><div><div class="k">Indicative rate</div><div class="v">${res.rate ? res.rate.toFixed(2) + "%" : "None"}</div></div><div><div class="k">EMIs vs income</div><div class="v">${Math.round(res.foir * 100)}%</div></div><div><div class="k">Max eligible</div><div class="v">${fmtShort(res.maxAmt)}</div></div></div>
@@ -1687,10 +1714,15 @@ export function initSaakhRuntime(
     "credit_utilisation_pct", "missed_payments_24m", "enquiries_6m", "past_default", "existing_emi",
     "outstanding_debt", "loan_type", "loan_amount", "tenure_months", "collateral_value", "purpose",
   ];
+  // Same limits as the Assess form, so a CSV row cannot be scored on values the form would refuse.
   function rowErrors(a: any) {
+    if (!/^[A-Za-z .'-]{2,80}$/.test(String(a.full_name || "").trim())) return ["full_name", "Name must use letters only"];
     if (!(a.age >= 18 && a.age <= 75)) return ["age", "Age must be 18 to 75"];
-    if (!(a.monthly_income >= 10000)) return ["monthly_income", "Monthly income must be at least ₹10,000"];
+    if (!(a.monthly_income >= 10000 && a.monthly_income <= 5000000)) return ["monthly_income", "Monthly income must be ₹10,000 to ₹50,00,000"];
+    if (a.cibil_score !== -1 && !(a.cibil_score >= 300 && a.cibil_score <= 900)) return ["cibil_score", "CIBIL score must be 300 to 900, or -1 for new to credit"];
+    if (!(a.credit_utilisation_pct >= 0 && a.credit_utilisation_pct <= 100)) return ["credit_utilisation_pct", "Card limit used must be 0 to 100"];
     if (!TENURE[a.loan_type]) return ["loan_type", "Unknown loan type"];
+    if (!(a.loan_amount >= 10000 && a.loan_amount <= TYPE_MAX[a.loan_type])) return ["loan_amount", `Loan amount must be ₹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])}`];
     const [t0, t1] = TENURE[a.loan_type];
     if (!(a.tenure_months >= t0 && a.tenure_months <= t1)) return ["tenure_months", `Tenure must be ${t0} to ${t1} months`];
     if ((a.loan_type === "home" || a.loan_type === "auto") && !(a.collateral_value > 0)) return ["collateral_value", "Asset value is required for home and auto loans"];
@@ -1731,7 +1763,7 @@ export function initSaakhRuntime(
         .slice(0, 10)
         .map(
           (x) =>
-            `<tr><td class="nm">${x.a.full_name}</td><td>${x.a.loan_type}</td><td class="num">${fmtINR(x.a.loan_amount)}</td><td>${chipGrade(x.r.grade)}</td><td>${chipOutcome(x.r.outcome)}</td><td class="num">${fmtPct(x.r.pd)}</td></tr>`
+            `<tr><td class="nm">${esc(x.a.full_name)}</td><td>${esc(x.a.loan_type)}</td><td class="num">${fmtINR(x.a.loan_amount)}</td><td>${chipGrade(x.r.grade)}</td><td>${chipOutcome(x.r.outcome)}</td><td class="num">${fmtPct(x.r.pd)}</td></tr>`
         )
         .join("")}</tbody></table></div><div class="pager"><span>Showing ${Math.min(10, results.length)} of ${results.length} scored rows</span></div></div>`;
     hydrateIcons(out);
@@ -1764,14 +1796,34 @@ export function initSaakhRuntime(
     };
     toast(`${results.length} applications scored`);
   }
+  // RFC 4180 fields, so quoted names and purposes may contain commas.
+  // ponytail: a line break inside a quoted field is not supported; the template has no such field.
+  function csvFields(line: string) {
+    const out: string[] = [];
+    let cur = "", quoted = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (quoted) {
+        if (c === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (c === '"') quoted = false;
+        else cur += c;
+      } else if (c === '"') quoted = true;
+      else if (c === ",") { out.push(cur); cur = ""; }
+      else cur += c;
+    }
+    out.push(cur);
+    return out;
+  }
   function parseCSV(text: string) {
-    const lines = text.trim().split(/\r?\n/);
-    const head = (lines.shift() || "").split(",").map((s) => s.trim());
+    const lines = text.replace(/^﻿/, "").trim().split(/\r?\n/); // Excel adds a byte-order mark
+    const head = csvFields(lines.shift() || "").map((s) => s.trim());
     const missing = TEMPLATE_COLS.filter((c) => c !== "purpose" && !head.includes(c));
     if (missing.length) return { error: `The file is missing these columns: ${missing.join(", ")}. Download the template and try again.` };
+    if (!lines.length) return { error: "The file has no rows to score. Add at least one application under the header." };
+    if (lines.length > 5000) return { error: `The file has ${lines.length.toLocaleString("en-IN")} rows. The limit is 5,000.` };
     return {
       apps: lines.map((l) => {
-        const v = l.split(",");
+        const v = csvFields(l);
         const o: any = {};
         head.forEach((h, i) => {
           const x = (v[i] || "").trim();
@@ -1779,6 +1831,8 @@ export function initSaakhRuntime(
             ? x
             : h === "past_default"
             ? /^(1|true|yes)$/i.test(x)
+            : x === ""
+            ? NaN // a blank number must fail validation, not count as 0
             : +x;
         });
         return { ...base, ...o };
@@ -1801,18 +1855,30 @@ export function initSaakhRuntime(
     const drop = document.getElementById("drop")!, file = document.getElementById("file") as HTMLInputElement;
     const handle = (f?: File) => {
       if (!f) return;
+      if (!/\.csv$/i.test(f.name)) {
+        toast("That is not a CSV file. Choose a file ending in .csv.", "bad");
+        return;
+      }
+      if (f.size > 5 * 1024 * 1024) {
+        toast("That file is over the 5 MB limit.", "bad");
+        return;
+      }
       const rd = new FileReader();
+      rd.onerror = () => toast("The file could not be read. Try again.", "bad");
       rd.onload = () => {
         const p = parseCSV(String(rd.result));
         if (p.error) {
           toast(p.error, "bad");
           return;
         }
-        runBatch(p.apps!.slice(0, 5000));
+        runBatch(p.apps!);
       };
       rd.readAsText(f);
     };
-    file?.addEventListener("change", () => handle(file.files?.[0]));
+    file?.addEventListener("change", () => {
+      handle(file.files?.[0]);
+      file.value = ""; // otherwise choosing the same file again does nothing
+    });
     drop?.addEventListener("dragover", (e) => {
       e.preventDefault();
       drop.classList.add("over");
@@ -2028,7 +2094,7 @@ export function initSaakhRuntime(
     const pipeEl = document.getElementById("pipe")!;
     pipeEl.innerHTML = PIPE.map(
       (p, i) =>
-        `<div class="pnode ih" data-pstage="${i}" tabindex="0"><span class="n">${i + 1}</span><br>${iconSvg(p[0], { s: 24, a: "pop" })}<h4>${p[1]}</h4><p>${p[2]}</p></div>${
+        `<div class="pnode ih" data-pstage="${i}" tabindex="0"><span class="n">${i + 1}</span><br>${iconSvg(p[0], { s: 24, a: "pop" })}<h2>${p[1]}</h2><p>${p[2]}</p></div>${
           i < PIPE.length - 1 ? '<span class="pedge"><span class="dot"></span></span>' : ""
         }`
     ).join("");
@@ -2053,6 +2119,11 @@ export function initSaakhRuntime(
       renderStageInspector(0, activeTraceApp, activeTraceRes);
     });
 
+    pipeEl.addEventListener("keydown", (e: any) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      e.target.closest(".pnode")?.click();
+    });
     pipeEl.addEventListener("click", (e: any) => {
       const node = e.target.closest(".pnode");
       if (!node) return;
@@ -2103,6 +2174,16 @@ export function initSaakhRuntime(
       ul._pos = null;
       place(tabs.querySelector('[aria-selected="true"]'), true);
     };
+    tabs.addEventListener("keydown", (e: any) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const all = [...tabs.querySelectorAll('[role="tab"]')] as HTMLElement[];
+      const i = all.indexOf(e.target);
+      if (i < 0) return;
+      e.preventDefault();
+      const next = all[(i + (e.key === "ArrowRight" ? 1 : -1) + all.length) % all.length];
+      next.focus();
+      next.click();
+    });
     tabs.addEventListener("click", (e: any) => {
       const b = e.target.closest('[role="tab"]');
       if (!b) return;
@@ -2291,6 +2372,20 @@ export function initSaakhRuntime(
     profile: "Your profile",
   };
   const PUBLIC_VIEWS = ["home", "login", "about", "model"];
+  // Same strings as each route's `metadata`, so a hash move and a full page load show one title.
+  const DEFAULT_TITLE = "Saakh - AI-Based Loan Eligibility & Risk Assessment System";
+  const PAGE_TITLES: Record<string, string> = {
+    assess: "Assess an application",
+    "what-if": "What if the numbers changed?",
+    applicants: "Applicants",
+    batch: "Score a batch",
+    portfolio: "Portfolio",
+    model: "How the AI decides",
+    tutorials: "Tutorial videos",
+    about: "About this project",
+    login: "Sign in",
+    profile: "Your profile",
+  };
   const inited: Record<string, boolean> = {};
   function placePill(inst?: boolean) {
     const a = document.querySelector('#nav a[aria-current="page"]') as HTMLElement;
@@ -2331,6 +2426,7 @@ export function initSaakhRuntime(
     document.querySelectorAll("[data-route]").forEach((a: any) => a.setAttribute("aria-current", a.dataset.route === r ? "page" : "false"));
     const cr = document.getElementById("crumb");
     if (cr) cr.textContent = ROUTES[r];
+    document.title = PAGE_TITLES[r] ? `${PAGE_TITLES[r]} | Saakh` : DEFAULT_TITLE;
     placePill(!inited._pill);
     inited._pill = true;
     const once: Record<string, () => void> = {
@@ -2377,17 +2473,21 @@ export function initSaakhRuntime(
     t?._place && t._place();
   });
 
-  function setTheme(t: string) {
-    document.documentElement.dataset.theme = t;
-    try { localStorage.setItem("saakh-theme", t); } catch {}
+  function labelTheme(t: string) {
     document.querySelectorAll("#themeBtn,[data-theme-toggle]").forEach((b) =>
       b.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme")
     );
+  }
+  function setTheme(t: string) {
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem("saakh-theme", t); } catch {}
+    labelTheme(t);
   }
   try {
     const t = localStorage.getItem("saakh-theme");
     if (t) document.documentElement.dataset.theme = t;
   } catch {}
+  labelTheme(document.documentElement.dataset.theme || "light");
   document.addEventListener("click", (e: any) => {
     if (e.target.closest("#themeBtn,[data-theme-toggle]")) setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
   });
@@ -2454,7 +2554,7 @@ export function initSaakhRuntime(
       }
       h += `<li><button role="option" class="ih" data-i="${i}" aria-selected="${i === 0}">${iconSvg(c.ic, { a: "pop" })}${c.t}</button></li>`;
     });
-    document.getElementById("cmdList")!.innerHTML = h || `<li class="grp">Nothing matches "${q}"</li>`;
+    document.getElementById("cmdList")!.innerHTML = h || `<li class="grp">Nothing matches "${esc(q)}"</li>`;
   }
   document.getElementById("cmdBtn")!.onclick = openCmd;
   document.getElementById("scrim")!.onclick = () => {
@@ -2504,6 +2604,7 @@ export function initSaakhRuntime(
     [topA, landA].forEach((a) => {
       if (!a) return;
       a.textContent = AUTH_USER ? firstName(AUTH_USER) : "Sign in";
+      a.title = AUTH_USER ? AUTH_USER.full_name : ""; // a long name shortens with an ellipsis on phones
       a.href = AUTH_USER ? "#profile" : "#login";
     });
     const pl = document.getElementById("navProfileLink");
@@ -2515,6 +2616,7 @@ export function initSaakhRuntime(
       const who = document.createElement("a");
       who.className = "who";
       who.href = "#profile";
+      who.title = `${AUTH_USER.full_name}, ${AUTH_USER.email}`; // both lines shorten with an ellipsis in the narrow rail
       const b = document.createElement("b");
       b.textContent = AUTH_USER.full_name;
       const sp = document.createElement("span");
@@ -2534,12 +2636,17 @@ export function initSaakhRuntime(
       rail.append(a);
     }
   }
+  // Someone who just registered would otherwise come back to "Create your account" and be told the email is taken.
+  function showSignInMode() {
+    (document.querySelector('#authSeg [data-v="login"]') as HTMLElement | null)?.click();
+  }
   function signOut(expired: boolean) {
     const hadUser = !!AUTH_USER;
     setToken("");
     AUTH_USER = null;
     updateAuthUI();
     if (hadUser || expired) toast(expired ? "Your session expired. Sign in again." : "You are signed out", expired ? "bad" : "ok");
+    showSignInMode();
     location.hash = "login";
     route();
   }
@@ -2553,20 +2660,6 @@ export function initSaakhRuntime(
     } catch {
       // API unreachable
     }
-    if (t.startsWith("local_")) {
-      try {
-        const email = atob(t.slice(6));
-        const u = getLocalUsers().find((x: any) => x.email.toLowerCase() === email.toLowerCase());
-        if (u) {
-          const uClean = { ...u }; delete uClean.password;
-          AUTH_USER = uClean;
-        } else {
-          setToken("");
-        }
-      } catch {
-        setToken("");
-      }
-    }
   }
   function apiError(body: any, fallback: string): string {
     const d = body && body.detail;
@@ -2574,105 +2667,6 @@ export function initSaakhRuntime(
     if (Array.isArray(d) && d.length) return d.map((x: any) => String(x.msg || "").replace(/^Value error, /, "")).filter(Boolean).join(" ") || fallback;
     return fallback;
   }
-  /* Local client storage fallback for GitHub Pages and offline/standalone testing */
-  const LOCAL_USERS_KEY = "saakh_users";
-  const DEMO_USER = {
-    id: "u-demo-1",
-    email: "officer@saakh.ai",
-    full_name: "Nithin Kumar",
-    phone: "9876543210",
-    city: "Bengaluru",
-    employment_type: "salaried",
-    monthly_income: 85000,
-    password: "Saakh2026!",
-    created_at: "2026-11-01T00:00:00Z"
-  };
-
-  function getLocalUsers(): any[] {
-    try {
-      const raw = localStorage.getItem(LOCAL_USERS_KEY);
-      if (!raw) {
-        localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify([DEMO_USER]));
-        return [DEMO_USER];
-      }
-      return JSON.parse(raw);
-    } catch {
-      return [DEMO_USER];
-    }
-  }
-
-  function saveLocalUsers(users: any[]) {
-    try {
-      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
-    } catch {}
-  }
-
-  function handleLocalAuth(path: string, method: string, body?: any) {
-    const users = getLocalUsers();
-    if (path === "/api/auth/login" && method === "POST") {
-      const email = String(body?.email || "").toLowerCase();
-      const pw = String(body?.password || "");
-      const u = users.find((x: any) => x.email.toLowerCase() === email && x.password === pw);
-      if (u) {
-        const uClean = { ...u }; delete uClean.password;
-        return { ok: true, status: 200, data: { token: "local_" + btoa(u.email), user: uClean } };
-      }
-      return { ok: false, status: 401, data: { detail: "Incorrect email or password. Use demo: officer@saakh.ai / Saakh2026!" } };
-    }
-    if (path === "/api/auth/register" && method === "POST") {
-      const email = String(body?.email || "").toLowerCase();
-      if (users.some((x: any) => x.email.toLowerCase() === email)) {
-        return { ok: false, status: 400, data: { detail: "An account with that email already exists." } };
-      }
-      const newUser = {
-        id: "u-" + Date.now(),
-        email: body.email,
-        full_name: body.full_name || "Applicant",
-        phone: "",
-        city: "",
-        employment_type: "",
-        monthly_income: null,
-        password: body.password,
-        created_at: new Date().toISOString()
-      };
-      users.push(newUser);
-      saveLocalUsers(users);
-      const uClean = { ...newUser }; delete uClean.password;
-      return { ok: true, status: 201, data: { token: "local_" + btoa(newUser.email), user: uClean } };
-    }
-    if (path === "/api/auth/me" && method === "PATCH") {
-      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-      const idx = users.findIndex((x: any) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
-      if (idx !== -1) {
-        users[idx] = { ...users[idx], ...body };
-        saveLocalUsers(users);
-        const uClean = { ...users[idx] }; delete uClean.password;
-        return { ok: true, status: 200, data: uClean };
-      }
-      return { ok: false, status: 404, data: { detail: "User not found." } };
-    }
-    if (path === "/api/auth/change-password" && method === "POST") {
-      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-      const idx = users.findIndex((x: any) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
-      if (idx !== -1) {
-        if (users[idx].password && users[idx].password !== body.current_password) {
-          return { ok: false, status: 400, data: { detail: "Current password does not match." } };
-        }
-        users[idx].password = body.new_password;
-        saveLocalUsers(users);
-        return { ok: true, status: 200, data: { detail: "Password updated." } };
-      }
-      return { ok: false, status: 404, data: { detail: "User not found." } };
-    }
-    if (path === "/api/auth/me" && method === "DELETE") {
-      if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-      const filtered = users.filter((x: any) => x.email.toLowerCase() !== AUTH_USER.email.toLowerCase());
-      saveLocalUsers(filtered);
-      return { ok: true, status: 200, data: { detail: "Account deleted." } };
-    }
-    return { ok: false, status: 404, data: { detail: "Not found" } };
-  }
-
   async function authCall(path: string, method: string, body?: any) {
     try {
       const r = await fetch(`${API_BASE}${path}`, {
@@ -2685,9 +2679,9 @@ export function initSaakhRuntime(
         return { ok: r.ok, status: r.status, data };
       }
     } catch {
-      // Backend not running / GitHub Pages static host -> fall back to local auth
+      // Network failure: reported below, like a 5xx. Sign-in must never succeed without the server.
     }
-    return handleLocalAuth(path, method, body);
+    return { ok: false, status: 503, data: { detail: "Cannot reach the Saakh server right now. Check that it is running and try again." } };
   }
   function setBusy(btn: HTMLButtonElement, busy: boolean, label?: string) {
     btn.disabled = busy;
@@ -2722,6 +2716,8 @@ export function initSaakhRuntime(
     };
     segInit(document.getElementById("authSeg"), apply);
     const demoBtn = document.getElementById("demoCredBtn");
+    // The API only creates the demo account outside production, so do not advertise it on a public deployment.
+    if (!/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(API_BASE) && demoBtn?.parentElement) demoBtn.parentElement.style.display = "none";
     if (demoBtn) {
       demoBtn.onclick = () => {
         $("fa_email").value = "officer@saakh.ai";
@@ -2761,8 +2757,8 @@ export function initSaakhRuntime(
         city: $("pf_city").value.trim(),
         employment_type: $("pf_emp").value,
       };
-      const inc = $("pf_inc").value.replace(/[^0-9]/g, "");
-      if (inc) body.monthly_income = Number(inc);
+      // Blank clears the income. The API ignores nulls, and the page already shows 0 as blank.
+      body.monthly_income = Number($("pf_inc").value.replace(/[^0-9]/g, ""));
       const btn = document.getElementById("profSave") as HTMLButtonElement;
       setBusy(btn, true, "Saving...");
       const res = await authCall("/api/auth/me", "PATCH", body);
@@ -2794,6 +2790,7 @@ export function initSaakhRuntime(
       AUTH_USER = null;
       setToken("");
       updateAuthUI();
+      showSignInMode();
       toast("Your account was deleted");
       location.hash = "home";
     });
@@ -2836,12 +2833,36 @@ export function initSaakhRuntime(
   }
   function showTour() {
     const [r, sel, t, p] = TOUR[tourI];
+    const tourStep = tourI;
+    const sheet = document.getElementById("asheet");
+    // Protected pages would bounce a signed-out visitor to Sign in and leave the card pointing at nothing.
+    if (!PUBLIC_VIEWS.includes(r) && !AUTH_USER) {
+      const sp = document.getElementById("spot")!, tc = document.getElementById("tour")!;
+      sp.style.display = "none";
+      document.getElementById("tourT")!.textContent = t;
+      document.getElementById("tourP")!.textContent = `${p} Sign in to see this step on the live page, or press Next to read on.`;
+      document.getElementById("tourN")!.textContent = `Step ${tourI + 1} of ${TOUR.length}`;
+      document.getElementById("tourNext")!.textContent = tourI === TOUR.length - 1 ? "Finish" : "Next";
+      tc.style.display = "block";
+      tc.style.top = Math.max(16, (innerHeight - tc.offsetHeight) / 2) + "px";
+      tc.style.left = Math.max(16, (innerWidth - tc.offsetWidth) / 2) + "px";
+      return;
+    }
     if (location.hash.slice(1) !== r) location.hash = r;
     setTimeout(() => {
+      if (tourStep !== tourI) return; // ended or moved on while waiting
+      if (sel === "#persona") {
+        const s = document.getElementById("persona") as HTMLSelectElement;
+        s.value = "0";
+        s.dispatchEvent(new Event("change"));
+      }
       const el = document.querySelector(`.view.on ${sel}`) || document.querySelector(sel);
       if (!el) return;
+      // On phones these targets live in the bottom drawer, which is closed otherwise.
+      if (sheet && window.innerWidth < 768) sheet.classList.toggle("open", sheet.contains(el));
       el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
       setTimeout(() => {
+        if (tourStep !== tourI) return;
         const b = el.getBoundingClientRect();
         const sp = document.getElementById("spot")!, tc = document.getElementById("tour")!;
         sp.style.display = "block";
@@ -2857,8 +2878,10 @@ export function initSaakhRuntime(
         document.getElementById("tourNext")!.textContent = tourI === TOUR.length - 1 ? "Finish" : "Next";
         tc.style.display = "block";
         const below = b.top + Math.min(b.height, innerHeight * 0.6) + 24;
-        const top = below + 170 < innerHeight ? below : Math.max(16, b.top - 190);
-        tc.style.top = top + "px";
+        const cardH = tc.offsetHeight;
+        const top = below + cardH + 16 < innerHeight ? below : b.top - cardH - 24;
+        // On a phone the target can fill the screen, leaving no room above or below it: keep the card visible.
+        tc.style.top = Math.max(16, Math.min(top, innerHeight - cardH - 16)) + "px";
         tc.style.left = Math.min(innerWidth - tc.offsetWidth - 16, Math.max(16, b.left)) + "px";
         anim(tc, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], "gentle");
       }, reduce ? 0 : 420);

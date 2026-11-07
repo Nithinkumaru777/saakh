@@ -4,13 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saakh - AI-Based Loan Eligibility & Risk Assessment System</title>
+<meta name="description" content="AI-based loan eligibility and risk assessment. AI for Finance CIA-2, Topic 4. NITHIN KUMAR U, USN 2102508611.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Saakh">
+<meta property="og:title" content="Saakh - AI-Based Loan Eligibility & Risk Assessment System">
+<meta property="og:description" content="AI-based loan eligibility and risk assessment. AI for Finance CIA-2, Topic 4. NITHIN KUMAR U, USN 2102508611.">
+<meta property="og:url" content="https://nithinkumaru777.github.io/saakh/">
+<meta property="og:image" content="https://nithinkumaru777.github.io/saakh/tutorial/poster.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%226%22%20fill%3D%22%2317171A%22/%3E%3Cg%20transform%3D%22translate%284%2C%204%29%22%20stroke%3D%22%23F2C12E%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M14%2013V8.5C14%207%2015%207%2015%205a3%203%200%200%200-6%200c0%202%201%202%201%203.5V13%22%20/%3E%3Cpath%20d%3D%22M20%2015.5a2.5%202.5%200%200%200-2.5-2.5h-11A2.5%202.5%200%200%200%204%2015.5V17a1%201%200%200%200%201%201h14a1%201%200%200%200%201-1z%22%20/%3E%3Cpath%20d%3D%22M5%2022h14%22%20/%3E%3C/g%3E%3C/svg%3E">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" onload="this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ============ TOKENS: design-spec.md §3 "Ink & Haldi" ============ */
 :root{
@@ -412,7 +420,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeri
 .pnode{flex:1;min-width:150px;padding:16px;border:1px solid var(--rule-strong);background:var(--sheet);transition:border-color var(--d-std),background var(--d-std),box-shadow var(--d-std);position:relative}
 .pnode .n{font-size:12.5px;font-weight:600;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .pnode .ic{color:var(--ink);margin:8px 0}
-.pnode h4{margin:0 0 4px;font-size:15px;font-weight:600}
+.pnode h2{margin:0 0 4px;font-size:15px;font-weight:600}
 .pnode p{margin:0;font-size:13px;line-height:19px;color:var(--ink-2)}
 .pnode.hot{border-color:var(--ink);background:var(--haldi-wash);box-shadow:4px 4px 0 0 var(--edge)}
 .pedge{width:28px;flex:none;position:relative;align-self:center;height:1.5px;background:var(--ink-3)}
@@ -474,7 +482,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 .cmd li button[aria-selected="true"] .ic{color:var(--ink)}
 .cmd .grp{padding:8px 12px 4px;font-size:12.5px;color:var(--ink-3);font-weight:600}
 .toasts{position:fixed;right:24px;bottom:24px;display:flex;flex-direction:column;gap:8px;z-index:80;pointer-events:none}
-.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--ink);color:var(--on-ink);font-size:14px;font-weight:500;animation:toastIn .24s var(--e-out);pointer-events:auto;max-width:380px;border-left:4px solid var(--haldi)}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--ink);color:var(--on-ink);font-size:14px;font-weight:500;animation:toastIn .24s var(--e-out);max-width:380px;border-left:4px solid var(--haldi)}
 .toast.bad{border-left-color:var(--decline)}
 .toast .ic path,.toast .ic polyline,.toast .ic line{stroke-dasharray:1;animation:icDraw .3s .08s var(--e-out) both}
 .toast.out{animation:toastOut .18s ease-out forwards}
@@ -583,7 +591,17 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
   .toasts{left:16px;right:16px;bottom:150px}
   .stamp{right:14px;top:74px}
   .stamp b{font-size:19px;line-height:22px}
+  .fbar .fl span{white-space:normal}
+  #authBtn{display:inline-block;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
+/* Small phones: the page's own heading already says where you are, so the crumb gives way to the controls. */
+@media (max-width:420px){
+  .topbar-sep,.crumb{display:none}
+  .topbar{gap:6px;padding-left:12px;padding-right:12px}
+  .land-top{gap:6px;padding-left:12px;padding-right:12px}
+  .land-top .btn-ghost{padding-left:6px;padding-right:6px}
+}
+.field[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}
 }
@@ -629,7 +647,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
       <span class="topbar-sep" style="color:var(--rule-strong);margin:0 4px">/</span>
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
-      <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
+      <button class="btn btn-ghost btn-sm ih" id="tourBtn" aria-label="Guided demo"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
       <button class="btn btn-secondary btn-sm ih" id="cmdBtn" aria-label="Open command palette"><i data-icon="search" data-a="wiggle" data-s="16"></i><span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>
       <a class="btn btn-secondary btn-sm" id="authBtn" href="#login">Sign in</a>
       <button class="iconbtn ih" id="themeBtn" aria-label="Switch to dark theme"><i data-icon="sun-moon" data-a="spin"></i></button>
@@ -701,7 +719,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
           <h2 class="title">Applicant</h2><p class="lead">Who is applying.</p>
           <div class="fgrid">
             <div class="field full"><label for="f_name">Full name</label><input class="ctl" id="f_name" data-k="full_name" autocomplete="off"><div class="errmsg"><div></div></div><span class="help">As on PAN card</span></div>
-            <div class="field"><label for="f_age">Age</label><input class="ctl" id="f_age" data-k="age" inputmode="numeric"><div class="errmsg"><div></div></div><span class="help">21 to 75</span></div>
+            <div class="field"><label for="f_age">Age</label><input class="ctl" id="f_age" data-k="age" inputmode="numeric"><div class="errmsg"><div></div></div><span class="help">18 to 75. Under 21 is declined by policy.</span></div>
             <div class="field"><label for="f_job">Years in current job or business</label><input class="ctl" id="f_job" data-k="years_in_job" inputmode="decimal"><div class="errmsg"><div></div></div><span class="help"></span></div>
             <div class="field full"><span class="lab" id="l_emp">Employment</span><div class="seg" data-seg="employment_type" aria-labelledby="l_emp"><span class="seg-ind"></span>
               <button type="button" data-v="salaried" class="ih"><i data-icon="id-card" data-a="pop" data-s="16"></i>Salaried</button>
@@ -828,7 +846,7 @@ table.map td .ic{vertical-align:-4px;margin-right:8px}
 <!-- ======================= BATCH ======================= -->
 <section class="view" data-view="batch" aria-label="Batch scoring">
   <div class="page-head"><div class="grow"><h1 class="display-m">Score a batch</h1><p>Upload a CSV of applications. Valid rows are scored; rows with problems are listed with the reason.</p></div>
-    <button class="btn btn-secondary ih" id="tplBtn"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Copy CSV template</span></button></div>
+    <button class="btn btn-secondary ih" id="tplBtn"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Download CSV template</span></button></div>
   <div class="drop" id="drop">
     <i data-icon="cloud-upload" data-s="40" class="play-on-hover"></i>
     <h3>Drop a CSV file here</h3>
@@ -1250,12 +1268,17 @@ function genApp(r,i){
   if(lt==='home'||lt==='auto') a.collateral_value=Math.round(a.loan_amount/(.55+r()*.4)/10000)*10000;
   return a;
 }
-const today=new Date(2026,10,1);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+const today=new Date();
 const HISTORY=[];
+// Runs are kept in this browser so that "saved to history" survives a reload; there is no server on this site.
+const RUNS_KEY='saakh_history';
+function saveRun(run){ try{ const runs=JSON.parse(localStorage.getItem(RUNS_KEY)||'[]'); runs.unshift(run); localStorage.setItem(RUNS_KEY,JSON.stringify(runs.slice(0,500))); }catch(_){} }
 (function seed(){
   const r=rng(42);
   PERSONAS.forEach((p,i)=>{ const s=score(p,true); HISTORY.push({id:'p'+i,app:p,res:s,date:new Date(today-(i+1)*86400000*.6)}); });
   for(let i=0;i<120;i++){ const a=genApp(r,i); HISTORY.push({id:'g'+i,app:a,res:score(a),date:new Date(today-(10+i*1.3)*86400000)}); }
+  try{ const runs=JSON.parse(localStorage.getItem(RUNS_KEY)||'[]'); HISTORY.unshift(...runs.filter(h=>h&&h.app&&h.res).map(h=>({...h,date:new Date(h.date)}))); }catch(_){}
 })();
 const fmtDate=d=>d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 
@@ -1310,7 +1333,7 @@ const chipGrade=g=>`<span class="gchip" style="--g:var(--g${g})"><span class="gl
    TOASTS
 ==================================================================== */
 function toast(msg,kind='ok'){
-  const t=document.createElement('div'); t.className='toast '+kind; t.innerHTML=iconSvg(kind==='ok'?'check':'x')+`<span>${msg}</span>`;
+  const t=document.createElement('div'); t.className='toast '+kind; t.innerHTML=iconSvg(kind==='ok'?'check':'x')+`<span>${esc(msg)}</span>`;
   document.getElementById('toasts').appendChild(t);
   const all=document.querySelectorAll('.toast:not(.out)'); if(all.length>3) all[0].remove();
   setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),220); },4000);
@@ -1406,7 +1429,7 @@ function fillForm(a){
 }
 function readForm(){
   const a={...FORM};
-  document.querySelectorAll('#stage [data-k]').forEach(el=>{ const k=el.dataset.k; if(k==='full_name'||k==='purpose'){ a[k]=el.value; return; } a[k]= el.dataset.money? parseINR(el.value) : (el.value===''?NaN:+el.value); });
+  document.querySelectorAll('#stage [data-k]').forEach(el=>{ const k=el.dataset.k; if(k==='full_name'||k==='purpose'){ a[k]=el.value; return; } a[k]= el.dataset.money!==undefined? parseINR(el.value) : (el.value===''?NaN:+el.value); }); // data-money has no value, so it reads as ""
   a.cibil_score = document.getElementById('f_ntc').checked? -1 : a.cibil_score;
   if(a.cibil_score===-1) a.credit_history_years=0;
   a.past_default=document.getElementById('f_def').checked;
@@ -1514,7 +1537,7 @@ async function runAssessment(){
     document.getElementById('headTxt').innerHTML='<span class="hl">'+res.headline+'</span>'; document.getElementById('headline').classList.add('on');
     setTimeout(()=>{ const rows=[...document.querySelectorAll('#fbars .fbar')]; const i=res.factors.findIndex(f=>f.dir==='raises'); if(rows[i]) rows[i].classList.add('mark'); }, reduce?0:420);
     document.getElementById('live').classList.add('off');
-    HISTORY.unshift({id:'r'+Date.now(),app:{...FORM},res,date:new Date()});
+    const run={id:'r'+Date.now(),app:{...FORM},res,date:new Date()}; HISTORY.unshift(run); saveRun(run);
     toast('Assessment saved to history');
   },'Run again');
 }
@@ -1522,7 +1545,7 @@ function initAssess(){
   const sel=document.getElementById('persona');
   sel.innerHTML+=PERSONAS.map((p,i)=>`<option value="${i}">${p.full_name}, ${p.note}</option>`).join('');
   sel.addEventListener('change',()=>{ if(sel.value==='') return; FORM={...PERSONAS[+sel.value]}; fillForm(FORM); document.querySelectorAll('.field.err').forEach(f=>f.classList.remove('err')); liveUpdate(); toast(`Loaded ${FORM.full_name}`); });
-  document.getElementById('clearForm').addEventListener('click',()=>{ document.querySelectorAll('#stage [data-k]').forEach(el=>el.value=''); sel.value=''; maxStep=0; goStep(0); renderStepper(); });
+  document.getElementById('clearForm').addEventListener('click',()=>{ document.querySelectorAll('#stage [data-k]').forEach(el=>el.value=''); sel.value=''; document.getElementById('f_ntc').checked=false; document.getElementById('f_def').checked=false; document.getElementById('f_cibil').disabled=false; document.querySelectorAll('#stage .field.err').forEach(f=>f.classList.remove('err')); maxStep=0; goStep(0); renderStepper(); liveUpdate(); });
   document.querySelectorAll('#stage [data-money]').forEach(moneyInit);
   document.querySelectorAll('#stage .seg').forEach(sg=>segInit(sg,()=>{ if(sg.dataset.seg==='loan_type') typeChanged(); liveUpdate(); }));
   document.getElementById('stage').addEventListener('input',e=>{ const f=e.target.closest('.field'); if(f) f.classList.remove('err'); liveUpdate(); });
@@ -1559,7 +1582,7 @@ function initWhatIf(){ wiDial=new Ruler(document.getElementById('wiRuler')); doc
 function enterWhatIf(){ WIbase=safeApp(readForm()); if(WIbase.cibil_score===-1) WIbase.cibil_score=650; WI={...WIbase}; buildSliders(); wiPaint(true); }
 function buildSliders(){
   const box=document.getElementById('wiSliders');
-  box.innerHTML=`<h2 class="subtitle" style="margin-bottom:4px">${WI.full_name||'Applicant'}</h2><p class="small" style="margin:0 0 6px">${WI.loan_type[0].toUpperCase()+WI.loan_type.slice(1)} loan. Values from the Assess page.</p>`+
+  box.innerHTML=`<h2 class="subtitle" style="margin-bottom:4px">${esc(WI.full_name||'Applicant')}</h2><p class="small" style="margin:0 0 6px">${WI.loan_type[0].toUpperCase()+WI.loan_type.slice(1)} loan. Values from the Assess page.</p>`+
     WISL.map(([k,lab,rf])=>{ const [mn,mx,st]=rf(WI); return `<div class="srow"><div class="lab"><span>${lab}</span></div><div class="rng" style="padding-top:28px"><label class="sr" for="wi_${k}">${lab}</label><input type="range" id="wi_${k}" data-k="${k}" min="${mn}" max="${mx}" step="${st}" value="${Math.min(mx,Math.max(mn,WI[k]))}"><span class="bub"></span></div></div>`; }).join('');
   WISL.forEach(([k,,,fmt])=>{ const w=document.getElementById('wi_'+k).closest('.rng'); rangeInit(w,fmt); });
   let t=0; box.oninput=e=>{ const k=e.target.dataset.k; if(!k) return; WI[k]=+e.target.value; clearTimeout(t); t=setTimeout(wiPaint,150); };
@@ -1597,28 +1620,30 @@ function filtered(){ return HISTORY.filter(h=>(filt==='ALL'||h.res.outcome===fil
 function renderTable(){
   const rows=filtered(); const per=12; const pages=Math.max(1,Math.ceil(rows.length/per)); page=Math.min(page,pages-1);
   const slice=rows.slice(page*per,page*per+per);
-  document.getElementById('tbody').innerHTML=slice.map(h=>`<tr data-id="${h.id}" tabindex="0"><td class="nm"><span data-vt="name">${h.app.full_name}</span></td><td>${h.app.loan_type[0].toUpperCase()+h.app.loan_type.slice(1)}</td><td class="num">${fmtINR(h.app.loan_amount)}</td><td><span data-vt="grade">${chipGrade(h.res.grade)}</span></td><td>${chipOutcome(h.res.outcome)}</td><td class="num">${fmtPct(h.res.pd)}</td><td>${fmtDate(h.date)}</td></tr>`).join('');
-  document.getElementById('tblEmpty').innerHTML= rows.length? '' : `<div class="empty">${iconSvg('users',{s:40})}<p style="margin:0 0 14px">No applicants match "${query}". Clear the search or run a new assessment.</p><a class="btn btn-primary" href="#assess">Assess an application</a></div>`;
+  document.getElementById('tbody').innerHTML=slice.map(h=>`<tr data-id="${esc(h.id)}" tabindex="0"><td class="nm"><span data-vt="name">${esc(h.app.full_name)}</span></td><td>${esc(h.app.loan_type[0].toUpperCase()+h.app.loan_type.slice(1))}</td><td class="num">${fmtINR(h.app.loan_amount)}</td><td><span data-vt="grade">${chipGrade(h.res.grade)}</span></td><td>${chipOutcome(h.res.outcome)}</td><td class="num">${fmtPct(h.res.pd)}</td><td>${fmtDate(h.date)}</td></tr>`).join('');
+  document.getElementById('tblEmpty').innerHTML= rows.length? '' : `<div class="empty">${iconSvg('users',{s:40})}<p style="margin:0 0 14px">No applicants match "${esc(query)}". Clear the search or run a new assessment.</p><a class="btn btn-primary" href="#assess">Assess an application</a></div>`;
   document.getElementById('pinfo').textContent=rows.length? `Showing ${page*per+1} to ${page*per+slice.length} of ${rows.length}`:'';
   document.getElementById('pprev').disabled=page===0; document.getElementById('pnext').disabled=page>=pages-1;
 }
 function withVT(fn){ if(document.startViewTransition && !reduce) document.startViewTransition(fn); else fn(); }
 function openDetail(id,fromRow){
   const h=HISTORY.find(x=>x.id===id); if(!h) return;
+  // A row closed in the last 600 ms still holds these names, and a duplicate name aborts the transition.
+  document.querySelectorAll('[style*="view-transition-name"]').forEach(e=>e.style.viewTransitionName='');
   if(fromRow){ fromRow.querySelector('[data-vt="name"]').style.viewTransitionName='ap-name'; fromRow.querySelector('[data-vt="grade"]').style.viewTransitionName='ap-grade'; }
   withVT(()=>{
     document.querySelectorAll('[style*="view-transition-name"]').forEach(e=>e.style.viewTransitionName='');
     const a=h.app, r=h.res.factors? h.res : score(a); const res=score(a,true);
     const d=document.getElementById('appDetail');
     d.innerHTML=`<button class="btn btn-ghost ih" id="detBack" style="margin-left:-12px"><i data-icon="arrow-left" data-a="nudge-x"></i><span class="lbl">Back to applicants</span></button>
-    <div class="detail-head"><span class="nm" style="view-transition-name:ap-name">${a.full_name}</span><span style="view-transition-name:ap-grade">${chipGrade(res.grade)}</span>${chipOutcome(res.outcome)}<span class="grow" style="flex:1"></span>
+    <div class="detail-head"><span class="nm" style="view-transition-name:ap-name">${esc(a.full_name)}</span><span style="view-transition-name:ap-grade">${chipGrade(res.grade)}</span>${chipOutcome(res.outcome)}<span class="grow" style="flex:1"></span>
       <button class="btn btn-primary ih" id="detPdf" style="min-width:180px"><i data-icon="download" data-a="nudge-y"></i><span class="lbl">Download report</span><span class="state load"><i data-icon="loader-circle" data-cls="spin"></i></span><span class="state ok"><span style="display:flex;gap:8px;align-items:center"><i data-icon="check" data-raw></i>Report ready</span></span></button></div>
     <div class="detail-grid">
       <div class="panel" style="padding:24px"><h2 class="subtitle" style="margin-bottom:14px">Application</h2><dl class="dl">
-        <dt>Age</dt><dd>${a.age}</dd><dt>Employment</dt><dd>${{salaried:'Salaried',self_employed:'Self-employed',business_owner:'Business owner'}[a.employment_type]}, ${a.years_in_job} years</dd>
+        <dt>Age</dt><dd>${a.age}</dd><dt>Employment</dt><dd>${{salaried:'Salaried',self_employed:'Self-employed',business_owner:'Business owner'}[a.employment_type]||esc(a.employment_type)}, ${esc(a.years_in_job)} years</dd>
         <dt>Monthly income</dt><dd>${fmtINR(a.monthly_income)}</dd><dt>CIBIL score</dt><dd>${a.cibil_score===-1?'New to credit':a.cibil_score}</dd>
         <dt>Existing EMIs</dt><dd>${fmtINR(a.existing_emi)}</dd><dt>Card limit used</dt><dd>${a.credit_utilisation_pct}%</dd>
-        <dt>Loan</dt><dd>${fmtINR(a.loan_amount)} ${a.loan_type}, ${a.tenure_months} months</dd>${a.collateral_value?`<dt>Asset value</dt><dd>${fmtINR(a.collateral_value)}</dd>`:''}
+        <dt>Loan</dt><dd>${fmtINR(a.loan_amount)} ${esc(a.loan_type)}, ${esc(a.tenure_months)} months</dd>${a.collateral_value?`<dt>Asset value</dt><dd>${fmtINR(a.collateral_value)}</dd>`:''}
         <dt>Assessed</dt><dd>${fmtDate(h.date)}</dd></dl></div>
       <div class="sheet" style="padding:22px 24px"><div class="sh-figs"><div><div class="k">Estimated chance of default</div><div class="bigpd">${fmtPct(res.pd)}</div></div></div><div id="detRuler"></div>
         <div class="kv4"><div><div class="k">EMI</div><div class="v">${fmtINR(res.emi)}</div></div><div><div class="k">Indicative rate</div><div class="v">${res.rate?res.rate.toFixed(2)+'%':'None'}</div></div><div><div class="k">EMIs vs income</div><div class="v">${Math.round(res.foir*100)}%</div></div><div><div class="k">Max eligible</div><div class="v">${fmtShort(res.maxAmt)}</div></div></div>
@@ -1630,9 +1655,51 @@ function openDetail(id,fromRow){
     new Ruler(document.getElementById('detRuler')).jump(res.pd,`Estimated chance of default ${(res.pd*100).toFixed(1)} percent, grade ${res.grade}`);
     renderFactors(document.getElementById('detBars'),res.factors,false);
     document.getElementById('detBack').onclick=()=>closeDetail(id);
-    document.getElementById('detPdf').onclick=e=>btnRun(e.currentTarget,()=>sleep(900)).then(()=>{}) && toast('Report ready. In the app this downloads Saakh_'+a.full_name.replace(/ /g,'_')+'.pdf');
+    document.getElementById('detPdf').onclick=e=>btnRun(e.currentTarget,async()=>{ downloadFile(`Saakh_${String(a.full_name).replace(/[^a-zA-Z0-9_-]+/g,'_')}_${h.id}.pdf`,reportPdf(a,res,h)); toast('Downloaded Saakh_'+String(a.full_name).replace(/ /g,'_')+'.pdf'); });
     window.scrollTo({top:0});
   });
+}
+// A small text-only PDF written by hand, because this one-file site has no libraries or build step.
+// ponytail: Helvetica's built-in encoding only, so non-English letters print as '?'; embed a font if names ever need them.
+function pdfBlob(rows){
+  const clean=s=>String(s).replace(/₹/g,'Rs. ').replace(/[−–—]/g,'-').replace(/[^\x20-\x7E]/g,'?').replace(/([\\()])/g,'\\$1');
+  const wrap=(s,n)=>{ const out=[]; let l=''; String(s).split(' ').forEach(w=>{ if((l+' '+w).length>n&&l){out.push(l);l=w;} else l=l?l+' '+w:w; }); out.push(l); return out; };
+  const lines=rows.flatMap(([t,kind])=>wrap(t,kind==='h1'?60:92).map(x=>[x,kind]));
+  const pages=[]; for(let i=0;i<lines.length;i+=48) pages.push(lines.slice(i,i+48));
+  const objs=['<< /Type /Catalog /Pages 2 0 R >>','','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>'];
+  const kids=[];
+  pages.forEach(pg=>{
+    let y=792, s='';
+    pg.forEach(([t,kind])=>{ const size=kind==='h1'?18:kind==='h2'?12:10; y-=kind==='h1'?30:kind==='h2'?22:15; s+=`BT /${kind?'F2':'F1'} ${size} Tf 48 ${y} Td (${clean(t)}) Tj ET\n`; });
+    objs.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${objs.length+2} 0 R >>`);
+    kids.push(`${objs.length} 0 R`);
+    objs.push(`<< /Length ${s.length} >>\nstream\n${s}endstream`);
+  });
+  objs[1]=`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${kids.length} >>`;
+  let pdf='%PDF-1.4\n'; const off=[];
+  objs.forEach((o,i)=>{ off.push(pdf.length); pdf+=`${i+1} 0 obj\n${o}\nendobj\n`; });
+  const xref=pdf.length;
+  pdf+=`xref\n0 ${objs.length+1}\n0000000000 65535 f \n`+off.map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<< /Size ${objs.length+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+  return new Blob([pdf],{type:'application/pdf'});
+}
+function reportPdf(a,res,h){
+  return pdfBlob([
+    ['Saakh credit assessment report','h1'],
+    [`${a.full_name}, assessed ${fmtDate(h.date)}`],
+    ['Decision','h2'],
+    [`${res.outcome}, risk grade ${res.grade}. Estimated chance of default ${fmtPct(res.pd)}.`],
+    [`EMI ${fmtINR(res.emi)}. Indicative rate ${res.rate?res.rate.toFixed(2)+'%':'None'}. EMIs vs income ${Math.round(res.foir*100)}%. Maximum eligible ${fmtINR(res.maxAmt)}.`],
+    ['Application','h2'],
+    [`Age ${a.age}. Employment ${a.employment_type}, ${a.years_in_job} years. Monthly income ${fmtINR(a.monthly_income)}.`],
+    [`CIBIL score ${a.cibil_score===-1?'new to credit':a.cibil_score}. Existing EMIs ${fmtINR(a.existing_emi)}. Card limit used ${a.credit_utilisation_pct}%.`],
+    [`Loan ${fmtINR(a.loan_amount)} ${a.loan_type}, ${a.tenure_months} months.`],
+    ['What moved the score','h2'],
+    ...(res.factors||[]).map(f=>[`${f.pp>0?'+':'-'}${Math.abs(f.pp).toFixed(1)} points: ${f.sentence}`]),
+    ...((res.cf||[]).length?[['Paths to a better grade','h2'],...res.cf.map(c=>[c.sentence])]:[]),
+    ['About this report','h2'],
+    ['Estimates from a model trained on synthetic data. Illustrative only, not a credit decision.'],
+    ['AI for Finance, CIA-2. Nithin Kumar U, USN 2102508611.'],
+  ]);
 }
 function closeDetail(id){
   withVT(()=>{ document.getElementById('appDetail').hidden=true; document.getElementById('appList').hidden=false; renderTable();
@@ -1652,9 +1719,14 @@ function initApplicants(){
 ==================================================================== */
 const TEMPLATE_COLS=['full_name','age','employment_type','years_in_job','city_tier','dependents','residence','monthly_income','other_monthly_income','cibil_score','credit_history_years','open_credit_lines','credit_utilisation_pct','missed_payments_24m','enquiries_6m','past_default','existing_emi','outstanding_debt','loan_type','loan_amount','tenure_months','collateral_value','purpose'];
 function rowErrors(a){
+  // Same limits as the Assess form, so a CSV row cannot be scored on values the form would refuse.
+  if(!/^[A-Za-z .'-]{2,80}$/.test(String(a.full_name||'').trim())) return ['full_name','Name must use letters only'];
   if(!(a.age>=18&&a.age<=75)) return ['age','Age must be 18 to 75'];
-  if(!(a.monthly_income>=10000)) return ['monthly_income','Monthly income must be at least ₹10,000'];
+  if(!(a.monthly_income>=10000&&a.monthly_income<=5000000)) return ['monthly_income','Monthly income must be ₹10,000 to ₹50,00,000'];
+  if(a.cibil_score!==-1&&!(a.cibil_score>=300&&a.cibil_score<=900)) return ['cibil_score','CIBIL score must be 300 to 900, or -1 for new to credit'];
+  if(!(a.credit_utilisation_pct>=0&&a.credit_utilisation_pct<=100)) return ['credit_utilisation_pct','Card limit used must be 0 to 100'];
   if(!TENURE[a.loan_type]) return ['loan_type','Unknown loan type'];
+  if(!(a.loan_amount>=10000&&a.loan_amount<=TYPE_MAX[a.loan_type])) return ['loan_amount',`Loan amount must be ₹10,000 to ${fmtINR(TYPE_MAX[a.loan_type])}`];
   const [t0,t1]=TENURE[a.loan_type]; if(!(a.tenure_months>=t0&&a.tenure_months<=t1)) return ['tenure_months',`Tenure must be ${t0} to ${t1} months`];
   if((a.loan_type==='home'||a.loan_type==='auto')&&!(a.collateral_value>0)) return ['collateral_value','Asset value is required for home and auto loans'];
   return null;
@@ -1679,25 +1751,53 @@ async function runBatch(apps){
     <div class="gstrip">${GRADES.map((k,i)=>g[k]?`<i style="flex:${g[k]};background:var(--g${k});animation-delay:${i*60}ms" title="Grade ${k}: ${g[k]}"></i>`:'').join('')}</div>
     <div class="legend">${GRADES.map(k=>`<span><i style="background:var(--g${k})"></i>Grade ${k}: ${g[k]}</span>`).join('')}</div></div>
     ${errs.length?`<div class="panel" style="padding:20px 24px;margin-top:16px"><h3 class="subtitle" style="margin-bottom:6px">Rows to fix</h3><ul class="errlist">${errs.map(e=>`<li>${iconSvg('x',{s:16})}<span>Row ${e.row}, ${e.field}: ${e.msg}</span></li>`).join('')}</ul></div>`:''}
-    <div class="panel" style="margin-top:16px"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Applicant</th><th>Loan</th><th class="num">Amount</th><th>Grade</th><th>Decision</th><th class="num">Risk</th></tr></thead><tbody>${results.slice(0,10).map(x=>`<tr><td class="nm">${x.a.full_name}</td><td>${x.a.loan_type}</td><td class="num">${fmtINR(x.a.loan_amount)}</td><td>${chipGrade(x.r.grade)}</td><td>${chipOutcome(x.r.outcome)}</td><td class="num">${fmtPct(x.r.pd)}</td></tr>`).join('')}</tbody></table></div><div class="pager"><span>Showing 10 of ${results.length} scored rows</span></div></div>`;
+    <div class="panel" style="margin-top:16px"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Applicant</th><th>Loan</th><th class="num">Amount</th><th>Grade</th><th>Decision</th><th class="num">Risk</th></tr></thead><tbody>${results.slice(0,10).map(x=>`<tr><td class="nm">${esc(x.a.full_name)}</td><td>${esc(x.a.loan_type)}</td><td class="num">${fmtINR(x.a.loan_amount)}</td><td>${chipGrade(x.r.grade)}</td><td>${chipOutcome(x.r.outcome)}</td><td class="num">${fmtPct(x.r.pd)}</td></tr>`).join('')}</tbody></table></div><div class="pager"><span>Showing ${Math.min(10,results.length)} of ${results.length} scored rows</span></div></div>`;
   hydrateIcons(out);
-  document.getElementById('dlRes').onclick=e=>{ btnRun(e.currentTarget,()=>sleep(700)); toast('Results CSV ready. In the app this downloads saakh_results.csv'); };
+  document.getElementById('dlRes').onclick=e=>{
+    btnRun(e.currentTarget,async()=>{
+      await sleep(300);
+      const q=v=>`"${String(v).replace(/"/g,'""')}"`;
+      const hdr=['full_name','loan_type','loan_amount','tenure_months','pd_pct','grade','outcome','indicative_rate','emi','foir_pct','max_eligible_amount','headline'];
+      const rows=results.map(x=>[q(x.a.full_name),x.a.loan_type,x.a.loan_amount,x.a.tenure_months,(x.r.pd*100).toFixed(2),x.r.grade,x.r.outcome,x.r.rate??'',Math.round(x.r.emi),(x.r.foir*100).toFixed(1),x.r.maxAmt,q(x.r.headline)].join(','));
+      downloadFile('saakh_results.csv',[hdr.join(','),...rows].join('\n'));
+    });
+    toast('Downloaded saakh_results.csv');
+  };
   toast(`${results.length} applications scored`);
 }
+function downloadFile(name,content,type='text/csv;charset=utf-8;'){
+  const url=URL.createObjectURL(content instanceof Blob?content:new Blob([content],{type}));
+  const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+// RFC 4180 fields, so quoted names and purposes may contain commas.
+// ponytail: a line break inside a quoted field is not supported; the template has no such field.
+function csvFields(line){
+  const out=[]; let cur='',quoted=false;
+  for(let i=0;i<line.length;i++){ const c=line[i];
+    if(quoted){ if(c==='"'&&line[i+1]==='"'){cur+='"';i++;} else if(c==='"') quoted=false; else cur+=c; }
+    else if(c==='"') quoted=true; else if(c===','){out.push(cur);cur='';} else cur+=c; }
+  out.push(cur); return out;
+}
 function parseCSV(text){
-  const lines=text.trim().split(/\r?\n/); const head=lines.shift().split(',').map(s=>s.trim());
+  const lines=text.replace(/^﻿/,'').trim().split(/\r?\n/); const head=csvFields(lines.shift()||'').map(s=>s.trim());
   const missing=TEMPLATE_COLS.filter(c=>c!=='purpose'&&!head.includes(c));
-  if(missing.length) return {error:`The file is missing these columns: ${missing.join(', ')}. Copy the template and try again.`};
-  return {apps:lines.map(l=>{ const v=l.split(','); const o={}; head.forEach((h,i)=>{ const x=(v[i]||'').trim(); o[h]= ['full_name','employment_type','residence','loan_type','purpose'].includes(h)? x : h==='past_default'? /^(1|true|yes)$/i.test(x) : +x; }); return {...base,...o}; })};
+  if(missing.length) return {error:`The file is missing these columns: ${missing.join(', ')}. Download the template and try again.`};
+  if(!lines.length) return {error:'The file has no rows to score. Add at least one application under the header.'};
+  if(lines.length>5000) return {error:`The file has ${lines.length.toLocaleString('en-IN')} rows. The limit is 5,000.`};
+  return {apps:lines.map(l=>{ const v=csvFields(l); const o={}; head.forEach((h,i)=>{ const x=(v[i]||'').trim(); o[h]= ['full_name','employment_type','residence','loan_type','purpose'].includes(h)? x : h==='past_default'? /^(1|true|yes)$/i.test(x) : x===''? NaN : +x; }); return {...base,...o}; })};
 }
 function initBatch(){
   document.getElementById('sampleBtn').addEventListener('click',()=>{ const r=rng(7); const apps=Array.from({length:50},(_,i)=>genApp(r,i)); apps[11].age=17; apps[27].tenure_months=400; apps[38].collateral_value=0; if(apps[38].loan_type!=='home'&&apps[38].loan_type!=='auto'){apps[38].loan_type='auto';apps[38].tenure_months=60;} runBatch(apps); });
   const drop=document.getElementById('drop'), file=document.getElementById('file');
-  const handle=f=>{ if(!f) return; const rd=new FileReader(); rd.onload=()=>{ const p=parseCSV(rd.result); if(p.error){ toast(p.error,'bad'); return;} runBatch(p.apps.slice(0,5000)); }; rd.readAsText(f); };
-  file.addEventListener('change',()=>handle(file.files[0]));
+  const handle=f=>{ if(!f) return;
+    if(!/\.csv$/i.test(f.name)){ toast('That is not a CSV file. Choose a file ending in .csv.','bad'); return; }
+    if(f.size>5*1024*1024){ toast('That file is over the 5 MB limit.','bad'); return; }
+    const rd=new FileReader(); rd.onerror=()=>toast('The file could not be read. Try again.','bad'); rd.onload=()=>{ const p=parseCSV(rd.result); if(p.error){ toast(p.error,'bad'); return;} runBatch(p.apps); }; rd.readAsText(f); };
+  file.addEventListener('change',()=>{ handle(file.files[0]); file.value=''; }); // otherwise choosing the same file again does nothing
   drop.addEventListener('dragover',e=>{ e.preventDefault(); drop.classList.add('over'); }); drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
   drop.addEventListener('drop',e=>{ e.preventDefault(); drop.classList.remove('over'); handle(e.dataTransfer.files[0]); });
-  document.getElementById('tplBtn').addEventListener('click',async e=>{ try{ await navigator.clipboard.writeText(TEMPLATE_COLS.join(',')+'\n'); toast('Template columns copied'); }catch(_){ toast('Copy is blocked here. The columns are listed in SPEC.md','bad'); } });
+  document.getElementById('tplBtn').addEventListener('click',()=>{ const sample=['Aarav Sharma',29,'salaried',4.5,1,0,'rented',85000,0,760,5,3,22.5,0,1,'false',10000,120000,'personal',500000,36,0,'Home improvement'].join(','); downloadFile('saakh_batch_template.csv',TEMPLATE_COLS.join(',')+'\n'+sample+'\n'); toast('Downloaded saakh_batch_template.csv'); });
 }
 
 /* ====================================================================
@@ -1755,7 +1855,7 @@ document.head.appendChild(chartCss);
 const PIPE=[['file-check','Application','23 fields from the wizard or a CSV row'],['gavel','Policy rules','Six knock-outs and four review flags'],['layers','Features','FOIR, loan-to-income, loan-to-value, utilisation'],['brain','XGBoost model','Monotone gradient-boosted trees'],['gauge','Calibration','Platt scaling turns scores into probabilities'],['sparkles','SHAP explanation','Each input’s contribution in plain words'],['stamp','Decision','Sanctioned, refer or declined, with rate and limit']];
 let perfDrawn=false, impDrawn=false;
 function initModel(){
-  document.getElementById('pipe').innerHTML=PIPE.map((p,i)=>`<div class="pnode ih"><span class="n">${i+1}</span><br>${iconSvg(p[0],{s:24,a:'pop'})}<h4>${p[1]}</h4><p>${p[2]}</p></div>${i<PIPE.length-1?'<span class="pedge"><span class="dot"></span></span>':''}`).join('');
+  document.getElementById('pipe').innerHTML=PIPE.map((p,i)=>`<div class="pnode ih"><span class="n">${i+1}</span><br>${iconSvg(p[0],{s:24,a:'pop'})}<h2>${p[1]}</h2><p>${p[2]}</p></div>${i<PIPE.length-1?'<span class="pedge"><span class="dot"></span></span>':''}`).join('');
   document.getElementById('traceBtn').addEventListener('click',async e=>{
     const b=e.currentTarget; b.disabled=true; const nodes=[...document.querySelectorAll('.pnode')], dots=[...document.querySelectorAll('.pedge .dot')];
     for(let i=0;i<nodes.length;i++){ nodes.forEach(n=>n.classList.remove('hot')); nodes[i].classList.add('hot'); nodes[i].scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
@@ -1765,6 +1865,7 @@ function initModel(){
   const tabs=document.getElementById('mtabs'), ul=document.getElementById('mtabUl');
   const place=(b,inst)=>{ if(!b.offsetWidth) return; if(inst||!ul._pos){ ul._pos={x:b.offsetLeft,y:0,w:b.offsetWidth}; ul.style.transform=`translate(${b.offsetLeft}px,0)`; ul.style.width=b.offsetWidth+'px'; } else moveTo(ul,b.offsetLeft,0,b.offsetWidth,'snappy'); };
   tabs._place=()=>{ ul._pos=null; place(tabs.querySelector('[aria-selected="true"]'),true); };
+  tabs.addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return; const all=[...tabs.querySelectorAll('[role="tab"]')]; const i=all.indexOf(e.target); if(i<0) return; e.preventDefault(); const next=all[(i+(e.key==='ArrowRight'?1:-1)+all.length)%all.length]; next.focus(); next.click(); });
   tabs.addEventListener('click',e=>{ const b=e.target.closest('[role="tab"]'); if(!b) return; tabs.querySelectorAll('[role="tab"]').forEach(t=>t.setAttribute('aria-selected',t===b)); place(b);
     document.querySelectorAll('.tabpanel').forEach(p=>p.classList.toggle('on',p.dataset.p===b.dataset.t));
     if(b.dataset.t==='perf') drawPerf(); if(b.dataset.t==='imp') drawImp(); });
@@ -1862,7 +1963,6 @@ const LOCAL_USERS_KEY = "saakh_users";
 let AUTH_USER = null;
 let RETURN_TO = "";
 let sessionLoaded = false;
-const API_BASE = "http://localhost:8000";
 
 const DEMO_USER = {
   id: "u-demo-1",
@@ -1908,6 +2008,7 @@ function updateAuthUI() {
   [topA, landA].forEach((a) => {
     if (!a) return;
     a.textContent = AUTH_USER ? firstName(AUTH_USER) : "Sign in";
+    a.title = AUTH_USER ? AUTH_USER.full_name : ""; // a long name shortens with an ellipsis on phones
     a.href = AUTH_USER ? "#profile" : "#login";
   });
   const pl = document.getElementById("navProfileLink");
@@ -1919,6 +2020,7 @@ function updateAuthUI() {
     const who = document.createElement("a");
     who.className = "who";
     who.href = "#profile";
+    who.title = `${AUTH_USER.full_name}, ${AUTH_USER.email}`; // both lines shorten with an ellipsis in the narrow rail
     const b = document.createElement("b");
     b.textContent = AUTH_USER.full_name;
     const sp = document.createElement("span");
@@ -1939,51 +2041,76 @@ function updateAuthUI() {
   }
 }
 
+// Someone who just registered would otherwise come back to "Create your account" and be told the email is taken.
+function showSignInMode() {
+  document.querySelector('#authSeg [data-v="login"]')?.click();
+}
+
 function signOut(expired) {
   const hadUser = !!AUTH_USER;
   setToken("");
   AUTH_USER = null;
   updateAuthUI();
   if (hadUser || expired) toast(expired ? "Your session expired. Sign in again." : "You are signed out", expired ? "bad" : "ok");
+  showSignInMode();
   location.hash = "login";
   route();
 }
 
 async function loadSession() {
   const t = getToken();
-  if (!t) { sessionLoaded = true; updateAuthUI(); return; }
-  try {
-    const r = await fetch(`${API_BASE}/api/auth/me`, { headers: { Authorization: `Bearer ${t}` } });
-    if (r.ok) { AUTH_USER = await r.json(); sessionLoaded = true; updateAuthUI(); return; }
-    else if (r.status === 401) { setToken(""); }
-  } catch {}
   if (t.startsWith("local_")) {
     try {
       const email = atob(t.slice(6));
       const u = getLocalUsers().find((x) => x.email.toLowerCase() === email.toLowerCase());
-      if (u) {
-        const uClean = { ...u }; delete uClean.password;
-        AUTH_USER = uClean;
-      } else {
-        setToken("");
-      }
+      if (u) AUTH_USER = publicUser(u);
+      else setToken("");
     } catch {
       setToken("");
     }
+  } else if (t) {
+    setToken(""); // a token from another version of the site means nothing here
   }
   sessionLoaded = true;
   updateAuthUI();
 }
 
-function handleLocalAuth(path, method, body) {
+/* ponytail: this static site has no server, so accounts live only in this browser. Hashing keeps the password
+   unreadable in storage, but it is not real security; website 1 (apps/web + services/api) is the real system. */
+async function pwHash(pw, salt) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt: enc.encode(salt), iterations: 150000, hash: "SHA-256" }, key, 256);
+  return [...new Uint8Array(bits)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+async function setPw(u, pw) {
+  u.salt = crypto.randomUUID();
+  u.pw_hash = await pwHash(pw, u.salt);
+  delete u.password;
+}
+async function pwMatches(u, pw) {
+  // Accounts saved before hashing existed still hold the plain password; they are upgraded at next sign-in.
+  return u.pw_hash ? u.pw_hash === (await pwHash(pw, u.salt)) : u.password === pw;
+}
+function publicUser(u) {
+  const { password, pw_hash, salt, ...rest } = u;
+  return rest;
+}
+const PW_RULE = "Password must be at least 8 characters with a letter and a number.";
+const pwStrong = (p) => String(p).length >= 8 && /[A-Za-z]/.test(p) && /\d/.test(p);
+
+async function handleLocalAuth(path, method, body) {
   const users = getLocalUsers();
+  const meIdx = () => (AUTH_USER ? users.findIndex((x) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase()) : -1);
   if (path === "/api/auth/login" && method === "POST") {
     const email = String(body?.email || "").toLowerCase();
-    const pw = String(body?.password || "");
-    const u = users.find((x) => x.email.toLowerCase() === email && x.password === pw);
-    if (u) {
-      const uClean = { ...u }; delete uClean.password;
-      return { ok: true, status: 200, data: { token: "local_" + btoa(u.email), user: uClean } };
+    const u = users.find((x) => x.email.toLowerCase() === email);
+    if (u && (await pwMatches(u, String(body?.password || "")))) {
+      if (!u.pw_hash) {
+        await setPw(u, String(body.password));
+        saveLocalUsers(users);
+      }
+      return { ok: true, status: 200, data: { token: "local_" + btoa(u.email), user: publicUser(u) } };
     }
     return { ok: false, status: 401, data: { detail: "Incorrect email or password. Use demo: officer@saakh.ai / Saakh2026!" } };
   }
@@ -2000,59 +2127,46 @@ function handleLocalAuth(path, method, body) {
       city: "",
       employment_type: "",
       monthly_income: null,
-      password: body.password,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
+    await setPw(newUser, body.password);
     users.push(newUser);
     saveLocalUsers(users);
-    const uClean = { ...newUser }; delete uClean.password;
-    return { ok: true, status: 201, data: { token: "local_" + btoa(newUser.email), user: uClean } };
+    return { ok: true, status: 201, data: { token: "local_" + btoa(newUser.email), user: publicUser(newUser) } };
   }
   if (path === "/api/auth/me" && method === "PATCH") {
-    if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-    const idx = users.findIndex((x) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
-    if (idx !== -1) {
-      users[idx] = { ...users[idx], ...body };
-      saveLocalUsers(users);
-      const uClean = { ...users[idx] }; delete uClean.password;
-      return { ok: true, status: 200, data: uClean };
-    }
-    return { ok: false, status: 404, data: { detail: "User not found." } };
+    const i = meIdx();
+    if (i === -1) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+    const phone = String(body.phone || "").replace(/[ -]/g, "");
+    if (!/^[A-Za-z .'-]{2,80}$/.test(body.full_name || "")) return { ok: false, status: 422, data: { detail: "Enter the full name using letters only." } };
+    if (phone && !/^(\+91)?[6-9]\d{9}$/.test(phone)) return { ok: false, status: 422, data: { detail: "Enter a 10 digit Indian mobile number." } };
+    if (body.city && !/^[A-Za-z .'-]{1,60}$/.test(body.city)) return { ok: false, status: 422, data: { detail: "Enter a city name using letters only." } };
+    if (body.monthly_income > 5000000) return { ok: false, status: 422, data: { detail: "Enter a monthly income up to 50,00,000." } };
+    users[i] = { ...users[i], ...body, phone };
+    saveLocalUsers(users);
+    return { ok: true, status: 200, data: publicUser(users[i]) };
   }
   if (path === "/api/auth/change-password" && method === "POST") {
-    if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-    const idx = users.findIndex((x) => x.email.toLowerCase() === AUTH_USER.email.toLowerCase());
-    if (idx !== -1) {
-      if (users[idx].password && users[idx].password !== body.current_password) {
-        return { ok: false, status: 400, data: { detail: "Current password does not match." } };
-      }
-      users[idx].password = body.new_password;
-      saveLocalUsers(users);
-      return { ok: true, status: 200, data: { detail: "Password updated." } };
-    }
-    return { ok: false, status: 404, data: { detail: "User not found." } };
+    const i = meIdx();
+    if (i === -1) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+    if (!(await pwMatches(users[i], String(body.current_password || "")))) return { ok: false, status: 400, data: { detail: "Current password does not match." } };
+    if (!pwStrong(body.new_password)) return { ok: false, status: 422, data: { detail: PW_RULE } };
+    await setPw(users[i], body.new_password);
+    saveLocalUsers(users);
+    return { ok: true, status: 200, data: { detail: "Password updated." } };
   }
   if (path === "/api/auth/me" && method === "DELETE") {
-    if (!AUTH_USER) return { ok: false, status: 401, data: { detail: "Not signed in." } };
-    const filtered = users.filter((x) => x.email.toLowerCase() !== AUTH_USER.email.toLowerCase());
-    saveLocalUsers(filtered);
+    const i = meIdx();
+    if (i === -1) return { ok: false, status: 401, data: { detail: "Not signed in." } };
+    users.splice(i, 1);
+    saveLocalUsers(users);
     return { ok: true, status: 200, data: { detail: "Account deleted." } };
   }
   return { ok: false, status: 404, data: { detail: "Not found" } };
 }
 
 async function authCall(path, method, body) {
-  try {
-    const r = await fetch(`${API_BASE}${path}`, {
-      method,
-      headers: { "Content-Type": "application/json", ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if (r.ok || (r.status >= 400 && r.status < 500)) {
-      const data = await r.json().catch(() => ({}));
-      return { ok: r.ok, status: r.status, data };
-    }
-  } catch {}
+  if (!window.crypto || !crypto.subtle) return { ok: false, status: 500, data: { detail: "Accounts need a secure page. Open this site over https." } };
   return handleLocalAuth(path, method, body);
 }
 
@@ -2145,8 +2259,7 @@ function initAuth() {
         city: $("pf_city").value.trim(),
         employment_type: $("pf_emp").value,
       };
-      const inc = $("pf_inc").value.replace(/[^0-9]/g, "");
-      if (inc) body.monthly_income = Number(inc);
+      body.monthly_income = Number($("pf_inc").value.replace(/[^0-9]/g, "")); // blank clears it
       const btn = document.getElementById("profSave");
       setBusy(btn, true, "Saving...");
       const res = await authCall("/api/auth/me", "PATCH", body);
@@ -2188,6 +2301,7 @@ function initAuth() {
       AUTH_USER = null;
       setToken("");
       updateAuthUI();
+      showSignInMode();
       toast("Your account was deleted");
       location.hash = "home";
     });
@@ -2273,7 +2387,7 @@ const TUTORIAL_DATA = {
         {
           "id": "g1",
           "title": "Open the app and find your way around",
-          "description": "Getting started takes one step. Open the app in your browser at localhost, port 3000. There is no sign up and no password, because Saakh is an internal tool, so it opens straight on the home page. Press Assess a full application to enter the workspace. Here, the left rail is your main navigation, the top bar shows which page you are on, and this small chip shows the live connection to the server. Live means decisions from other desks will appear without a reload.",
+          "description": "Getting started takes one step. Open the site in your browser. It opens on the home page, which needs no account. Press Assess a full application, then sign in or create a free account to enter the workspace. Here, the left rail is your main navigation, the top bar shows which page you are on, and this small chip shows the live connection to the server. Live means decisions from other desks will appear without a reload.",
           "duration": "0:39",
           "src": "/tutorial/clips/g1.mp4"
         }
@@ -2750,6 +2864,8 @@ function initTutorials() {
 
 const ROUTES={home:'Home',assess:'Assess','what-if':'What-if',applicants:'Applicants',batch:'Batch',portfolio:'Portfolio',model:'Model',tutorials:'Tutorials',about:'About',login:'Sign in',profile:'Your profile'};
 const PUBLIC_VIEWS=['home','tutorials','login','about','model'];
+const DEFAULT_TITLE='Saakh - AI-Based Loan Eligibility & Risk Assessment System';
+const PAGE_TITLES={assess:'Assess an application','what-if':'What if the numbers changed?',applicants:'Applicants',batch:'Score a batch',portfolio:'Portfolio',model:'How the AI decides',tutorials:'Tutorials',about:'About this project',login:'Sign in',profile:'Your profile'};
 const inited={};
 function placePill(inst){
   const a=document.querySelector('#nav a[aria-current="page"]'); const pill=document.getElementById('navPill');
@@ -2776,6 +2892,7 @@ function route(){
   document.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('aria-current',a.dataset.route===r?'page':'false'));
   const cr=document.getElementById('crumb');
   if(cr) cr.textContent=ROUTES[r];
+  document.title=PAGE_TITLES[r]?`${PAGE_TITLES[r]} | Saakh`:DEFAULT_TITLE;
   placePill(!inited._pill); inited._pill=true;
   const once={home:initHome,assess:initAssess,'what-if':initWhatIf,applicants:initApplicants,batch:initBatch,model:initModel,tutorials:initTutorials};
   if(!inited[r] && once[r]){ once[r](); inited[r]=true; }
@@ -2789,13 +2906,14 @@ function route(){
 window.addEventListener('hashchange',route);
 window.addEventListener('resize',()=>{ placePill(true); document.querySelectorAll('.view.on .seg').forEach(s=>s._place&&s._place()); const t=document.getElementById('mtabs'); t._place&&t._place(); });
 
-function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('saakh-theme',t);}catch(_){}
-  document.querySelectorAll('#themeBtn,[data-theme-toggle]').forEach(b=>b.setAttribute('aria-label',t==='dark'?'Switch to light theme':'Switch to dark theme')); }
+function labelTheme(t){ document.querySelectorAll('#themeBtn,[data-theme-toggle]').forEach(b=>b.setAttribute('aria-label',t==='dark'?'Switch to light theme':'Switch to dark theme')); }
+function setTheme(t){ document.documentElement.dataset.theme=t; try{localStorage.setItem('saakh-theme',t);}catch(_){} labelTheme(t); }
 try{ const t=localStorage.getItem('saakh-theme'); if(t) document.documentElement.dataset.theme=t; }catch(_){}
+labelTheme(document.documentElement.dataset.theme||'light');
 document.addEventListener('click',e=>{ if(e.target.closest('#themeBtn,[data-theme-toggle]')) setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'); });
 
 // Command palette
-const CMDS=[...Object.entries(ROUTES).map(([k,v])=>({g:'Go to',t:v,ic:{home:'house',assess:'file-check','what-if':'sliders-horizontal',applicants:'users',batch:'cloud-upload',portfolio:'chart-column-increasing',model:'brain',about:'circle-help'}[k],run:()=>location.hash=k})),
+const CMDS=[...Object.entries(ROUTES).map(([k,v])=>({g:'Go to',t:v,ic:{home:'house',assess:'file-check','what-if':'sliders-horizontal',applicants:'users',batch:'cloud-upload',portfolio:'chart-column-increasing',model:'brain',tutorials:'play',about:'circle-help',login:'id-card',profile:'id-card'}[k],run:()=>location.hash=k})),
   ...PERSONAS.map((p,i)=>({g:'Load sample applicant',t:p.full_name+', '+p.note,ic:'id-card',run:()=>{ location.hash='assess'; setTimeout(()=>{ const s=document.getElementById('persona'); s.value=i; s.dispatchEvent(new Event('change')); },60); }})),
   {g:'Actions',t:'Toggle dark theme',ic:'sun-moon',run:()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark')},
   {g:'Actions',t:'Start guided demo',ic:'play',run:()=>startTour()}];
@@ -2804,7 +2922,7 @@ function openCmd(){ const d=document.getElementById('cmd'), s=document.getElemen
 function closeCmd(){ document.getElementById('cmd').classList.remove('on'); document.getElementById('scrim').classList.remove('on'); }
 function renderCmd(q){ cmdItems=CMDS.filter(c=>c.t.toLowerCase().includes(q.toLowerCase())); cmdSel=0; let g='',h='';
   cmdItems.forEach((c,i)=>{ if(c.g!==g){ g=c.g; h+=`<li class="grp" role="presentation">${g}</li>`; } h+=`<li><button role="option" class="ih" data-i="${i}" aria-selected="${i===0}">${iconSvg(c.ic,{a:'pop'})}${c.t}</button></li>`; });
-  document.getElementById('cmdList').innerHTML=h||`<li class="grp">Nothing matches "${q}"</li>`; }
+  document.getElementById('cmdList').innerHTML=h||`<li class="grp">Nothing matches "${esc(q)}"</li>`; }
 document.getElementById('cmdBtn').onclick=openCmd;
 document.getElementById('scrim').onclick=()=>{ closeCmd(); closeMore(); };
 document.getElementById('cmdIn').addEventListener('input',e=>renderCmd(e.target.value));
@@ -2835,14 +2953,25 @@ let tourI=-1;
 function startTour(){ tourI=0; showTour(); }
 function endTour(){ tourI=-1; document.getElementById('spot').style.display='none'; document.getElementById('tour').style.display='none'; }
 function showTour(){
-  const [r,sel,t,p]=TOUR[tourI]; if(location.hash.slice(1)!==r) location.hash=r;
-  setTimeout(()=>{ const el=document.querySelector(`.view.on ${sel}`)||document.querySelector(sel); if(!el) return; el.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});
-    setTimeout(()=>{ const b=el.getBoundingClientRect(); const sp=document.getElementById('spot'), tc=document.getElementById('tour');
+  const [r,sel,t,p]=TOUR[tourI]; const tourStep=tourI; const sheet=document.getElementById('asheet');
+  // Protected pages would bounce a signed-out visitor to Sign in and leave the card pointing at nothing.
+  if(!PUBLIC_VIEWS.includes(r)&&!AUTH_USER){ const tc=document.getElementById('tour'); document.getElementById('spot').style.display='none';
+    document.getElementById('tourT').textContent=t; document.getElementById('tourP').textContent=`${p} Sign in to see this step on the live page, or press Next to read on.`;
+    document.getElementById('tourN').textContent=`Step ${tourI+1} of ${TOUR.length}`; document.getElementById('tourNext').textContent=tourI===TOUR.length-1?'Finish':'Next';
+    tc.style.display='block'; tc.style.top=Math.max(16,(innerHeight-tc.offsetHeight)/2)+'px'; tc.style.left=Math.max(16,(innerWidth-tc.offsetWidth)/2)+'px'; return; }
+  if(location.hash.slice(1)!==r) location.hash=r;
+  setTimeout(()=>{ if(tourStep!==tourI) return;
+    if(sel==='#persona'){ const s=document.getElementById('persona'); s.value='0'; s.dispatchEvent(new Event('change')); }
+    const el=document.querySelector(`.view.on ${sel}`)||document.querySelector(sel); if(!el) return;
+    // On phones these targets live in the bottom drawer, which is closed otherwise.
+    if(sheet&&window.innerWidth<768) sheet.classList.toggle('open',sheet.contains(el));
+    el.scrollIntoView({block:'center',behavior:reduce?'auto':'smooth'});
+    setTimeout(()=>{ if(tourStep!==tourI) return; const b=el.getBoundingClientRect(); const sp=document.getElementById('spot'), tc=document.getElementById('tour');
       sp.style.display='block'; Object.assign(sp.style,{left:(b.left-8)+'px',top:(b.top-8)+'px',width:(b.width+16)+'px',height:(Math.min(b.height,innerHeight*.6)+16)+'px'});
       document.getElementById('tourT').textContent=t; document.getElementById('tourP').textContent=p; document.getElementById('tourN').textContent=`Step ${tourI+1} of ${TOUR.length}`;
       document.getElementById('tourNext').textContent=tourI===TOUR.length-1?'Finish':'Next';
-      tc.style.display='block'; const below=b.top+Math.min(b.height,innerHeight*.6)+24; const top=below+170<innerHeight? below : Math.max(16,b.top-190);
-      tc.style.top=top+'px'; tc.style.left=Math.min(innerWidth-tc.offsetWidth-16,Math.max(16,b.left))+'px';
+      tc.style.display='block'; const below=b.top+Math.min(b.height,innerHeight*.6)+24; const cardH=tc.offsetHeight; const top=below+cardH+16<innerHeight? below : b.top-cardH-24;
+      tc.style.top=Math.max(16,Math.min(top,innerHeight-cardH-16))+'px'; /* a phone target can fill the screen: keep the card visible */ tc.style.left=Math.min(innerWidth-tc.offsetWidth-16,Math.max(16,b.left))+'px';
       anim(tc,[{opacity:0,transform:'translateY(6px)'},{opacity:1,transform:'none'}],'gentle'); },reduce?0:420);
   },80);
 }

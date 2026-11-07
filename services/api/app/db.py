@@ -48,9 +48,29 @@ def get_session() -> Generator[Session, None, None]:
         yield session
 
 
+def _seed_demo_user() -> None:
+    """The account the sign-in page advertises. Its password is public, so it never exists in production."""
+    if os.environ.get("SAAKH_ENV") == "production":
+        return
+    from app.auth import User, _now, hash_password  # auth imports this module
+
+    with Session(engine) as session:
+        if session.exec(select(User).where(User.email == "officer@saakh.ai")).first():
+            return
+        session.add(User(
+            email="officer@saakh.ai",
+            password_hash=hash_password("Saakh2026!"),
+            full_name="Nithin Kumar",
+            created_at=_now(),
+            last_login=_now(),
+        ))
+        session.commit()
+
+
 def seed_database_if_empty() -> None:
     """Seed the database with the 8 demo personas + 120 generated records if empty."""
     init_db()
+    _seed_demo_user()
     with Session(engine) as session:
         count = session.exec(select(AssessmentRecord)).first()
         if count is not None:

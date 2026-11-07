@@ -130,6 +130,23 @@ node scripts/check_no_emoji.mjs
 
 ---
 
+### End-to-End Tests (Playwright)
+
+Run from the project root. Each suite covers 1440px, 768px and 375px widths, and starts and stops its own servers on separate ports (3100, 8100, 4174) with a throwaway database, so your local data is not touched.
+
+```powershell
+pnpm install
+pnpm exec playwright install chromium
+
+pnpm e2e:web      # website 1: builds and tests the production Next.js + FastAPI site
+pnpm e2e:pages    # website 2: tests prototype/ served at /saakh/, as on GitHub Pages
+pnpm site2        # view website 2 locally at http://localhost:4174/saakh/
+```
+
+Findings and scores from the last full audit are in `apps/web/AUDIT_REPORT.md` and `prototype/AUDIT_REPORT.md`.
+
+---
+
 ## 5. Academic Accreditation
 - **Course:** AI for Finance — CIA-2 · Topic 4
 - **Project Title:** AI-Based Loan Eligibility and Risk Assessment System

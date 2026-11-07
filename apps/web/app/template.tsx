@@ -1,21 +1,4 @@
-"use client";
-
-import React from "react";
-import { motion } from "motion/react";
-import { useMotionPreset } from "@/lib/motion";
-
+// A CSS fade, not a JS one: server HTML rendered at opacity 0 stays invisible until React has hydrated.
 export default function Template({ children }: { children: React.ReactNode }) {
-  const { reduced } = useMotionPreset();
-
-  return (
-    <motion.div
-      initial={reduced ? undefined : { opacity: 0 }}
-      animate={reduced ? undefined : { opacity: 1 }}
-      exit={reduced ? undefined : { opacity: 0 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
-      className="w-full flex-1"
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className="w-full flex-1 route-fade">{children}</div>;
 }

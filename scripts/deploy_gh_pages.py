@@ -73,10 +73,13 @@ diff_res = subprocess.run(['git', 'status', '--porcelain'], cwd=worktree_dir, ca
 print("Git status in worktree:\n", diff_res.stdout)
 
 if diff_res.stdout.strip():
-    commit_msg = "Deploy: fix responsive layout overlap and add full tutorial video suite"
+    source = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], cwd=repo_dir, capture_output=True, text=True).stdout.strip()
+    commit_msg = f"Deploy: prototype from master {source}"
     subprocess.run(['git', 'commit', '-m', commit_msg], cwd=worktree_dir, check=True)
     push_res = subprocess.run(['git', 'push', 'origin', 'gh-pages', '--force'], cwd=worktree_dir, capture_output=True, text=True)
     print("Git push result:", push_res.returncode, push_res.stdout, push_res.stderr)
+    if push_res.returncode != 0:
+        raise SystemExit("Push to gh-pages failed: the live site was not updated.")
 else:
     print("Nothing to commit on gh-pages.")
 

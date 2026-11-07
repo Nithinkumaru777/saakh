@@ -4,9 +4,13 @@
   "scripts": {
     "dev": "concurrently -k -n \"api,web\" -c \"cyan,magenta\" \"pnpm --filter @saakh/api dev\" \"pnpm --filter @saakh/web dev\"",
     "test:all": "pnpm --filter @saakh/web test && uv run --project services/api pytest && python scripts/test_ledger.py && node scripts/check_no_emoji.mjs",
-    "e2e:100": "pnpm --filter @saakh/web test:e2e"
+    "e2e:100": "pnpm --filter @saakh/web test:e2e",
+    "e2e:web": "playwright test --config e2e/web.config.ts",
+    "e2e:pages": "playwright test --config e2e/pages.config.ts",
+    "site2": "node e2e/static-server.mjs"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "concurrently": "^9.1.2"
   },
   "packageManager": "pnpm@12.16.1"
