@@ -133,3 +133,27 @@ def test_password_hash_is_salted_and_verifies():
     a, b = auth.hash_password("Sup3rsecret"), auth.hash_password("Sup3rsecret")
     assert a != b and auth.verify_password("Sup3rsecret", a) and not auth.verify_password("Sup3rsecreT", a)
     assert not auth.verify_password("x", "garbage")
+
+
+def test_demo_account_exists_for_local_use_but_never_in_production(monkeypatch):
+    from sqlmodel import Session, select
+
+    from app.db import _seed_demo_user, engine
+
+    def demo():
+        with Session(engine) as s:
+            return s.exec(select(auth.User).where(auth.User.email == "officer@saakh.ai")).first()
+
+    with Session(engine) as s:
+        for u in s.exec(select(auth.User).where(auth.User.email == "officer@saakh.ai")).all():
+            s.delete(u)
+        s.commit()
+
+    monkeypatch.setenv("SAAKH_ENV", "production")
+    _seed_demo_user()
+    assert demo() is None
+
+    monkeypatch.delenv("SAAKH_ENV")
+    _seed_demo_user()
+    assert auth.verify_password("Saakh2026!", demo().password_hash)
+    _seed_demo_user()  # running again must not fail or duplicate

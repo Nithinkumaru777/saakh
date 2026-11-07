@@ -6,11 +6,12 @@ const API_ORIGIN = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 // and Next's bootstrap scripts; tighten with nonces if a stricter policy is needed.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  // 'wasm-unsafe-eval' and data: below: the PDF report's layout engine (yoga, via @react-pdf) is inlined WebAssembly.
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  `connect-src 'self' ${API_ORIGIN}`,
+  `connect-src 'self' data: ${API_ORIGIN}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

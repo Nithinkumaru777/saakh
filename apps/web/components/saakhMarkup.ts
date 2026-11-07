@@ -38,7 +38,7 @@ export const SAAKH_MARKUP = `
       <span class="crumb" id="crumb">Assess</span>
       <span class="grow"></span>
       <span class="livefeed" id="liveFeed" data-state="connecting" role="status" title="Live updates: new assessments from other desks appear without a reload"><span class="pulse" aria-hidden="true"></span><span class="txt">Connecting</span></span>
-      <button class="btn btn-ghost btn-sm ih" id="tourBtn"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
+      <button class="btn btn-ghost btn-sm ih" id="tourBtn" aria-label="Guided demo"><i data-icon="play" data-a="pop" data-s="16"></i><span class="lbl">Guided demo</span></button>
       <button class="btn btn-secondary btn-sm ih" id="cmdBtn" aria-label="Open command palette"><i data-icon="search" data-a="wiggle" data-s="16"></i><span class="lbl">Search</span><span class="kbd">Ctrl K</span></button>
       <a class="btn btn-secondary btn-sm" id="authBtn" href="#login">Sign in</a>
       <button class="iconbtn ih" id="themeBtn" aria-label="Switch to dark theme"><i data-icon="sun-moon" data-a="spin"></i></button>
@@ -110,7 +110,7 @@ export const SAAKH_MARKUP = `
           <h2 class="title">Applicant</h2><p class="lead">Who is applying.</p>
           <div class="fgrid">
             <div class="field full"><label for="f_name">Full name</label><input class="ctl" id="f_name" data-k="full_name" autocomplete="off"><div class="errmsg"><div></div></div><span class="help">As on PAN card</span></div>
-            <div class="field"><label for="f_age">Age</label><input class="ctl" id="f_age" data-k="age" inputmode="numeric"><div class="errmsg"><div></div></div><span class="help">21 to 75</span></div>
+            <div class="field"><label for="f_age">Age</label><input class="ctl" id="f_age" data-k="age" inputmode="numeric"><div class="errmsg"><div></div></div><span class="help">18 to 75. Under 21 is declined by policy.</span></div>
             <div class="field"><label for="f_job">Years in current job or business</label><input class="ctl" id="f_job" data-k="years_in_job" inputmode="decimal"><div class="errmsg"><div></div></div><span class="help"></span></div>
             <div class="field full"><span class="lab" id="l_emp">Employment</span><div class="seg" data-seg="employment_type" aria-labelledby="l_emp"><span class="seg-ind"></span>
               <button type="button" data-v="salaried" class="ih"><i data-icon="id-card" data-a="pop" data-s="16"></i>Salaried</button>

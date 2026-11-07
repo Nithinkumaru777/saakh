@@ -96,6 +96,12 @@ export function toReportAssessment(app: RuntimeAppInput, res: RuntimeScoreResult
   };
 }
 
+/** Public pages arrive already visible, so their content paints without waiting for JavaScript. */
+function markupFor(view: string) {
+  if (!["home", "login", "about", "model"].includes(view)) return SAAKH_MARKUP;
+  return SAAKH_MARKUP.replace(`class="view" data-view="${view}"`, `class="view on" data-view="${view}"`);
+}
+
 export function SaakhApp({ initialView = "home" }: SaakhAppProps) {
   useEffect(() => {
     const handleDownloadPdf = async (app: RuntimeAppInput, res: RuntimeScoreResult, id?: string, dateStr?: string) => {
@@ -121,7 +127,7 @@ export function SaakhApp({ initialView = "home" }: SaakhAppProps) {
 
   return (
     <div
-      dangerouslySetInnerHTML={{ __html: SAAKH_MARKUP }}
+      dangerouslySetInnerHTML={{ __html: markupFor(initialView) }}
       suppressHydrationWarning
     />
   );

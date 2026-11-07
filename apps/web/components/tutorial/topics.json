@@ -58,7 +58,7 @@
         {
           "id": "g1",
           "title": "Open the app and find your way around",
-          "description": "Getting started takes one step. Open the app in your browser at localhost, port 3000. There is no sign up and no password, because Saakh is an internal tool, so it opens straight on the home page. Press Assess a full application to enter the workspace. Here, the left rail is your main navigation, the top bar shows which page you are on, and this small chip shows the live connection to the server. Live means decisions from other desks will appear without a reload.",
+          "description": "Getting started takes one step. Open the app in your browser at localhost, port 3000. It opens on the home page, which needs no account. Press Assess a full application, then sign in or create a free account to enter the workspace. Here, the left rail is your main navigation, the top bar shows which page you are on, and this small chip shows the live connection to the server. Live means decisions from other desks will appear without a reload.",
           "duration": "0:39",
           "src": "/tutorial/clips/g1.mp4"
         }

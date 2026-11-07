@@ -10,7 +10,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test --repeat-each=100"
+    "test:e2e": "playwright test --config ../../e2e/web.config.ts --repeat-each=100"
   },
   "dependencies": {
     "@hookform/resolvers": "^6.0.2",
@@ -31,6 +31,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
